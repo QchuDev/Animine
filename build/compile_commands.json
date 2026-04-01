@@ -7,6 +7,12 @@
 },
 {
   "directory": "C:/Users/cuchu/proyects/QchuAnims/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DGLFW_DLL -IC:/Users/cuchu/proyects/QchuAnims/include -g -std=gnu++17 -o CMakeFiles\\qchu-anims.dir\\src\\classes\\camera.cpp.obj -c C:\\Users\\cuchu\\proyects\\QchuAnims\\src\\classes\\camera.cpp",
+  "file": "C:/Users/cuchu/proyects/QchuAnims/src/classes/camera.cpp",
+  "output": "C:/Users/cuchu/proyects/QchuAnims/build/CMakeFiles/qchu-anims.dir/src/classes/camera.cpp.obj"
+},
+{
+  "directory": "C:/Users/cuchu/proyects/QchuAnims/build",
   "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DGLFW_DLL -IC:/Users/cuchu/proyects/QchuAnims/include -g -std=gnu++17 -o CMakeFiles\\qchu-anims.dir\\src\\classes\\engine.cpp.obj -c C:\\Users\\cuchu\\proyects\\QchuAnims\\src\\classes\\engine.cpp",
   "file": "C:/Users/cuchu/proyects/QchuAnims/src/classes/engine.cpp",
   "output": "C:/Users/cuchu/proyects/QchuAnims/build/CMakeFiles/qchu-anims.dir/src/classes/engine.cpp.obj"

@@ -4,7 +4,13 @@ layout (location = 1) in vec3 aColor;
 
 out vec3 ourColor;
 
+// Las 3 matrices mágicas
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
 void main() {
-    gl_Position = vec4(aPos, 1.0);
+    // Multiplicamos la posición por las matrices (el orden importa: P * V * M)
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
     ourColor = aColor;
 }
