@@ -1,0 +1,8 @@
+# ninja log v7
+5	124	7967806748885188	CMakeFiles/qchu-anims.dir/src/classes/axises.cpp.obj	24331882bfe7f521
+24	406	7967806749083364	CMakeFiles/qchu-anims.dir/src/main.cpp.obj	dbdad73e22aa9ae3
+12	416	7967806748958746	CMakeFiles/qchu-anims.dir/src/classes/renderer.cpp.obj	7567483de3fa9f53
+8	421	7967806748925195	CMakeFiles/qchu-anims.dir/src/classes/engine.cpp.obj	e23278985b32eb1e
+17	487	7967806749009229	CMakeFiles/qchu-anims.dir/src/classes/shader.cpp.obj	225c4f653d15a41c
+21	857	7967806749049223	CMakeFiles/qchu-anims.dir/src/glad.c.obj	9e7cbf9b5f68b713
+859	1020	7967806757432156	qchu-anims.exe	4f19a57164558bfc

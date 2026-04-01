@@ -1,0 +1,3 @@
+C:/Users/cuchu/proyects/QchuAnims/build/CMakeFiles/qchu-anims.dir
+C:/Users/cuchu/proyects/QchuAnims/build/CMakeFiles/edit_cache.dir
+C:/Users/cuchu/proyects/QchuAnims/build/CMakeFiles/rebuild_cache.dir

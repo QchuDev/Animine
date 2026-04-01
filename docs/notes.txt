@@ -1,0 +1,27 @@
+
+Las herramientas del proyecto:
+    
+    // No lo tengo muy claro, sera cuestion de investigar...    
+    KHR -->	Low level headers (Khronos Group) definen tipos basicos.
+    
+    // Este conjunto lo voy a usar bastante
+    GLFW --> Window e Inputs	
+    GLAD --> Relacion con GPU
+    GLM	--> Math (Matrices, Vectores, Cuaterniones)
+    
+    // Arreglos
+    // vertices[0] => *vertices
+    // vertices[1] => *(vertices + 1)
+    // (...)
+    // vertices[i] => *(vertices + i)
+    
+    
+    // En C/C++ tenemos que hacernos cargo de los espacios de memoria que ocupamos
+    // no hay garbage collector
+    
+    char* c = new char(); // addr: 0xf1
+    *c = 'b'; // addr: 0xf1 val: 'b'                
+    
+    c = new char(); // addr: 0xf3           <--- MEMORY LEAK (no libera 0xf1 antes de usar otro espacio de memoria)
+    *c = 'g': // addr: 0xf3 val: 0xf3
+    delete c; // addr: 0xf3 liberado
