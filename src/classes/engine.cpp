@@ -46,8 +46,12 @@ bool Engine::init(int width, int height, const char* title) {
  */
 void Engine::run() {
     while(!glfwWindowShouldClose(window)) {
+        // Calcular deltaTime
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;   
+
         processInput();
-        
         /*
             The engine delegates the drawing to the renderer
         */
@@ -71,8 +75,32 @@ void Engine::run() {
  * We set the window to close when the escape key is pressed
  */
 void Engine::processInput() {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+
+    // For the closing of the window
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
+    }
+
+    // For the camera movement
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        renderer->camera->ProcessKeyboard(FORWARD, this->deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        renderer->camera->ProcessKeyboard(BACKWARD, this->deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        renderer->camera->ProcessKeyboard(LEFT, this->deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        renderer->camera->ProcessKeyboard(RIGHT, this->deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        renderer->camera->ProcessKeyboard(UP, this->deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+        renderer->camera->ProcessKeyboard(DOWN, this->deltaTime);
+    }
+
 }
 
 /**

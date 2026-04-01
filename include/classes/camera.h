@@ -5,6 +5,15 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+enum Camera_Movement {
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
 class Camera {
     public:
         glm::vec3 Position;
@@ -20,7 +29,7 @@ class Camera {
         glm::mat4 GetViewMatrix();
         
         // Process W,A,S,D movement
-        void ProcessKeyboard(const char* direction, float deltaTime);
+        void ProcessKeyboard(Camera_Movement direction, float deltaTime);
             
     private:
 };
