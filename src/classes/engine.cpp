@@ -34,6 +34,9 @@ bool Engine::init(int width, int height, const char* title) {
     */
     renderer = new Renderer();
     
+    // SETS
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     return true;
 }
 
@@ -50,7 +53,6 @@ void Engine::run() {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;   
-
         processInput();
         /*
             The engine delegates the drawing to the renderer
@@ -101,6 +103,26 @@ void Engine::processInput() {
         renderer->camera->ProcessKeyboard(DOWN, this->deltaTime);
     }
 
+    // 1. Obtener posición actual del cursor
+    double xpos, ypos;
+    glfwGetCursorPos(window, &xpos, &ypos);
+
+    // 2. Evitar el "salto" inicial al arrancar el programa
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    // 3. Calcular cuánto se movió el mouse (offset)
+    float xoffset = (float)(xpos - lastX);
+    float yoffset = (float)(lastY - ypos); // Invertido: y va de abajo hacia arriba en OpenGL
+
+    lastX = xpos;
+    lastY = ypos;
+
+    // 4. Enviar los datos a la cámara
+    renderer->camera->ProcessMouseMovement(xoffset, yoffset);
 }
 
 /**

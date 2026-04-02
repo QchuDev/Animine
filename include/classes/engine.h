@@ -18,7 +18,8 @@ class Engine {
         ~Engine();  // Destructor of the class -> to free memory
         bool init(int width, int height, const char* title);
         void run(); // Method to start the main loop
-        
+        double lastX = 640.0, lastY = 360.0; // Inicializar en el centro de tu ventana
+        bool firstMouse = true;
     private:
         GLFWwindow* window;
         Renderer* renderer; // Instance of the one who draws on screen
