@@ -30,8 +30,7 @@ class Camera {
         
         // Process W,A,S,D movement
         void ProcessKeyboard(Camera_Movement direction, float deltaTime);
-            
-    private:
+        void updateCameraVectors();           
 };
 
 

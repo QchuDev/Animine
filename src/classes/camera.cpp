@@ -37,3 +37,8 @@ void Camera::ProcessKeyboard(const Camera_Movement direction, float deltaTime) {
     std::cout << "Velocidad calculada: " << velocity << " Pos Z: " << Position.z << std::endl;
 }
 
+
+void Camera::updateCameraVectors() {
+    glm::vec3 front;
+    
+}
