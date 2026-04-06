@@ -21,7 +21,7 @@ glm::mat4 Camera::GetViewMatrix() {
  * Proccesses the W,A,S,D movement of the camera 
  */
 void Camera::ProcessKeyboard(const Camera_Movement direction, float deltaTime) {
-    float velocity = 5.0f * deltaTime; 
+    float velocity = 2.0f * deltaTime; 
     
     if (direction == FORWARD)
         Position += Front * velocity;
@@ -36,7 +36,6 @@ void Camera::ProcessKeyboard(const Camera_Movement direction, float deltaTime) {
     if (direction == DOWN)
         Position -= glm::normalize(Up) * velocity;
         
-    std::cout << "Velocidad calculada: " << velocity << " Pos Z: " << Position.z << std::endl;
 }
 
 
@@ -53,7 +52,7 @@ void Camera::updateCameraVectors() {
 }
 
 void Camera::ProcessMouseMovement(float xoffset, float yoffset) {
-    float sensitivity = 0.1f;
+    float sensitivity = 0.05f;
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
