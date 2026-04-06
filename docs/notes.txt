@@ -37,4 +37,8 @@ Las herramientas del proyecto:
     delete c; // addr: 0xf3 liberado
 
 
+// Que es std:: ?
+'std' es la abreviacion de 'standard' y representa la el espacio de nombres
+'namespace' de la biblioteca estandar de C++
+
 

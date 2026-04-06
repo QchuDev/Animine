@@ -103,25 +103,16 @@ void Engine::processInput() {
         renderer->camera->ProcessKeyboard(DOWN, this->deltaTime);
     }
 
-    // 1. Obtener posición actual del cursor
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
-
-    // 2. Evitar el "salto" inicial al arrancar el programa
     if (firstMouse) {
-        lastX = xpos;
-        lastY = ypos;
+        lastX = xpos; lastY = ypos;
         firstMouse = false;
     }
-
-    // 3. Calcular cuánto se movió el mouse (offset)
     float xoffset = (float)(xpos - lastX);
-    float yoffset = (float)(lastY - ypos); // Invertido: y va de abajo hacia arriba en OpenGL
-
+    float yoffset = (float)(lastY - ypos); 
     lastX = xpos;
     lastY = ypos;
-
-    // 4. Enviar los datos a la cámara
     renderer->camera->ProcessMouseMovement(xoffset, yoffset);
 }
 

@@ -55,14 +55,9 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset) {
     float sensitivity = 0.05f;
     xoffset *= sensitivity;
     yoffset *= sensitivity;
-
     Yaw   += xoffset;
     Pitch += yoffset;
-
-    // Restricción para no "rompernos el cuello" mirando atrás
     if (Pitch > 89.0f)  Pitch = 89.0f;
     if (Pitch < -89.0f) Pitch = -89.0f;
-
-    // ¡Importante! Recalcular los vectores Front, Right y Up
     updateCameraVectors();
 }
