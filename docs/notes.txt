@@ -1,11 +1,12 @@
 
 // Recordar que tenemos una pagina para aprender C++
-
 -> https://learncpp.com
+
+// Ademas tenemos una pagina especifica de donde aprender OpenGL
+-> https://learnopengl.com
 
 Ademas podemos aprenderlo desde cursos de Cisco
 (nos dan un certificado y todo)
-
 
 
 Las herramientas del proyecto:
