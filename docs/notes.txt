@@ -1,4 +1,13 @@
 
+// Recordar que tenemos una pagina para aprender C++
+
+-> https://learncpp.com
+
+Ademas podemos aprenderlo desde cursos de Cisco
+(nos dan un certificado y todo)
+
+
+
 Las herramientas del proyecto:
     
     // No lo tengo muy claro, sera cuestion de investigar...    
@@ -25,3 +34,6 @@ Las herramientas del proyecto:
     c = new char(); // addr: 0xf3           <--- MEMORY LEAK (no libera 0xf1 antes de usar otro espacio de memoria)
     *c = 'g': // addr: 0xf3 val: 0xf3
     delete c; // addr: 0xf3 liberado
+
+
+

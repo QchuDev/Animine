@@ -1,0 +1,53 @@
+@startuml
+
+skinparam Linetype ortho
+skinparam Nodesep 60
+skinparam Ranksep 60
+
+class Engine {
+    + void run(width, height, );
+}
+class GLFWindow {}
+GLFWindow <-- Engine
+
+class Renderer {
+    + void drawScene();
+}
+Renderer <-- Engine
+
+class Shader {}
+Shader <-- Renderer
+
+'Scene is a class that contains all the entities within it'
+class Scene {
+    + vector<Entity> getAllEntities();
+}
+Scene <-- Engine
+
+package entities {
+    interface entity {}
+    class line {}
+    class mesh {}
+    class cube {}
+    class curve {}
+    class text {}
+}
+entities <-- Scene
+
+'Here is where the magic happens, the animator should transform the entities attr.'
+'Each entity has a position, scale and rotation'
+'This class should be able to receive the path of some animations scripts.'
+'this scripts are just text files that contain key words for animating'
+
+class Animator {}
+Animator<--Engine
+
+package animations {
+    class bouncing_ball{}
+    class curve_appearing{}
+    class camera_angle_change{}
+}
+
+animations<--Animator
+
+@enduml
