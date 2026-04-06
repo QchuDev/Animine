@@ -54,7 +54,7 @@ void Engine::run() {
     
         // Renderer --> the guy who draws
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
-        renderer->drawScene();
+        renderer->drawScene(scene.getAllEntities());
         
         // Good stuff idk what it does
         glfwSwapBuffers(window);

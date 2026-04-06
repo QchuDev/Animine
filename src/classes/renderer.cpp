@@ -34,17 +34,20 @@ void Renderer::clear(float r, float g, float b, float a) {
 /**
  * Draws every entity in the scene
  */
-void Renderer::drawScene() {
+void Renderer::drawScene(std::vector<IEntity*>& entities) {
+    
     basicShader->use(); // activate the shader before drawing
     
-    // Projection Matrix
-    // 45 degrees of view, 16:9 aspect ratio, close-up and far planes
+    // Global Matrices -> Projection and view
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f/720.0f, 0.1f, 100.0f);
-    
-    // View Matrix
     glm::mat4 view = camera->GetViewMatrix();
     
-    // Model matrix
+    // Start the drawing of each entity
+    axises->draw(*basicShader, view, projection);
+    for (IEntity* entity : entities) {
+        entity->draw(*basicShader, view, projection);
+    }
+    
     glm::mat4 model = glm::mat4(1.0f);
     
     // Send matrices to shader
@@ -53,5 +56,4 @@ void Renderer::drawScene() {
     glUniformMatrix4fv(glGetUniformLocation(basicShader->ID, "view"), 1, GL_FALSE, &view[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(basicShader->ID, "projection"), 1, GL_FALSE, &projection[0][0]);
     
-    axises->draw(*basicShader, view, projection);
 }

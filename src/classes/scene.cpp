@@ -36,9 +36,14 @@ void Scene::parseLine(const std::string& line) {
     
 }
 
-std::vector<IEntity> Scene::getAllEntities() {
-    
+std::vector<IEntity*>& Scene::getAllEntities() {
+    return entities;
 }
 
 
-Scene::~Scene() {}
+Scene::~Scene() {
+    for(IEntity* entity : entities) {
+        delete entity; // Ahora sí borramos la memoria dinámica
+    }
+    entities.clear();
+}

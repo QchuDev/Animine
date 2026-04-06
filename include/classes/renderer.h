@@ -5,6 +5,7 @@
 #include "classes/shader.h"
 #include "classes/camera.h"
 
+#include "classes/entities/entity.h"
 
 class Renderer {
     public:
@@ -14,7 +15,7 @@ class Renderer {
         Camera* camera;
         
         void clear(float r, float g, float b, float a); // Cleans the screen with a specified color
-        void drawScene(); // Draws on screen the current scene 
+        void drawScene(std::vector<IEntity*>&); // Draws on screen the current scene 
 };
 
 
