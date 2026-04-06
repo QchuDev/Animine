@@ -4,7 +4,7 @@
 
 Scene::Scene() {}
 
-bool Scene::init(std::string path) {
+bool Scene::loadScene(std::string path) {
     // Creates an input file stream and open the file 
     std::ifstream myFile(path);
     
@@ -33,9 +33,6 @@ void Scene::parseLine(const std::string& line) {
     
     // for now we print the line...
     std::cout << line << std::endl;
-    
-    
-    
     
 }
 

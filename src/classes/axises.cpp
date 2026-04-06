@@ -6,12 +6,12 @@ Axises::Axises() {
     // 3 axis/lines -> 6 points
     float vertices[] = {
         //     XYZ               RGB
-        -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // X-axis start
-        1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // X-axis end
-        0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // Y-axis start
-        0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // Y-axis end
-        0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, // Z-axis start
-        0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Z-axis end
+        -5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // X-axis start
+        5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // X-axis end
+        0.0f, -5.0f, 0.0f, 0.0f, 1.0f, 0.0f, // Y-axis start
+        0.0f, 5.0f, 0.0f, 0.0f, 1.0f, 0.0f, // Y-axis end
+        0.0f, 0.0f, -5.0f, 0.0f, 0.0f, 1.0f, // Z-axis start
+        0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 1.0f, // Z-axis end
     };
     
     // STUDY THIS FUCKING STUFF
@@ -33,7 +33,7 @@ Axises::Axises() {
     
 }
 
-void Axises::draw() {
+void Axises::draw(Shader& shader, const glm::mat4& view, const glm::mat4& projection) {
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 6);
 };

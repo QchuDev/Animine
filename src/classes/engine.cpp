@@ -1,7 +1,7 @@
-#include "classes/engine.h"
 #include <glad/glad.h>
 #include <iostream>
-#include <classes/scene.h>
+#include "classes/engine.h"
+#include "classes/scene.h"
 
 Engine::Engine() : window(nullptr), renderer(nullptr) {}
 
@@ -9,33 +9,20 @@ Engine::Engine() : window(nullptr), renderer(nullptr) {}
  * Setup of the engine, creates the window and render
  */
 bool Engine::init(int width, int height, const char* title) {
-    /*
-        If GLFW fails to start... then we cant do a thing
-    */
-    if (!glfwInit()) return false;
+
+    if (!glfwInit()) return false;                                  // Check if glfw fails to init
     
-    /*
-        We create the window with the specifications given to the engine,
-        and check if correctly created 
-    */
-    window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if(!window) {
+    window = glfwCreateWindow(width, height, title, NULL, NULL);    // We create the window with the specifications given to the engine
+    if(!window) {                                                   // check if correctly created
         glfwTerminate();
         return false;    
     }
     glfwMakeContextCurrent(window);
     
-    /*
-        ???      
-    */
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) return false;
 
-    /*
-        Create the renderer we are going to use
-    */
-    renderer = new Renderer();
+    renderer = new Renderer(); // Create the renderer to draw entities on the window
     
-    // SETS
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     return true;
@@ -50,29 +37,28 @@ bool Engine::init(int width, int height, const char* title) {
  */
 void Engine::run() {
     
+    // Set up the main scene
     Scene scene;
-    scene.init("scenes/scene_1.txt");
+    scene.loadScene("scenes/main_scene.txt"); // we load the main scene
     
-    
+    // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {
+    
         // Calcular deltaTime
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;   
+        
+        // -> All inputs here <-
         processInput();
-        /*
-            The engine delegates the drawing to the renderer
-        */
+    
+        // Renderer --> the guy who draws
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
         renderer->drawScene();
         
-        
-        /*
-            We make sure to ... ???
-        */
+        // Good stuff idk what it does
         glfwSwapBuffers(window);
         glfwPollEvents();
-        
     }
 }
 
@@ -108,7 +94,8 @@ void Engine::processInput() {
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
         renderer->camera->ProcessKeyboard(DOWN, this->deltaTime);
     }
-
+    
+    // The cursor input logic
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
     if (firstMouse) {
@@ -119,7 +106,9 @@ void Engine::processInput() {
     float yoffset = (float)(lastY - ypos); 
     lastX = xpos;
     lastY = ypos;
-    renderer->camera->ProcessMouseMovement(xoffset, yoffset);
+    
+    // The camera takes this inputs to rotate 
+    renderer->camera->ProcessMouseMovement(xoffset, yoffset); 
 }
 
 /**

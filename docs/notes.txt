@@ -2,13 +2,16 @@
 // Recordar que tenemos una pagina para aprender C++
 -> https://learncpp.com
 
-// Ademas tenemos una pagina especifica de donde aprender OpenGL
--> https://learnopengl.com
-
 Ademas podemos aprenderlo desde cursos de Cisco
 (nos dan un certificado y todo)
 
 
+// Ademas tenemos una pagina especifica de donde aprender OpenGL
+-> https://learnopengl.com
+En esta pagina encontramos el libro 'Learn OpenGL - Graphics Programming'
+
+
+// Que usamos y que librerias tenemos?
 Las herramientas del proyecto:
     
     // No lo tengo muy claro, sera cuestion de investigar...    
@@ -18,23 +21,26 @@ Las herramientas del proyecto:
     GLFW --> Window e Inputs	
     GLAD --> Relacion con GPU
     GLM	--> Math (Matrices, Vectores, Cuaterniones)
-    
-    // Arreglos
-    // vertices[0] => *vertices
-    // vertices[1] => *(vertices + 1)
-    // (...)
-    // vertices[i] => *(vertices + i)
-    
-    
-    // En C/C++ tenemos que hacernos cargo de los espacios de memoria que ocupamos
-    // no hay garbage collector
-    
-    char* c = new char(); // addr: 0xf1
-    *c = 'b'; // addr: 0xf1 val: 'b'                
-    
-    c = new char(); // addr: 0xf3           <--- MEMORY LEAK (no libera 0xf1 antes de usar otro espacio de memoria)
-    *c = 'g': // addr: 0xf3 val: 0xf3
-    delete c; // addr: 0xf3 liberado
+
+
+
+// ------- Aprendizaje C++ ---------
+
+// Arrays
+// vertices[0] => *vertices
+// vertices[1] => *(vertices + 1)
+// (...)
+// vertices[i] => *(vertices + i)
+
+// En C/C++ tenemos que hacernos cargo de los espacios de memoria que ocupamos
+// no hay garbage collector
+
+char* c = new char(); // addr: 0xf1
+*c = 'b'; // addr: 0xf1 val: 'b'                
+
+c = new char(); // addr: 0xf3           <--- MEMORY LEAK (no libera 0xf1 antes de usar otro espacio de memoria)
+*c = 'g': // addr: 0xf3 val: 0xf3
+delete c; // addr: 0xf3 liberado
 
 
 // Que es std:: ?

@@ -15,13 +15,13 @@ Renderer::Renderer() {
     
     // Main Camera
     camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-    
+
     // The routes should match the vertex and fragment .glsl in our project
     // Basic Shader 
     basicShader = new Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
+    
 
 }
-
 
 /**
  * Clears the screen --> draws every pixel with the specified RGBA color
@@ -53,7 +53,5 @@ void Renderer::drawScene() {
     glUniformMatrix4fv(glGetUniformLocation(basicShader->ID, "view"), 1, GL_FALSE, &view[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(basicShader->ID, "projection"), 1, GL_FALSE, &projection[0][0]);
     
-    axises->draw();
+    axises->draw(*basicShader, view, projection);
 }
-
-

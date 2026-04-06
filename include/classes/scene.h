@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include "classes/entity.h"
+#include "classes/entities/entity.h"
 
 class Scene {
 public:
@@ -16,7 +16,7 @@ public:
      * 
      * returns if it was correctly initialized
      */
-    bool init(std::string path);
+    bool loadScene(std::string path);
     
     /**
      * Returns a vector with all the entities in this scene
