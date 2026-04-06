@@ -1,6 +1,7 @@
 #include "classes/engine.h"
 #include <glad/glad.h>
 #include <iostream>
+#include <classes/scene.h>
 
 Engine::Engine() : window(nullptr), renderer(nullptr) {}
 
@@ -48,6 +49,11 @@ bool Engine::init(int width, int height, const char* title) {
  * etc...
  */
 void Engine::run() {
+    
+    Scene scene;
+    scene.init("scenes/scene_1.txt");
+    
+    
     while(!glfwWindowShouldClose(window)) {
         // Calcular deltaTime
         float currentFrame = glfwGetTime();

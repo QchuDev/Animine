@@ -14,8 +14,9 @@ public:
      * This init method takes a path as an argument. 
      * It should be a .txt where the wanted entities are specified
      * 
+     * returns if it was correctly initialized
      */
-    void init(std::string path);
+    bool init(std::string path);
     
     /**
      * Returns a vector with all the entities in this scene
