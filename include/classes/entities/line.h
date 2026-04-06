@@ -10,6 +10,8 @@ public:
     Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color);
     ~Line();
     void draw(Shader& shader, const glm::mat4& view, const glm::mat4& projection) override;
+private:
+    unsigned int VAO, VBO;
 };
 
 #endif

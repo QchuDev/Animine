@@ -42,18 +42,12 @@ void Renderer::drawScene(std::vector<IEntity*>& entities) {
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f/720.0f, 0.1f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
     
-    // Start the drawing of each entity
+    // Drawing the main axis
     axises->draw(*basicShader, view, projection);
+    
+    // Start the drawing of each entity
     for (IEntity* entity : entities) {
         entity->draw(*basicShader, view, projection);
-    }
-    
-    glm::mat4 model = glm::mat4(1.0f);
-    
-    // Send matrices to shader
-    // model, view, projection should be the same names as the shaders/vertex.glsl
-    glUniformMatrix4fv(glGetUniformLocation(basicShader->ID, "model"), 1, GL_FALSE, &model[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(basicShader->ID, "view"), 1, GL_FALSE, &view[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(basicShader->ID, "projection"), 1, GL_FALSE, &projection[0][0]);
+    }    
     
 }

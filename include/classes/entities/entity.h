@@ -6,6 +6,7 @@
 
 #include "classes/shader.h"
 
+
 struct Transform
 {
     glm::vec3 position = glm::vec3(0.0f);   
@@ -46,6 +47,5 @@ class IEntity {
         virtual glm::vec3 getScale() { return transform.scale; }
         virtual void setScale(glm::vec3 sca) { transform.scale = sca; }
     };
-
 
 #endif 

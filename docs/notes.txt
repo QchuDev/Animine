@@ -23,7 +23,6 @@ Las herramientas del proyecto:
     GLM	--> Math (Matrices, Vectores, Cuaterniones)
 
 
-
 // ------- Aprendizaje C++ ---------
 
 // Arrays
@@ -50,3 +49,10 @@ delete c; // addr: 0xf3 liberado
 // Recordar algo medio piola y bizarro
 " ... ": string -> comillas dobles ""
 '...': char -> comillas simples ''
+
+// Punteros y expresiones
+
+Obj A;          <-- es el objeto, todo el terreno de memoria
+Obj B = A;      <-- copia A en b
+
+

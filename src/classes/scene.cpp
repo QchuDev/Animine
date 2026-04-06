@@ -1,6 +1,24 @@
-#include "classes/scene.h"
-#include <fstream>
 #include <iostream>
+#include <fstream>          // For reading the .txt file
+#include <sstream>          // For the parsing of text
+
+#include "classes/scene.h"
+#include "classes/entities/line.h"
+
+enum class EntityType {
+    LINE,
+    BALL,
+    QUAD,
+    UNKNOWN
+};
+
+EntityType getEntityType(const std::string& type) {
+    if (type == "line") return EntityType::LINE;
+    if (type == "line") return EntityType::BALL;
+    if (type == "line") return EntityType::QUAD;
+    return EntityType::UNKNOWN;
+}
+
 
 Scene::Scene() {}
 
@@ -27,14 +45,34 @@ bool Scene::loadScene(std::string path) {
     return true;
 }
 
+
 void Scene::parseLine(const std::string& line) {
     // We ignore comments -> lines starting with '#'
     if (line.empty() || line[0] == '#') { return; }
+    std::cout << "Processing --> " + line << std::endl; // temp.
     
-    // for now we print the line...
-    std::cout << line << std::endl;
+    std::stringstream ss(line);
+    std::string typeStr;
+    ss >> typeStr;     // Extracts the firt word --> the object type (example: line)
+    
+    EntityType type = getEntityType(typeStr); 
+    
+    switch (type) {
+        case EntityType::LINE:
+            float x1, y1, z1, x2, y2, z2, r, g, b;
+            if (ss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> r >> g >> b) {
+                std::cerr << "New Instance of: " << typeStr << std::endl;
+                entities.push_back(new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b)));
+            }
+            break;
+        
+        default:
+            std::cerr << "Unknown entity type: " << typeStr << std::endl;
+            break;
+    }
     
 }
+
 
 std::vector<IEntity*>& Scene::getAllEntities() {
     return entities;
