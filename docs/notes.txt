@@ -41,4 +41,6 @@ Las herramientas del proyecto:
 'std' es la abreviacion de 'standard' y representa la el espacio de nombres
 'namespace' de la biblioteca estandar de C++
 
-
+// Recordar algo medio piola y bizarro
+" ... ": string -> comillas dobles ""
+'...': char -> comillas simples ''

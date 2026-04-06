@@ -19,12 +19,24 @@ bool Scene::init(std::string path) {
     std::cerr << "Reading file ..." << std::endl;
     while (std::getline(myFile, line))
     {
-        std::cout << line << std::endl;
+        parseLine(line);        
     }
     
     // Close the file
     myFile.close();
     return true;
+}
+
+void Scene::parseLine(const std::string& line) {
+    // We ignore comments -> lines starting with '#'
+    if (line.empty() || line[0] == '#') { return; }
+    
+    // for now we print the line...
+    std::cout << line << std::endl;
+    
+    
+    
+    
 }
 
 std::vector<IEntity> Scene::getAllEntities() {

@@ -25,6 +25,7 @@ public:
 
 private:
     std::vector<IEntity> entities;
+    void parseLine(const std::string& line);
 };
 
 #endif
