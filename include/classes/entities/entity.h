@@ -34,6 +34,7 @@ struct Transform
 */
 class IEntity {
     public:
+        std::string id; // each entity has an id 
         Transform transform;
         virtual ~IEntity() {};// El "= 0" es OBLIGATORIO si no vas a dar una implementación aquí
         

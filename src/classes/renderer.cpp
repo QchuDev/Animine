@@ -48,6 +48,6 @@ void Renderer::drawScene(std::vector<IEntity*>& entities) {
     // Start the drawing of each entity
     for (IEntity* entity : entities) {
         entity->draw(*basicShader, view, projection);
-    }    
+    }
     
 }

@@ -39,7 +39,7 @@ void Engine::run() {
     
     // Set up the main scene
     Scene scene;
-    scene.loadScene("scenes/main_scene.txt"); // we load the main scene
+    scene.loadScene("../scenes/main_scene.txt"); // we load the main scene
     
     // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {
