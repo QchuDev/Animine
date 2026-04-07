@@ -60,6 +60,9 @@ void Engine::run() {
         for (IEntity* entity : scene.getAllEntities()) {
             entity->transform.rotation.x += 45.0f*deltaTime;
             entity->transform.rotation.z += 45.0f*deltaTime;
+            entity->transform.scale.x = 2.0f + glm::cos(10.0f*currentFrame);
+            entity->transform.scale.y = 2.0f - glm::cos(5.0f*currentFrame);
+            entity->transform.scale.z = 2.0f + glm::cos(2.0f*currentFrame);
         }
         
         // Good stuff idk what it does

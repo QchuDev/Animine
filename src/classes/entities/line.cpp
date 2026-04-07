@@ -4,7 +4,7 @@
 
 
 Line::Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color) {
-    // point : [x,y,z,r,g,b]
+    // point : [ x,y,z, r,g,b ]
     // line : [point, point]
     // 3 axis/lines -> 6 points
     float vertices[] = {
@@ -19,6 +19,8 @@ Line::Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color) {
     
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    
+    // Passing all vertices and colors 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
     
