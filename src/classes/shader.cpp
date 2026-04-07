@@ -62,6 +62,10 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     // We delete the individual shaders, as they are already linked with the program
     glDeleteShader(vertex);
     glDeleteShader(fragment);
+    
+    modelLoc = glGetUniformLocation(ID, "model");
+    viewLoc  = glGetUniformLocation(ID, "view");
+    projLoc  = glGetUniformLocation(ID, "projection");
 }
 
 void Shader::use() {

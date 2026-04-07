@@ -55,4 +55,5 @@ delete c; // addr: 0xf3 liberado
 Obj A;          <-- es el objeto, todo el terreno de memoria
 Obj B = A;      <-- copia A en b
 
+Obj B = A&;     <-- se guarda una referencia de A, no copia todo el objeto 
 

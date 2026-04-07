@@ -34,6 +34,13 @@ Axises::Axises() {
 }
 
 void Axises::draw(Shader& shader, const glm::mat4& view, const glm::mat4& projection) {
+    shader.use();
+    
+    // Usando las funciones optimizadas que creamos antes
+    shader.setMat4(shader.modelLoc, glm::mat4(1.0f)); 
+    shader.setMat4(shader.viewLoc, view);
+    shader.setMat4(shader.projLoc, projection);
+
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 6);
 };

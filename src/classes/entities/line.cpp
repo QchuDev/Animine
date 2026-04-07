@@ -34,15 +34,10 @@ Line::Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color) {
 void Line::draw(Shader& shader, const glm::mat4& view, const glm::mat4& projection) {
     shader.use(); // Asegurarnos de que el shader está activo
 
-    // 1. Enviamos la matriz de modelo (posición/rotación/escala propia)
-    glm::mat4 model = transform.getModelMatrix();
-    glUniformMatrix4fv(glGetUniformLocation(shader.ID, "model"), 1, GL_FALSE, &model[0][0]);
+    shader.setMat4(shader.modelLoc, transform.getModelMatrix());
+    shader.setMat4(shader.viewLoc, view);
+    shader.setMat4(shader.projLoc, projection);
     
-    // 2. Enviamos las matrices globales que recibimos del Renderer
-    glUniformMatrix4fv(glGetUniformLocation(shader.ID, "view"), 1, GL_FALSE, &view[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, &projection[0][0]);
-
-    // 3. Dibujamos
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 2);
     glBindVertexArray(0);

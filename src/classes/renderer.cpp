@@ -44,12 +44,13 @@ void Renderer::drawScene(std::vector<IEntity*>& entities) {
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1280.0f/720.0f, 0.01f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
     
-    // Drawing the main axis
-    axises->draw(*basicShader, view, projection);
     
     // Start the drawing of each entity
     for (IEntity* entity : entities) {
         entity->draw(*basicShader, view, projection);
     }
+    
+    // Drawing the main axis
+    axises->draw(*basicShader, view, projection);
     
 }

@@ -56,6 +56,12 @@ void Engine::run() {
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
         renderer->drawScene(scene.getAllEntities());
         
+        // Rotation test
+        for (IEntity* entity : scene.getAllEntities()) {
+            entity->transform.rotation.x += 45.0f*deltaTime;
+            entity->transform.rotation.z += 45.0f*deltaTime;
+        }
+        
         // Good stuff idk what it does
         glfwSwapBuffers(window);
         glfwPollEvents();
