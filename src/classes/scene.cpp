@@ -61,7 +61,6 @@ void Scene::parseLine(const std::string& line) {
         case EntityType::LINE:
             float x1, y1, z1, x2, y2, z2, r, g, b;
             if (ss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> r >> g >> b) {
-                std::cerr << "New Instance of: " << typeStr << std::endl;
                 entities.push_back(new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b)));
             }
             break;

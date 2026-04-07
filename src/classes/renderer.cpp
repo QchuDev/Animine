@@ -39,7 +39,9 @@ void Renderer::drawScene(std::vector<IEntity*>& entities) {
     basicShader->use(); // activate the shader before drawing
     
     // Global Matrices -> Projection and view
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f/720.0f, 0.1f, 100.0f);
+    
+    // projection (fov, aspect, near, far)
+    glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1280.0f/720.0f, 0.01f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
     
     // Drawing the main axis
