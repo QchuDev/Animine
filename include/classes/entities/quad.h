@@ -1,13 +1,13 @@
-#ifndef LINE_H
-#define LINE_H
+#ifndef QUAD_H
+#define QUAD_H
 
 #include <glm/glm.hpp>
 #include "classes/entities/entity.h"
 
-class Line : public IEntity{
+class Quad : public IEntity {
 public:
-    Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color);
-    ~Line();
+    Quad();
+    ~Quad();
     void draw(Shader& shader, const glm::mat4& view, const glm::mat4& projection) override;
 private:
     unsigned int VAO, VBO;
