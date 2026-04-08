@@ -2,7 +2,7 @@
 
 int main() {
     Engine engine;
-    if(engine.init(1920, 1080, "QchuAnims - Ready"))
+    if(engine.init(1280, 720, "QchuAnims - Ready"))
         engine.run();
     return 0;
 }
