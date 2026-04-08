@@ -7,6 +7,9 @@
 
 #include "classes/entities/entity.h"
 
+#include <string>
+#include <map>
+
 class Renderer {
     public:
         Renderer();
@@ -15,7 +18,7 @@ class Renderer {
         Camera* camera;
         
         void clear(float r, float g, float b, float a); // Cleans the screen with a specified color
-        void drawScene(std::vector<IEntity*>&); // Draws on screen the current scene 
+        void drawScene(std::map<std::string, IEntity*>&); // Draws on screen the current scene 
 };
 
 

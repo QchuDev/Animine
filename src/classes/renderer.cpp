@@ -34,7 +34,7 @@ void Renderer::clear(float r, float g, float b, float a) {
 /**
  * Draws every entity in the scene
  */
-void Renderer::drawScene(std::vector<IEntity*>& entities) {
+void Renderer::drawScene(std::map<std::string, IEntity*>& entities) {
     
     basicShader->use(); // activate the shader before drawing
     
@@ -46,7 +46,7 @@ void Renderer::drawScene(std::vector<IEntity*>& entities) {
     
     
     // Start the drawing of each entity
-    for (IEntity* entity : entities) {
+    for (auto const& [id, entity] : entities) {
         entity->draw(*basicShader, view, projection);
     }
     

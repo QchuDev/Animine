@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include "classes/entities/entity.h"
 
 class Scene {
@@ -21,10 +22,10 @@ public:
     /**
      * Returns a vector with all the entities in this scene
      */
-    std::vector<IEntity*>& getAllEntities();
+    std::map<std::string, IEntity*>& getAllEntities();
 
 private:
-    std::vector<IEntity*> entities;
+    std::map<std::string, IEntity*> entities;
     void parseLine(const std::string& line);
 };
 

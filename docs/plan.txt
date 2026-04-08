@@ -1,0 +1,30 @@
+
+           / THE PLAN \
+      Updates   |    State
+    ============================   
+    1. Window   |  (completed)
+    2. Camera   |  (completed)   
+    3. Axises   |  (completed)
+    4. Lines    |  (completed)
+    5. Quads    |     (wip)
+    6. Curves   |  
+    6a. Generic |
+    6b. Draw    |
+    7. Animator |  
+    8. 
+    
+    
+"scene_i.txt" Format
+
+# For the creation of entities
+    line id x1 y1 z1 x2 y2 z2 r g b
+    quad id x1 y1 z1 x2 y2 z2 x3 y3 z3 x4 y4 z4 texture_path
+    curve id formula(t) r g b
+
+# For the animation of an entity
+    animate id transform_type formula(t)
+    # transform_type: position/rotation/scale
+    # formula(t): example --> { sin(t) where 0 <= t <= 1 }
+
+# For timings: all animations until a wait play together
+    wait ammount

@@ -58,29 +58,37 @@ void Scene::parseLine(const std::string& line) {
     EntityType type = getEntityType(typeStr); 
     
     switch (type) {
-        case EntityType::LINE:
+        case EntityType::LINE: {
+            std::string id;
             float x1, y1, z1, x2, y2, z2, r, g, b;
-            if (ss >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> r >> g >> b) {
-                entities.push_back(new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b)));
+            
+            if (ss >> id >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> r >> g >> b) {
+                if (entities.find(id) == entities.end()) {
+                    entities[id] = new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b));;
+                } else {
+                    std::cout << "Error: duplicated id at .txt" << std::endl;
+                }
             }
+            
             break;
-        
-        default:
+        }
+        default: {
             std::cerr << "Unknown entity type: " << typeStr << std::endl;
             break;
+        }
     }
     
 }
 
 
-std::vector<IEntity*>& Scene::getAllEntities() {
+std::map<std::string, IEntity*>& Scene::getAllEntities() {
     return entities;
 }
 
 
 Scene::~Scene() {
-    for(IEntity* entity : entities) {
-        delete entity; // Ahora sí borramos la memoria dinámica
+    for (auto const& [id, entity] : entities) {
+        delete entity;
     }
     entities.clear();
 }
