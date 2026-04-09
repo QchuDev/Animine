@@ -12,21 +12,26 @@
 
 class Renderer {
     private: 
-    Shader* textureShader;
-    Shader* gizmoShader;
-    
+        Shader* textureShader;
+        Shader* gizmoShader;
+        std::map<std::string, unsigned int> loadedTextures;
     public:
         Axises* axises;
         Camera* camera;
         
         Renderer();
         void clear(float r, float g, float b, float a); // Cleans the screen with a specified color
-        void drawScene(std::map<std::string, IEntity*>&); // Draws on screen the current scene 
+        void drawScene(std::map<std::string, IEntity*>& entities); // Draws on screen the current scene 
 
         // Getters
         Shader* getGizmoShader() const { return gizmoShader; }
         Shader* getTextureShader() const { return textureShader; }
-    
+        
+        // The renderer handles the textures, we use the same textures for various entities
+        unsigned int getOrCreateTexture(const std::string& fileName);
+        
+        // Function with glGenTextures, glTexImage2D, etc.
+        unsigned int loadTextureFromDisk(const char* path);
 
 };
 

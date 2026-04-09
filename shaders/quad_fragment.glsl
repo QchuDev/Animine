@@ -1,12 +1,13 @@
-uniform bool useTexture; // Lo activas desde C++
-uniform vec3 flatColor;
-uniform sampler2D tex;
+#version 330 core
+
+out vec4 FragColor;
+
 in vec2 TexCoord;
 
-void main() {
-    if (useTexture) {
-        FragColor = texture(tex, TexCoord);
-    } else {
-        FragColor = vec4(flatColor, 1.0);
-    }
+uniform sampler2D ourTexture;
+
+void main()
+{
+    FragColor = texture(ourTexture, TexCoord);
+    // FragColor = vec4(1.0, 0.0, 1.0, 1.0); // Magenta puro
 }

@@ -2,9 +2,13 @@
 #include <fstream>          // For reading the .txt file
 #include <sstream>          // For the parsing of text
 
+// Managers
 #include "classes/scene.h"
-#include "classes/entities/line.h"
 #include "classes/renderer.h"
+
+// Entities
+#include "classes/entities/line.h"
+#include "classes/entities/quad.h"
 
 enum class EntityType {
     LINE,
@@ -16,7 +20,7 @@ enum class EntityType {
 EntityType getEntityType(const std::string& type) {
     if (type == "line") return EntityType::LINE;
     if (type == "curve") return EntityType::CURVE;
-    if (type == "line") return EntityType::QUAD;
+    if (type == "quad") return EntityType::QUAD;
     return EntityType::UNKNOWN;
 }
 
@@ -54,8 +58,14 @@ void Scene::parseLine(const std::string& line) {
     std::string typeStr;
     ss >> typeStr;     // Extracts the firt word --> the object type (example: line)
     
+    if (!entityCreation(typeStr, ss)) {
+        std::cout << "Error: couldn't create entity " << std::endl;
+    }
+        
+}
+
+bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
     EntityType type = getEntityType(typeStr); 
-    
     switch (type) {
         case EntityType::LINE: {
             std::string id;
@@ -64,6 +74,33 @@ void Scene::parseLine(const std::string& line) {
             if (ss >> id >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> r >> g >> b) {
                 if (entities.find(id) == entities.end()) {
                     entities[id] = new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b), renderer->getGizmoShader());
+                    return true;
+                } else {
+                    std::cout << "Error: duplicated id at .txt" << std::endl;
+
+                }
+            }
+            
+            break;
+        }
+        case EntityType::QUAD: {
+            std::cout << "Creando instancia de Quad..." << std::endl;
+            std::string id, texName;
+            float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
+            
+            if (ss >> id >> texName >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> x3 >> y3 >> z3 >> x4 >> y4 >> z4) {
+                
+                unsigned int texID = renderer->getOrCreateTexture(texName);
+                
+                if (entities.find(id) == entities.end()) {
+                    entities[id] = new Quad(
+                        glm::vec3(x1,y1,z1), 
+                        glm::vec3(x2,y2,z2), 
+                        glm::vec3(x3,y3,z3), 
+                        glm::vec3(x4,y4,z4),
+                        texID, 
+                        renderer->getTextureShader());
+                        return true;
                 } else {
                     std::cout << "Error: duplicated id at .txt" << std::endl;
                 }
@@ -73,12 +110,11 @@ void Scene::parseLine(const std::string& line) {
         }
         default: {
             std::cerr << "Unknown entity type: " << typeStr << std::endl;
-            break;
         }
     }
-    
-}
+    return false;
 
+}
 
 std::map<std::string, IEntity*>& Scene::getAllEntities() {
     return entities;

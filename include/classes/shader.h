@@ -27,14 +27,9 @@ class Shader {
         }
         
         void setInt(const std::string& name, int value) const {
-            // we search for name in the program
             int location = glGetUniformLocation(this->ID, name.c_str());
-            
-            // check and assign the value
             if (location != -1) {
                 glUniform1i(location, value);
-            } else {
-                std::cerr << "Uniform '" << name << "' not found!" << std::endl;
             }
         }
         

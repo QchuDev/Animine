@@ -12,6 +12,7 @@ private:
     std::map<std::string, IEntity*> entities;
     Renderer* renderer;
     void parseLine(const std::string& line);
+    bool entityCreation(std::string& type, std::stringstream& ss);
 public:
     Scene(Renderer* r) : renderer(r) {};
     ~Scene();

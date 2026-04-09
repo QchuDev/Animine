@@ -57,6 +57,7 @@ void Engine::run() {
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
         renderer->drawScene(scene.getAllEntities());
         
+        
         // Rotation test
         for (auto const& [id, entity] : scene.getAllEntities()) {
             entity->transform.rotation.y += 45.0f*deltaTime;

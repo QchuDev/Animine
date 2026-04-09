@@ -63,9 +63,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     glDeleteShader(vertex);
     glDeleteShader(fragment);
     
-    modelLoc = glGetUniformLocation(ID, "model");
-    viewLoc  = glGetUniformLocation(ID, "view");
     projLoc  = glGetUniformLocation(ID, "projection");
+    viewLoc  = glGetUniformLocation(ID, "view");
+    modelLoc = glGetUniformLocation(ID, "model");
 }
 
 void Shader::use() {
