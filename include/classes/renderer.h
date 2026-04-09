@@ -11,14 +11,23 @@
 #include <map>
 
 class Renderer {
+    private: 
+    Shader* textureShader;
+    Shader* gizmoShader;
+    
     public:
-        Renderer();
         Axises* axises;
-        Shader* basicShader;
         Camera* camera;
         
+        Renderer();
         void clear(float r, float g, float b, float a); // Cleans the screen with a specified color
         void drawScene(std::map<std::string, IEntity*>&); // Draws on screen the current scene 
+
+        // Getters
+        Shader* getGizmoShader() const { return gizmoShader; }
+        Shader* getTextureShader() const { return textureShader; }
+    
+
 };
 
 

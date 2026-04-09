@@ -10,16 +10,17 @@ Renderer::Renderer() {
     // Settings of OpenGL
     // ex: Depth test??
       
-    // Global axis XYZ
-    axises = new Axises();
     
     // Main Camera
     camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-
+    
     // The routes should match the vertex and fragment .glsl in our project
     // Basic Shader 
-    basicShader = new Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
+    gizmoShader = new Shader("shaders/vertex.glsl", "shaders/line_fragment.glsl");
+    textureShader = new Shader("shaders/vertex.glsl", "shaders/quad_fragment.glsl");
     
+    // Global axis XYZ
+    axises = new Axises(gizmoShader);
 
 }
 
@@ -36,7 +37,6 @@ void Renderer::clear(float r, float g, float b, float a) {
  */
 void Renderer::drawScene(std::map<std::string, IEntity*>& entities) {
     
-    basicShader->use(); // activate the shader before drawing
     
     // Global Matrices -> Projection and view
     
@@ -47,10 +47,11 @@ void Renderer::drawScene(std::map<std::string, IEntity*>& entities) {
     
     // Start the drawing of each entity
     for (auto const& [id, entity] : entities) {
-        entity->draw(*basicShader, view, projection);
+        entity->draw(view, projection);
     }
     
     // Drawing the main axis
-    axises->draw(*basicShader, view, projection);
+    gizmoShader->use(); // activate the gizmo shader before drawing
+    axises->draw(view, projection);
     
 }

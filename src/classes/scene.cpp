@@ -4,23 +4,22 @@
 
 #include "classes/scene.h"
 #include "classes/entities/line.h"
+#include "classes/renderer.h"
 
 enum class EntityType {
     LINE,
-    BALL,
+    CURVE,
     QUAD,
     UNKNOWN
 };
 
 EntityType getEntityType(const std::string& type) {
     if (type == "line") return EntityType::LINE;
-    if (type == "line") return EntityType::BALL;
+    if (type == "curve") return EntityType::CURVE;
     if (type == "line") return EntityType::QUAD;
     return EntityType::UNKNOWN;
 }
 
-
-Scene::Scene() {}
 
 bool Scene::loadScene(std::string path) {
     // Creates an input file stream and open the file 
@@ -64,7 +63,7 @@ void Scene::parseLine(const std::string& line) {
             
             if (ss >> id >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> r >> g >> b) {
                 if (entities.find(id) == entities.end()) {
-                    entities[id] = new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b));;
+                    entities[id] = new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b), renderer->getGizmoShader());
                 } else {
                     std::cout << "Error: duplicated id at .txt" << std::endl;
                 }

@@ -38,7 +38,8 @@ bool Engine::init(int width, int height, const char* title) {
 void Engine::run() {
     
     // Set up the main scene
-    Scene scene;
+    Scene scene(renderer);
+    
     scene.loadScene("./scenes/main_scene.txt"); // we load the main scene
     
     // Main loop -> run until glfw wants to close 
@@ -63,8 +64,7 @@ void Engine::run() {
         
         // Good stuff idk what it does
         glfwSwapBuffers(window);
-        glfwPollEvents();
-        
+        glfwPollEvents();   
     }
 }
 

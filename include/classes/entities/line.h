@@ -6,9 +6,9 @@
 
 class Line : public IEntity{
 public:
-    Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color);
+    Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color, Shader* s);
     ~Line();
-    void draw(Shader& shader, const glm::mat4& view, const glm::mat4& projection) override;
+    void draw(const glm::mat4& view, const glm::mat4& projection) override;
 private:
     unsigned int VAO, VBO;
 };

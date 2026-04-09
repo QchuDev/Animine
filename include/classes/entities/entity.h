@@ -33,20 +33,22 @@ struct Transform
     lives on the scene
 */
 class IEntity {
-    public:
-        std::string id; // each entity has an id 
-        Transform transform;
-        virtual ~IEntity() {};// El "= 0" es OBLIGATORIO si no vas a dar una implementación aquí
-        
-        virtual void draw(Shader& shader, const glm::mat4& view, const glm::mat4& projection) = 0;
-        
-        // Getters/Setters
-        virtual glm::vec3 getPosition() { return transform.position; }
-        virtual void setPosition(glm::vec3 pos) { transform.position = pos; }
-        virtual glm::vec3 getRotation() { return transform.rotation; }
-        virtual void setRotation(glm::vec3 rot) { transform.rotation = rot; }
-        virtual glm::vec3 getScale() { return transform.scale; }
-        virtual void setScale(glm::vec3 sca) { transform.scale = sca; }
-    };
+protected:
+    Shader* shader;
+public:
+    std::string id; // each entity has an id 
+    Transform transform;
+    IEntity(Shader* s) : shader(s) {}
+    virtual ~IEntity() {};
+    virtual void draw(const glm::mat4& view, const glm::mat4& projection) = 0;
+    
+    // Getters/Setters
+    virtual glm::vec3 getPosition() { return transform.position; }
+    virtual void setPosition(glm::vec3 pos) { transform.position = pos; }
+    virtual glm::vec3 getRotation() { return transform.rotation; }
+    virtual void setRotation(glm::vec3 rot) { transform.rotation = rot; }
+    virtual glm::vec3 getScale() { return transform.scale; }
+    virtual void setScale(glm::vec3 sca) { transform.scale = sca; }
+};
 
 #endif 

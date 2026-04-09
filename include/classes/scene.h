@@ -5,10 +5,15 @@
 #include <string>
 #include <map>
 #include "classes/entities/entity.h"
+#include "classes/renderer.h"
 
 class Scene {
+private:
+    std::map<std::string, IEntity*> entities;
+    Renderer* renderer;
+    void parseLine(const std::string& line);
 public:
-    Scene();
+    Scene(Renderer* r) : renderer(r) {};
     ~Scene();
 
     /**
@@ -19,14 +24,12 @@ public:
      */
     bool loadScene(std::string path);
     
+    
     /**
      * Returns a vector with all the entities in this scene
      */
     std::map<std::string, IEntity*>& getAllEntities();
 
-private:
-    std::map<std::string, IEntity*> entities;
-    void parseLine(const std::string& line);
 };
 
 #endif

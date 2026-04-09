@@ -1,6 +1,8 @@
 #include "classes/axises.h"
 
-Axises::Axises() {
+Axises::Axises(Shader* s) : IEntity(s) {
+    shader = s;
+    
     // point : [x,y,z,r,g,b]
     // line : [point, point]
     // 3 axis/lines -> 6 points
@@ -33,14 +35,16 @@ Axises::Axises() {
     
 }
 
-void Axises::draw(Shader& shader, const glm::mat4& view, const glm::mat4& projection) {
-    shader.use();
+void Axises::draw(const glm::mat4& view, const glm::mat4& projection) {
+    shader->use();
     
     // Usando las funciones optimizadas que creamos antes
-    shader.setMat4(shader.modelLoc, glm::mat4(1.0f)); 
-    shader.setMat4(shader.viewLoc, view);
-    shader.setMat4(shader.projLoc, projection);
+    shader->setMat4(shader->modelLoc, glm::mat4(1.0f)); 
+    shader->setMat4(shader->viewLoc, view);
+    shader->setMat4(shader->projLoc, projection);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 6);
 };
+
+Axises::~Axises() {}

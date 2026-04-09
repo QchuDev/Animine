@@ -18,8 +18,15 @@ Renderer <-- Engine
 class Shader {}
 Shader <-- Renderer
 
+
+'Here is where the magic happens, the animator should transform the entities attr.'
+'Each entity has a position, scale and rotation'
+'This class should be able to receive the path of some animations scripts.'
+'this scripts are just text files that contain key words for animating'
+
 'Scene is a class that contains all the entities within it'
 class Scene {
+    + bool loadScene(String path)
     + vector<Entity> getAllEntities();
 }
 Scene <-- Engine
@@ -27,27 +34,21 @@ Scene <-- Engine
 package entities {
     interface entity {}
     class line {}
-    class mesh {}
-    class cube {}
+    class quad {}
     class curve {}
     class text {}
 }
 entities <-- Scene
 
-'Here is where the magic happens, the animator should transform the entities attr.'
-'Each entity has a position, scale and rotation'
-'This class should be able to receive the path of some animations scripts.'
-'this scripts are just text files that contain key words for animating'
-
 class Animator {}
 Animator<--Engine
 
-package animations {
-    class bouncing_ball{}
-    class curve_appearing{}
+package scenes {
+    class intro_scene{}
+    class explain_3dfunction{}
     class camera_angle_change{}
 }
-
-animations<--Animator
+scenes<--Animator
+scenes<--Scene
 
 @enduml

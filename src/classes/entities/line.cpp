@@ -3,7 +3,9 @@
 #include "classes/entities/line.h"
 
 
-Line::Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color) {
+Line::Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color, Shader* s) 
+: IEntity(s) 
+{
     // point : [ x,y,z, r,g,b ]
     // line : [point, point]
     // 3 axis/lines -> 6 points
@@ -33,12 +35,12 @@ Line::Line(glm::vec3 startPos, glm::vec3 endPos, glm::vec3 color) {
     glEnableVertexAttribArray(1);
 }
 
-void Line::draw(Shader& shader, const glm::mat4& view, const glm::mat4& projection) {
-    shader.use(); // Asegurarnos de que el shader está activo
+void Line::draw(const glm::mat4& view, const glm::mat4& projection) {
+    shader->use(); // Asegurarnos de que el shader está activo
 
-    shader.setMat4(shader.modelLoc, transform.getModelMatrix());
-    shader.setMat4(shader.viewLoc, view);
-    shader.setMat4(shader.projLoc, projection);
+    shader->setMat4(shader->modelLoc, transform.getModelMatrix());
+    shader->setMat4(shader->viewLoc, view);
+    shader->setMat4(shader->projLoc, projection);
     
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 2);
