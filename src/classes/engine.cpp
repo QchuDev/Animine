@@ -3,6 +3,7 @@
 #include "classes/engine.h"
 #include "classes/scene.h"
 
+
 Engine::Engine() : window(nullptr), renderer(nullptr) {}
 
 /**
@@ -60,7 +61,10 @@ void Engine::run() {
         
         // Rotation test
         for (auto const& [id, entity] : scene.getAllEntities()) {
-            entity->transform.rotation.y += 45.0f*deltaTime;
+            entity->transform.rotation.x += 40.0f*deltaTime;
+            entity->transform.rotation.y += 20.0f*deltaTime;
+            entity->transform.rotation.z += 60.0f*deltaTime;
+            
         }
         
         // Good stuff idk what it does

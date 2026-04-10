@@ -22,4 +22,6 @@ line j 1.0 -1.0 -1.0  1.0  1.0 -1.0  0.0 0.8 0.5
 line k 1.0 -1.0  1.0  1.0  1.0  1.0  0.0 0.8 0.5
 line l -1.0 -1.0  1.0 -1.0  1.0  1.0  0.0 0.8 0.5
 
-quad bob fat_chicken.png -1 0 1 1 0 1 1 0 1 -1 0 -1 
+quad bob fat_chicken.png -1 1 1 1 1 1 1 -1 1 -1 -1 1 
+quad alice fat_chicken.png -1 1 1 1 1 1 1 1 -1 -1 1 -1 
+
