@@ -6,9 +6,9 @@
     2. Camera   |  (completed)   
     3. Axises   |  (completed)
     4. Lines    |  (completed)
-    5. Quads    |     (wip)
-    6. Curves   |     
-    6a. Generic |   
+    5. Quads    |  (completed)  
+    6. Curves   |     (wip)   
+    6a. Generic |     (wip)      
     6b. Draw    |   
     7. Animator |   
     8. Editor   |    

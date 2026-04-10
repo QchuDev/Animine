@@ -5,13 +5,13 @@
 quad wall_front wood.png  -1.0 0.0 1.0   1.0 0.0 1.0   1.0 1.5 1.0  -1.0 1.5 1.0
 
 # Pared Trasera
-quad wall_back wood.png    1.0 0.0 -1.0 -1.0 0.0 -1.0 -1.0 1.5 -1.0  1.0 1.5 -1.0
+quad wall_back wood.png         1.0 0.0 -1.0 -1.0 0.0 -1.0 -1.0 1.5 -1.0  1.0 1.5 -1.0
 
 # Pared Izquierda
-quad wall_left wood.png   -1.0 0.0 -1.0 -1.0 0.0  1.0 -1.0 1.5  1.0 -1.0 1.5 -1.0
+quad wall_left wood.png         -1.0 0.0 -1.0 -1.0 0.0  1.0 -1.0 1.5  1.0 -1.0 1.5 -1.0
 
 # Pared Derecha
-quad wall_right wood.png   1.0 0.0  1.0  1.0 0.0 -1.0  1.0 1.5 -1.0  1.0 1.5  1.0
+quad wall_right wood.png        1.0 0.0  1.0  1.0 0.0 -1.0  1.0 1.5 -1.0  1.0 1.5  1.0
 
 # --- TECHO (wood.png o podrías usar roof.png si existiera) ---
 
