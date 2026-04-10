@@ -46,15 +46,14 @@ void Renderer::drawScene(std::map<std::string, IEntity*>& entities) {
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1280.0f/720.0f, 0.01f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
     
+    // Drawing the main axis
+    axises->draw(view, projection);
     
     // Start the drawing of each entity
     for (auto const& [id, entity] : entities) {
         entity->draw(view, projection);
     }
     
-    // Drawing the main axis
-    gizmoShader->use(); // activate the gizmo shader before drawing
-    axises->draw(view, projection);
     
 }
 

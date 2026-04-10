@@ -83,16 +83,42 @@ bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
             
             break;
         }
+        
         case EntityType::QUAD: {
             std::cout << "Creando instancia de Quad..." << std::endl;
             std::string id, texName;
-            float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
             
-            if (ss >> id >> texName >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> x3 >> y3 >> z3 >> x4 >> y4 >> z4) {
-                
+            if (ss >> id >> texName) {
+                // Make a temporal list of parameters 
+                std::vector<float> params;
+                float temp;
+                while(ss >> temp) {
+                    params.push_back(temp);
+                }
+
                 unsigned int texID = renderer->getOrCreateTexture(texName);
                 
                 if (entities.find(id) == entities.end()) {
+                    float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
+                                        
+                    if (params.size() == 12) {
+                        x1 = params[0]; y1 = params[1]; z1 = params[2];    
+                        x2 = params[3]; y2 = params[4]; z2 = params[5];    
+                        x3 = params[6]; y3 = params[7]; z3 = params[8];    
+                        x4 = params[9]; y4 = params[10]; z4 = params[11];    
+                    } else if (params.size() == 2) {
+                        x1 = -0.5f*params[0]; y1 = -0.5f*params[1]; z1 = 0.0f;    
+                        x2 = 0.5f*params[0]; y2 = -0.5f*params[1]; z2 = 0.0f;    
+                        x3 = 0.5f*params[0]; y3 = 0.5f*params[1]; z3 = 0.0f;    
+                        x4 = -0.5f*params[0]; y4 = 0.5f*params[1]; z4 = 0.0f;    
+                    } else {
+                        x1 = -0.5; y1 = -0.5; z1 = 0.0f;    
+                        x2 = 0.5; y2 = -0.5; z2 = 0.0f;    
+                        x3 = 0.5; y3 = 0.5; z3 = 0.0f;    
+                        x4 = -0.5; y4 = 0.5; z4 = 0.0f;
+                    }
+                    
+                    // Finally we create the quad with the adjusted params 
                     entities[id] = new Quad(
                         glm::vec3(x1,y1,z1), 
                         glm::vec3(x2,y2,z2), 
@@ -100,10 +126,13 @@ bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
                         glm::vec3(x4,y4,z4),
                         texID, 
                         renderer->getTextureShader());
-                        return true;
+                    return true;
                 } else {
                     std::cout << "Error: duplicated id at .txt" << std::endl;
                 }
+                
+            } else {
+                std::cout << "Error: check id and texture name" << std::endl;
             }
             
             break;
