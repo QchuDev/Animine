@@ -1,7 +1,11 @@
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 #include <iostream>
+#include <numbers>
+
 #include "classes/engine.h"
 #include "classes/scene.h"
+#include "classes/curve.h"
 
 
 Engine::Engine() : window(nullptr), renderer(nullptr) {}
@@ -40,8 +44,19 @@ void Engine::run() {
     
     // Set up the main scene
     Scene scene(renderer);
-    
+
     scene.loadScene("./scenes/main_scene.txt"); // we load the main scene
+
+    // Function ...
+    auto miLambda = [](float t) -> glm::vec3 {
+        float x = std::cos(glm::two_pi<float>()*t)*360.0f;          // Va de -1 a 1
+        float y = std::sin(glm::two_pi<float>()*t)*360.0f; // Parábola (sube y baja)
+        float z = 1.0f;
+        return glm::vec3(x, y, z);
+    };
+    
+    Curve* curve = new Curve(miLambda, glm::two_pi<float>());
+    
     
     // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {
@@ -58,11 +73,8 @@ void Engine::run() {
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
         renderer->drawScene(scene.getAllEntities());
         
-        
         // Rotation test
-        for (auto const& [id, entity] : scene.getAllEntities()) {
-            entity->transform.rotation.y += 20.0f*deltaTime;
-        }
+        for (auto const& [id, entity] : scene.getAllEntities()) {}
         
         // Good stuff idk what it does
         glfwSwapBuffers(window);

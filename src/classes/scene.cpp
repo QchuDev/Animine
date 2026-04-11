@@ -24,7 +24,6 @@ EntityType getEntityType(const std::string& type) {
     return EntityType::UNKNOWN;
 }
 
-
 bool Scene::loadScene(std::string path) {
     // Creates an input file stream and open the file 
     std::ifstream myFile(path);
@@ -48,7 +47,6 @@ bool Scene::loadScene(std::string path) {
     return true;
 }
 
-
 void Scene::parseLine(const std::string& line) {
     // We ignore comments -> lines starting with '#'
     if (line.empty() || line[0] == '#') { return; }
@@ -67,6 +65,7 @@ void Scene::parseLine(const std::string& line) {
 bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
     EntityType type = getEntityType(typeStr); 
     switch (type) {
+        
         case EntityType::LINE: {
             std::string id;
             float x1, y1, z1, x2, y2, z2, r, g, b;
@@ -137,10 +136,30 @@ bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
             
             break;
         }
+        
+        case EntityType::CURVE: {
+            std::string id;
+            float xt, yt, zt, r, g, b;
+            
+            if (ss >> id >> xt >> yt >> zt >> r >> g >> b) {
+
+                if (entities.find(id) == entities.end()) {
+                    //entities[id] = new Curve(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b), renderer->getGizmoShader());
+                    return true;
+                } else {
+                    std::cout << "Error: duplicated id at .txt" << std::endl;
+                }
+
+            }
+            
+            break;
+        }
+        
         default: {
             std::cerr << "Unknown entity type: " << typeStr << std::endl;
         }
     }
+    
     return false;
 
 }
@@ -148,7 +167,6 @@ bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
 std::map<std::string, IEntity*>& Scene::getAllEntities() {
     return entities;
 }
-
 
 Scene::~Scene() {
     for (auto const& [id, entity] : entities) {

@@ -9,7 +9,7 @@
     5. Quads    |  (completed)  
     6. Curves   |     (wip)   
     6a. Generic |     (wip)      
-    6b. Draw    |   
+    6b. Draw    |     (wip)   
     7. Animator |   
     8. Editor   |    
     
@@ -24,12 +24,12 @@
     quad id texture w h
     quad id texture
     
-    curve id formula(t) r g b
+    curve id x(t) y(t) z(t) r g b
 
 # For the animation of an entity
     animate id transform_type formula(t)
     # transform_type: position/rotation/scale
-    # formula(t): example --> { sin(t) where 0 <= t <= 1 }
+    # v(t): example --> { sin(t) where 0 <= t <= 1 }
 
 # For timings: all animations until a wait play together
     wait ammount
