@@ -25,3 +25,6 @@ quad roof_back wood.png    1.1 1.5 -1.1 -1.1 1.5 -1.1 -1.1 2.2 0.0   1.1 2.2 0.0
 # --- DETALLES ---
 # Suelo
 quad floor wood.png       -1.0 0.0 -1.0  1.0 0.0 -1.0   1.0 0.0 1.0  -1.0 0.0 1.0
+
+
+curve _spin x(t) y(t) z(t) r g b
