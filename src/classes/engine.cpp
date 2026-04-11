@@ -41,7 +41,7 @@ void Engine::run() {
     // Set up the main scene
     Scene scene(renderer);
     
-    scene.loadScene("./scenes/main_scene.txt"); // we load the main scene
+    scene.loadScene("../scenes/main_scene.txt"); // we load the main scene
     
     // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {
@@ -59,10 +59,8 @@ void Engine::run() {
         renderer->drawScene(scene.getAllEntities());
         
         
-        // Rotation test
-        for (auto const& [id, entity] : scene.getAllEntities()) {
-            entity->transform.rotation.y += 20.0f*deltaTime;
-        }
+        // Animator segment...
+        
         
         // Good stuff idk what it does
         glfwSwapBuffers(window);

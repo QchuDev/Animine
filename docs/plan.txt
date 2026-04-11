@@ -2,34 +2,37 @@
            / THE PLAN \
       Updates   |    State
     ============================   
-    1. Window   |  (completed)
-    2. Camera   |  (completed)   
-    3. Axises   |  (completed)
-    4. Lines    |  (completed)
-    5. Quads    |  (completed)  
-    6. Curves   |     (wip)   
-    6a. Generic |     (wip)      
-    6b. Draw    |   
-    7. Animator |   
-    8. Editor   |    
+    1. Window   |  (completed)      SETUP
+    2. Camera   |  (completed)      SETUP
+    3. Axises   |  (completed)      SETUP
+    4. Lines    |  (completed)      CREATION
+    5. Quads    |  (completed)      CREATION    
+    6. Curves   |     (wip)         CREATION
+    7. Animator |                   ANIMATION
+    8. Editor   |                   QUALITY OF LIFE
     
-    
-"scene_i.txt" Format
+"scene_i.txt" Format:
 
-# For the creation of entities
-    line id x1 y1 z1 x2 y2 z2 r g b
-    
-    # Multiple creation formats
-    quad id texture x1 y1 z1 x2 y2 z2 x3 y3 z3 x4 y4 z4
-    quad id texture w h
-    quad id texture
-    
-    curve id formula(t) r g b
+    # CREATION
+        line id x1 y1 z1 x2 y2 z2 r g b
+        
+        # Multiple creation formats
+        quad id texture x1 y1 z1 x2 y2 z2 x3 y3 z3 x4 y4 z4
+        quad id texture w h
+        quad id texture
+        
+        curve id x(t) y(t) z(t) r g b
 
-# For the animation of an entity
-    animate id transform_type formula(t)
-    # transform_type: position/rotation/scale
-    # formula(t): example --> { sin(t) where 0 <= t <= 1 }
+    # ANIMATION
+        animate id transform_type x(t) y(t) z(t)
+            # transform_type: position/rotation/scale
+            # formula(t): example --> { sin(t) where 0 <= t <= 1 }
+        wait ammount
 
-# For timings: all animations until a wait play together
-    wait ammount
+
+
+## Steps:
+    Curve:  
+    - Is an Entity, has a transform, a draw and a shader ref.
+    - As a curve it has a parametric function, is a function with variable t and returns a vec3
+    - At creation we create the vertices of the functio  by adding small steps of t
