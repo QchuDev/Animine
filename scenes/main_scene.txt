@@ -1,10 +1,39 @@
 # --- PAREDES (wood.png) ---
 # Formato: quad [id] [textura] [x1 y1 z1] [x2 y2 z2] [x3 y3 z3] [x4 y4 z4]
 
-curve circle cos(t) sin(t) 0 0.5 0.5 0.5
-curve red_circle cos(t) sin(t) sin(t) 1.0 0.5 0.5
 
-curve line t t 0 0.5 0.5 0.5
 
-curve cuadratic t t^2 0 0.4 1.0 0.4
-curve santos t (t+t^2)/t^3 0 1.0 1.0 0.2
+
+quad wall_front wood.png  -1.0 0.0 1.0   1.0 0.0 1.0   1.0 1.5 1.0  -1.0 1.5 1.0
+
+
+
+
+
+
+# Pared Trasera
+quad wall_back wood.png         1.0 0.0 -1.0 -1.0 0.0 -1.0 -1.0 1.5 -1.0  1.0 1.5 -1.0
+
+# Pared Izquierda
+quad wall_left wood.png         -1.0 0.0 -1.0 -1.0 0.0  1.0 -1.0 1.5  1.0 -1.0 1.5 -1.0
+
+# Pared Derecha
+quad wall_right wood.png        1.0 0.0  1.0  1.0 0.0 -1.0  1.0 1.5 -1.0  1.0 1.5  1.0
+
+# --- TECHO (wood.png o podrías usar roof.png si existiera) ---
+
+# Ala del techo 1 (Frontal a Cumbrera)
+# La cumbrera (punto más alto) está en y=2.2, z=0.0
+quad roof_front wood.png  -1.1 1.5 1.1   1.1 1.5 1.1   1.1 2.2 0.0  -1.1 2.2 0.0
+
+# Ala del techo 2 (Trasera a Cumbrera)
+quad roof_back wood.png    1.1 1.5 -1.1 -1.1 1.5 -1.1 -1.1 2.2 0.0   1.1 2.2 0.0
+
+# --- DETALLES ---
+# Suelo
+quad floor wood.png       -1.0 0.0 -1.0  1.0 0.0 -1.0   1.0 0.0 1.0  -1.0 0.0 1.0
+
+
+curve pepo cos(t) sin(t) 0.0 0.5 0.5 0.5
+
+animate pepo rotation 

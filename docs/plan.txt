@@ -7,10 +7,12 @@
     3. Axises   |  (completed)      SETUP
     4. Lines    |  (completed)      CREATION
     5. Quads    |  (completed)      CREATION    
-    6. Curves   |     (wip)         CREATION
+    6. Curves   |  (completed)      CREATION
+    ...
     7. Animator |                   ANIMATION
     8. Editor   |                   QUALITY OF LIFE
     
+
 "scene_i.txt" Format:
 
     # CREATION
@@ -24,7 +26,7 @@
         curve id x(t) y(t) z(t) r g b
 
     # ANIMATION
-        animate id transform_type x(t) y(t) z(t)
+        animate id transform_type  arg x y z
             # transform_type: position/rotation/scale
             # formula(t): example --> { sin(t) where 0 <= t <= 1 }
         wait ammount
