@@ -8,6 +8,8 @@
 class Curve : public IEntity { 
 private:
     std::function<glm::vec3(float)> pCurve;
+    unsigned int VAO, VBO;
+    int m_vertexCount = 0;
 public:
     typedef std::function<glm::vec3(float)> ParamFunction;
 

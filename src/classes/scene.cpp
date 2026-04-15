@@ -2,6 +2,13 @@
 #include <fstream>          // For reading the .txt file
 #include <sstream>          // For the parsing of text
 
+#define exprtk_disable_string_capabilities  // Si no vas a procesar texto dentro de las fórmulas
+#define exprtk_disable_rtl_io_capabilities  // Desactiva funciones de impresión/consola en las fórmulas
+#define exprtk_disable_break_repeat_loop_capabilities
+#include <external/exprtk.hpp>
+
+#include <memory>
+
 // Managers
 #include "classes/scene.h"
 #include "classes/renderer.h"
@@ -9,6 +16,30 @@
 // Entities
 #include "classes/entities/line.h"
 #include "classes/entities/quad.h"
+#include "classes/entities/curve.h"
+
+
+// Estructura para agrupar lo que ExprTk necesita para evaluar
+struct ExprContext {
+    float t_val;
+    exprtk::symbol_table<float> symbol_table;
+    exprtk::expression<float> exprX, exprY, exprZ;
+
+    // Constructor que compila las 3 fórmulas
+    ExprContext(std::string x_str, std::string y_str, std::string z_str) {
+        symbol_table.add_variable("t", t_val);
+        symbol_table.add_constants();
+        
+        exprX.register_symbol_table(symbol_table);
+        exprY.register_symbol_table(symbol_table);
+        exprZ.register_symbol_table(symbol_table);
+
+        exprtk::parser<float> parser;
+        parser.compile(x_str, exprX);
+        parser.compile(y_str, exprY);
+        parser.compile(z_str, exprZ);
+    }
+};
 
 enum class EntityType {
     LINE,
@@ -73,6 +104,7 @@ bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
             if (ss >> id >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> r >> g >> b) {
                 if (entities.find(id) == entities.end()) {
                     entities[id] = new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b), renderer->getGizmoShader());
+                    std::cout << "Line created" << std::endl;
                     return true;
                 } else {
                     std::cout << "Error: duplicated id at .txt" << std::endl;
@@ -84,7 +116,6 @@ bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
         }
         
         case EntityType::QUAD: {
-            std::cout << "Creando instancia de Quad..." << std::endl;
             std::string id, texName;
             
             if (ss >> id >> texName) {
@@ -125,6 +156,9 @@ bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
                         glm::vec3(x4,y4,z4),
                         texID, 
                         renderer->getTextureShader());
+                    
+                    std::cout << "Quad created" << std::endl;
+                    
                     return true;
                 } else {
                     std::cout << "Error: duplicated id at .txt" << std::endl;
@@ -138,13 +172,27 @@ bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
         }
         
         case EntityType::CURVE: {
-            std::string id;
-            float xt, yt, zt, r, g, b;
+            std::string id, xt, yt, zt;
+            float r, g, b;
             
             if (ss >> id >> xt >> yt >> zt >> r >> g >> b) {
 
                 if (entities.find(id) == entities.end()) {
-                    //entities[id] = new Curve(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b), renderer->getGizmoShader());
+                    
+                    // Creamos el contexto en el Heap y lo envolvemos en un shared_ptr
+                    auto ctx = std::make_shared<ExprContext>(xt, yt, zt);
+                    auto paramCurve =  [ctx](float t) {
+                        ctx->t_val = t; // Actualizamos la 't' vinculada a ExprTk
+                        return glm::vec3(
+                            ctx->exprX.value(),
+                            ctx->exprY.value(),
+                            ctx->exprZ.value()
+                        );
+                    };
+                    
+                    // Using ExprTk
+                    entities[id] = new Curve(paramCurve, glm::vec3(r,g,b), renderer->getGizmoShader());
+                    std::cout << "Curve created" << std::endl;
                     return true;
                 } else {
                     std::cout << "Error: duplicated id at .txt" << std::endl;
