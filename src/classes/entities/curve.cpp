@@ -55,6 +55,8 @@ Curve::Curve(ParamFunction formula, glm::vec3 color, Shader* s)
 }
 
 void Curve::draw(const glm::mat4& view, const glm::mat4& projection) {
+    shader->use();
+    
     glBindVertexArray(VAO);
     // IMPORTANTE: Usamos GL_LINE_STRIP para conectar los puntos en cadena
     glDrawArrays(GL_LINE_STRIP, 0, m_vertexCount);

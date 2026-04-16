@@ -1,39 +1,39 @@
-# --- PAREDES (wood.png) ---
-# Formato: quad [id] [textura] [x1 y1 z1] [x2 y2 z2] [x3 y3 z3] [x4 y4 z4]
+# --- SUPERFICIE ONDULADA (Malla Wireframe 3D) ---
+# Efecto: Olas de mar / Huevera
+# Color: Azul Neón (0.0, 0.6, 1.0) para estilo holográfico
+# Fórmula base de altura (Y): sin(x) + cos(z)
+# Rango de t sugerido para la escena: -10 a 10 (aprox. 3pi)
 
+# --- 1. Líneas Longitudinales (Paralelas al eje X) ---
+# Variamos 'z' para cada línea. 't' controla 'x'.
+# Y = sin(t) + cos(constant_z)
 
+curve wave_x_0  t (sin(t)+cos(-5)) -5  0.0 0.6 1.0
+curve wave_x_1  t (sin(t)+cos(-4)) -4  0.0 0.6 1.0
+curve wave_x_2  t (sin(t)+cos(-3)) -3  0.0 0.6 1.0
+curve wave_x_3  t (sin(t)+cos(-2)) -2  0.0 0.6 1.0
+curve wave_x_4  t (sin(t)+cos(-1)) -1  0.0 0.6 1.0
+curve wave_x_5  t (sin(t)+cos(0))   0  0.0 0.6 1.0
+curve wave_x_6  t (sin(t)+cos(1))   1  0.0 0.6 1.0
+curve wave_x_7  t (sin(t)+cos(2))   2  0.0 0.6 1.0
+curve wave_x_8  t (sin(t)+cos(3))   3  0.0 0.6 1.0
+curve wave_x_9  t (sin(t)+cos(4))   4  0.0 0.6 1.0
+curve wave_x_10 t (sin(t)+cos(5))   5  0.0 0.6 1.0
 
+# --- 2. Líneas Transversales (Paralelas al eje Z) ---
+# Variamos 'x' para cada línea. 't' controla 'z'.
+# Y = sin(constant_x) + cos(t)
 
-quad wall_front wood.png  -1.0 0.0 1.0   1.0 0.0 1.0   1.0 1.5 1.0  -1.0 1.5 1.0
+curve wave_z_0  -5 (sin(-5)+cos(t)) t  0.0 0.6 1.0
+curve wave_z_1  -4 (sin(-4)+cos(t)) t  0.0 0.6 1.0
+curve wave_z_2  -3 (sin(-3)+cos(t)) t  0.0 0.6 1.0
+curve wave_z_3  -2 (sin(-2)+cos(t)) t  0.0 0.6 1.0
+curve wave_z_4  -1 (sin(-1)+cos(t)) t  0.0 0.6 1.0
+curve wave_z_5   0 (sin(0)+cos(t))  t  0.0 0.6 1.0
+curve wave_z_6   1 (sin(1)+cos(t))  t  0.0 0.6 1.0
+curve wave_z_7   2 (sin(2)+cos(t))  t  0.0 0.6 1.0
+curve wave_z_8   3 (sin(3)+cos(t))  t  0.0 0.6 1.0
+curve wave_z_9   4 (sin(4)+cos(t))  t  0.0 0.6 1.0
+curve wave_z_10  5 (sin(5)+cos(t))  t  0.0 0.6 1.0
 
-
-
-
-
-
-# Pared Trasera
-quad wall_back wood.png         1.0 0.0 -1.0 -1.0 0.0 -1.0 -1.0 1.5 -1.0  1.0 1.5 -1.0
-
-# Pared Izquierda
-quad wall_left wood.png         -1.0 0.0 -1.0 -1.0 0.0  1.0 -1.0 1.5  1.0 -1.0 1.5 -1.0
-
-# Pared Derecha
-quad wall_right wood.png        1.0 0.0  1.0  1.0 0.0 -1.0  1.0 1.5 -1.0  1.0 1.5  1.0
-
-# --- TECHO (wood.png o podrías usar roof.png si existiera) ---
-
-# Ala del techo 1 (Frontal a Cumbrera)
-# La cumbrera (punto más alto) está en y=2.2, z=0.0
-quad roof_front wood.png  -1.1 1.5 1.1   1.1 1.5 1.1   1.1 2.2 0.0  -1.1 2.2 0.0
-
-# Ala del techo 2 (Trasera a Cumbrera)
-quad roof_back wood.png    1.1 1.5 -1.1 -1.1 1.5 -1.1 -1.1 2.2 0.0   1.1 2.2 0.0
-
-# --- DETALLES ---
-# Suelo
-quad floor wood.png       -1.0 0.0 -1.0  1.0 0.0 -1.0   1.0 0.0 1.0  -1.0 0.0 1.0
-
-
-curve pepo cos(t) sin(t) 0.0 0.5 0.5 0.5
-
-animate pepo rotation 
+quad chicken fat_chicken.png 

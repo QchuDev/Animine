@@ -50,10 +50,10 @@ package scenes {
     class camera_angle_change{}
 }
 
-class Parser {}
-Parser --> scenes
-Parser <-- Scene
-Parser <-- Animator
+class SceneParser {}
+SceneParser --> scenes
+SceneParser <-- Scene
+SceneParser <-- Animator
 
 
 @enduml
