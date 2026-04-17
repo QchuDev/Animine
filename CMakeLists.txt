@@ -44,11 +44,8 @@ set(SHADERS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/shaders")
 set(OUTPUT_DIR "$<TARGET_FILE_DIR:qchu-anims>")
 
 add_custom_command(TARGET qchu-anims POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory "${OUTPUT_DIR}/assets"
     COMMAND ${CMAKE_COMMAND} -E make_directory "${OUTPUT_DIR}/shaders"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_CURRENT_SOURCE_DIR}/assets"
-        "${OUTPUT_DIR}/assets"
+  
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/shaders"
         "${OUTPUT_DIR}/shaders"
