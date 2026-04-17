@@ -1,7 +1,7 @@
-#include "classes/renderer.h"
+#include "classes/render/renderer.h"
 
-#include "classes/axises.h"
-#include "classes/camera.h"
+#include "classes/entities/axises.h"
+#include "classes/render/camera.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>

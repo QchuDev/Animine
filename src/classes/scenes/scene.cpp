@@ -10,8 +10,8 @@
 #include <memory>
 
 // Managers
-#include "classes/scene.h"
-#include "classes/renderer.h"
+#include "classes/scenes/scene.h"
+#include "classes/render/renderer.h"
 
 // Entities
 #include "classes/entities/line.h"

@@ -1,9 +1,9 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "classes/axises.h"
-#include "classes/shader.h"
-#include "classes/camera.h"
+#include "classes/entities/axises.h"
+#include "classes/render/shader.h"
+#include "classes/render/camera.h"
 
 #include "classes/entities/entity.h"
 

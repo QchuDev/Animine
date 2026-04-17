@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "classes/renderer.h"
+#include "classes/render/renderer.h"
 
 /*
     In this file we define the atributtes, methods, public and private of the class.

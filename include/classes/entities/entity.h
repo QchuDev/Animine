@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp> // for matrix transformations lol
 
-#include "classes/shader.h"
+#include "classes/render/shader.h"
 
 
 struct Transform

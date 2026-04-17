@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 #include "classes/entities/entity.h"
-#include "classes/renderer.h"
+#include "classes/render/renderer.h"
 
 class Scene {
 private:

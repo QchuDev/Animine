@@ -2,8 +2,8 @@
 #define SCENES_MANAGER_H
 
 #include <iostream>
-#include "scene.h"
-#include "animator.h"
+#include "classes/scenes/scene.h"
+#include "classes/animations/animator.h"
 class ScenesManager {
     public:
         Scene& getCurrentScene();

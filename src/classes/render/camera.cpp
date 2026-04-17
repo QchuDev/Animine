@@ -1,4 +1,4 @@
-#include "classes/camera.h"
+#include "classes/render/camera.h"
 #include <glm/glm.hpp>
 #include <iostream>
 

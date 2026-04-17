@@ -1,4 +1,4 @@
-#include "classes/axises.h"
+#include "classes/entities/axises.h"
 
 Axises::Axises(Shader* s) : IEntity(s) {
     shader = s;
