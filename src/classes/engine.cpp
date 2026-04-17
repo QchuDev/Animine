@@ -24,11 +24,17 @@ bool Engine::init(int width, int height, const char* title) {
     glfwMakeContextCurrent(window);
     
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) return false;
-
+    
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    
     renderer = new Renderer(); // Create the renderer to draw entities on the window
     
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
+    
+    // V-sync activation
+    glfwSwapInterval(1);
+    
     return true;
 }
 
@@ -47,7 +53,7 @@ void Engine::run() {
     // We try finding the main scene (directories problem)
     scene.loadScene("../scenes/main_scene.txt");
     scene.loadScene("./scenes/main_scene.txt"); 
-    
+
     // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {
     
@@ -62,11 +68,9 @@ void Engine::run() {
         // Renderer --> the guy who draws
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
         renderer->drawScene(scene.getAllEntities());
-        
-        
+      
         // Animator segment...
-        
-        
+
         // Good stuff idk what it does
         glfwSwapBuffers(window);
         glfwPollEvents();   

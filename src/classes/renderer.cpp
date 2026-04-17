@@ -23,7 +23,9 @@ Renderer::Renderer() {
     
     // Global axis XYZ
     axises = new Axises(gizmoShader);
-
+    
+    // Enables the depth test of the depth ?? lol
+    
 }
 
 /**
