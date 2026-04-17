@@ -2,8 +2,10 @@
 #define ANIMATOR_H
 
 class Animator { 
-private:
-
+    public:
+        void update();
+    private:
+            
 };
 
 #endif

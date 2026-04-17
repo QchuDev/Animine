@@ -4,7 +4,7 @@
 #include <numbers>
 
 #include "classes/engine.h"
-#include "classes/scene.h"
+#include "classes/scenes/scene.h"
 
 
 Engine::Engine() : window(nullptr), renderer(nullptr) {}
@@ -47,12 +47,17 @@ bool Engine::init(int width, int height, const char* title) {
  */
 void Engine::run() {
     
+    // Create ScenesManager
+    // Init ScenesManager --> Gets all uploaded Scenes
+    // Load the first scene to use
+    
+    
     // Set up the main scene
     Scene scene(renderer);
     
     // We try finding the main scene (directories problem)
-    scene.loadScene("../scenes/main_scene.txt");
-    scene.loadScene("./scenes/main_scene.txt"); 
+    scene.loadScene("../assets/scenes/main_scene.txt");
+    scene.loadScene("./assets/scenes/main_scene.txt"); 
 
     // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {

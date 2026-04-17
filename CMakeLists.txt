@@ -16,6 +16,9 @@ file(GLOB_RECURSE SOURCES
     "src/*.c" 
     "src/classes/*.cpp" 
     "src/classes/entities/*.cpp"
+    "src/classes/scenes/*.cpp"
+    "src/classes/render/*.cpp"
+    "src/classes/animations/*.cpp"
 )
 
 message(STATUS "Sources found: ${SOURCES}")

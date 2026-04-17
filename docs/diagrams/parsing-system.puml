@@ -1,0 +1,82 @@
+@startuml
+allow_mixing
+
+skinparam Linetype ortho
+skinparam Nodesep 60
+skinparam Ranksep 60
+
+'The .txt files to read the entities and transformation from'
+file scene.scene_3
+file scene.scene_2
+file scene.scene_1
+file scene.scene_0
+
+'For each txt file in the assets/scenes : '
+'It will create a Scene Object and pass it to ScenesManager'
+''
+
+class Interpreter {
+    - Strin files_path
+    + Set<IEntity> getEntities(String file_name)
+    + Set<Transformation> getTransformations(String file_name)
+}
+Interpreter --> scene
+
+package Engine {
+    class IEntity {}
+
+    class Wait {
+        - float duration;
+        + float getDuration();
+    }
+    class Transformation {
+        - String id
+        - String transform_prop
+        - String transition_type
+        - float current_time
+        - float duration
+        - vec3 target
+    }
+    interface Animation {}
+
+    Animation <|-- Wait    
+    Animation <|-- Transformation    
+        
+    class Scene {
+        - Map<String, IEntity> entities
+        - Map<String, Transformation> transformations
+        + vector<Entity> getAllEntities()
+        + bool loadScene(String path)
+    }
+    
+
+} 
+
+class Animator {
+    + void update()
+    + bool 
+}
+
+
+'At init() the ScenesManager will: '
+'- Ask its Interpreter to get all data for each file'
+'- Creates a Scene object for each, passing their entities and transformations'
+'- ' 
+
+class ScenesManager {
+    - Map<String, Scene> scenes
+    + Animator animator
+    
+    + Scene getScene(String file_name)
+    + bool init()
+}
+
+ScenesManager <-- Interpreter
+
+ScenesManager --> Scene 
+ScenesManager --> Animation
+ 
+ScenesManager *-- Animator    
+
+
+@enduml
