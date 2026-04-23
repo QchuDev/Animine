@@ -55,27 +55,39 @@ void Engine::run() {
     // Set up the main scene
     Scene scene(renderer);
     
-    // We try finding the main scene (directories problem)
-    scene.loadScene("../assets/scenes/main_scene.txt");
+    // We try finding the main scene
     scene.loadScene("./assets/scenes/main_scene.txt"); 
 
     // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {
-    
+        
         // Calcular deltaTime
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;   
+        
+        // Recibes una referencia constante
+        const auto& entities = scene.getAllEntities();
         
         // -> All inputs here <-
         processInput();
     
         // Renderer --> the guy who draws
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
-        renderer->drawScene(scene.getAllEntities());
+        renderer->drawScene(entities);
       
         // Animator segment...
-
+        // animator->update()
+    
+        // 3. FOREACH DE ENTIDADES (Para Animator o lógica extra)
+        // Usamos structured bindings [key, value] de C++17
+        for (auto const& [name, entity] : entities) {
+            entity->transform.scale.x = std::sin(currentFrame*0.1)+1;
+            entity->transform.scale.y = std::sin(currentFrame*0.4)+1;
+            entity->transform.scale.z = std::sin(currentFrame*0.8)+1;
+        }
+        
+        
         // Good stuff idk what it does
         glfwSwapBuffers(window);
         glfwPollEvents();   

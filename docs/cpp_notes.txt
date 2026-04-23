@@ -1,0 +1,34 @@
+// ------- Aprendizaje C++ ---------
+
+// En C/C++ tenemos que hacernos cargo de los espacios de memoria que ocupamos
+    (NO HAY GARBAGE COLLECTOR)
+    
+    char* c = new char(); // addr: 0xf1
+    *c = 'b'; // addr: 0xf1 val: 'b'                
+
+    c = new char(); // addr: 0xf3           <--- MEMORY LEAK (no libera 0xf1 antes de usar otro espacio de memoria)
+
+    *c = 'g': // addr: 0xf3 val: 0xf3
+    delete c; // addr: 0xf3 liberado
+
+
+
+// Que es std:: ?
+    'std' es la abreviacion de 'standard' y representa un namespace
+    'namespace' de la biblioteca estandar de C++
+
+
+
+// Recordar algo medio piola y bizarro
+    " ... " = string
+     '...'  = char
+
+
+// Punteros y expresiones
+    Obj A;          <-- es el objeto, todo el terreno de memoria
+    Obj B = A;      <-- copia A en B
+
+    Obj B = A&;     <-- se guarda una referencia de A, no copia todo el objeto 
+
+    Obj B = A*;     <-- puntero, B es la direccion de A 
+    

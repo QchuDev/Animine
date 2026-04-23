@@ -212,7 +212,7 @@ bool Scene::entityCreation(std::string& typeStr, std::stringstream& ss) {
 
 }
 
-std::map<std::string, IEntity*>& Scene::getAllEntities() {
+const std::map<std::string, IEntity*>& Scene::getAllEntities() const {
     return entities;
 }
 

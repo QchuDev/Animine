@@ -12,8 +12,8 @@ Curve::Curve(ParamFunction formula, glm::vec3 color, Shader* s)
     // point : [ x,y,z, r,g,b ]
     // line : [point, point]
     std::vector<float> vertices;
-    float l = 10.0f;
-    float step = 0.1f;
+    float l = 100.0f;
+    float step = 0.01f;
     
     m_vertexCount = 0;
     float t_min = -l;
@@ -57,8 +57,13 @@ Curve::Curve(ParamFunction formula, glm::vec3 color, Shader* s)
 void Curve::draw(const glm::mat4& view, const glm::mat4& projection) {
     shader->use();
     
+    shader->setMat4(shader->modelLoc, transform.getModelMatrix());
+    shader->setMat4(shader->viewLoc, view);
+    shader->setMat4(shader->projLoc, projection);
+    
     glBindVertexArray(VAO);
     // IMPORTANTE: Usamos GL_LINE_STRIP para conectar los puntos en cadena
+    glLineWidth(2.0f);
     glDrawArrays(GL_LINE_STRIP, 0, m_vertexCount);
 }
 

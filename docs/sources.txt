@@ -1,0 +1,25 @@
+// Recordar que tenemos una pagina para aprender C++
+-> https://learncpp.com
+    Ademas podemos aprenderlo desde cursos de Cisco
+    (nos dan un certificado y todo)
+
+
+// Ademas tenemos una pagina especifica de donde aprender OpenGL
+->  https://learnopengl.com
+    Aqui encontramos el libro 'Learn OpenGL - Graphics Programming'
+
+
+// Variables del OpenGL
+->  https://docs.gl
+    
+    
+// Que usamos y que librerias tenemos?
+Las herramientas del proyecto:
+    
+    // No lo tengo muy claro, sera cuestion de investigar...    
+    KHR -->	Low level headers (Khronos Group) definen tipos basicos.
+    
+    // Este conjunto lo voy a usar bastante
+    GLFW --> Window e Inputs	
+    GLAD --> Relacion con GPU
+    GLM	--> Math (Matrices, Vectores, Cuaterniones)
