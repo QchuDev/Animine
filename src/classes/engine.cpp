@@ -48,8 +48,8 @@ bool Engine::init(int width, int height, const char* title) {
  */
 void Engine::run() {
     // Set up the Scenes Manager
-    ScenesManager sM();
-    if (!sM.loadScene("./assets/scenes/")) {
+    ScenesManager sM(renderer, animator);
+    if (!sM.loadScenes("./assets/scenes/")) {
         std::cout << "ERROR: - Scenes Folder not Found -" << std::endl;
         return;
     }; 
@@ -70,20 +70,8 @@ void Engine::run() {
     
         // Renderer --> the guy who draws
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
-        renderer->drawScene(entities);
+        renderer->drawAll(entities);
       
-        // Animator segment...
-        // animator->update()
-    
-        // 3. FOREACH DE ENTIDADES (Para Animator o lógica extra)
-        // Usamos structured bindings [key, value] de C++17
-        // for (auto const& [name, entity] : entities) {
-        //     entity->transform.scale.x = std::sin(currentFrame*0.1)+1;
-        //     entity->transform.scale.y = std::sin(currentFrame*0.4)+1;
-        //     entity->transform.scale.z = std::sin(currentFrame*0.8)+1;
-        // }
-        
-        
         // Good stuff idk what it does
         glfwSwapBuffers(window);
         glfwPollEvents();   

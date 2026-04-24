@@ -5,15 +5,18 @@
 #include "classes/scenes/scene.h"
 #include "classes/animations/animator.h"
 #include "classes/scenes/interpreter.h"
+
 class ScenesManager {
 private:
     
-    Scene current_scene;                    // The scene to be used
-    std::map<std::string, Scene> scenes;    // All uploaded scenes
-    Interpreter interpreter;
+    Scene* current_scene = nullptr;                    // The scene to be used
+    std::map<std::string, Scene*> scenes;    // All uploaded scenes
+    Interpreter* interpreter;
+    Renderer* renderer;
+    Animator* animator;
     
 public:
-    ScenesManager();
+    ScenesManager(Renderer* renderer, Animator* Animator);
     ~ScenesManager();
     Scene& getCurrentScene();
     Scene& getScene(std::string& scene_name);

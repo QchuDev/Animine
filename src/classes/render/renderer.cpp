@@ -39,7 +39,7 @@ void Renderer::clear(float r, float g, float b, float a) {
 /**
  * Draws every entity in the scene
  */
-void Renderer::drawScene(const std::map<std::string, IEntity*>& entities) {
+void Renderer::drawAll(const std::map<std::string, IEntity*>& entities) {
     
     
     // Global Matrices -> Projection and view

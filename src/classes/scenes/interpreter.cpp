@@ -49,20 +49,34 @@ enum class EntityType {
 
 
 // Constructor, just assign the path where the scenes lie
-Interpreter::Interpreter(std::string scenes_path) : file_path(scenes_path) {}
+Interpreter::Interpreter() {}
 
 /**
  * Get the entities at the specified scene (ordered)
  */
-std::vector<IEntity> Interpreter::getEntities(std::string& file_name) {
-    return std::vector<IEntity>();
+std::map<std::string, IEntity*> Interpreter::getEntities(std::string& file_name) {
+    
+    // We ignore comments -> lines starting with '#'
+    if (line.empty() || line[0] == '#') { return; }
+    std::cout << "Processing --> " + line << std::endl; // temp.
+    
+    std::stringstream ss(line);
+    std::string typeStr;
+    ss >> typeStr;     // Extracts the firt word --> the object type (example: line)
+    
+    if (!entityCreation(typeStr, ss)) {
+        std::cout << "Error: couldn't create entity " << std::endl;
+    }
+    
+    
+    return std::map<std::string, IEntity*>();
 }
 
 /**
  * Get the animations at the specified scene (ordered)
  */
-std::vector<IAnimation> Interpreter::getAnimations(std::string& file_name) {
-    return std::vector<IAnimation>();
+std::vector<std::vector<IAnimation*>> Interpreter::getAnimations(std::string& file_name) {
+    return std::vector<std::vector<IAnimation*>>();
 }
 
 IEntity Interpreter::entityCreation(std::string& typeStr, std::stringstream& ss) {
@@ -166,17 +180,3 @@ IEntity Interpreter::entityCreation(std::string& typeStr, std::stringstream& ss)
 
 }
 
-void Interpreter::parseLine(const std::string& line) {
-    // We ignore comments -> lines starting with '#'
-    if (line.empty() || line[0] == '#') { return; }
-    std::cout << "Processing --> " + line << std::endl; // temp.
-    
-    std::stringstream ss(line);
-    std::string typeStr;
-    ss >> typeStr;     // Extracts the firt word --> the object type (example: line)
-    
-    if (!entityCreation(typeStr, ss)) {
-        std::cout << "Error: couldn't create entity " << std::endl;
-    }
-
-}

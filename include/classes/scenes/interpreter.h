@@ -14,9 +14,9 @@ class Interpreter {
         void parseLine(const std::string& line);
         
     public:
-        Interpreter(std::string filePath);
-        std::vector<IEntity> getEntities(std::string& file_name);
-        std::vector<IAnimation> getAnimations(std::string& file_name);
+        Interpreter();
+        std::map<std::string, IEntity*> getEntities(std::string& file_name);
+        std::vector<std::vector<IAnimation*>> getAnimations(std::string& file_name);
             
 };
 

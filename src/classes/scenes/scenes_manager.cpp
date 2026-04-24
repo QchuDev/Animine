@@ -1,17 +1,19 @@
 #include "classes/scenes/scenes_manager.h"
-
 #include <filesystem>
 #include <iostream>
 #include <string>
 
+ScenesManager::ScenesManager(Renderer* r, Animator* a): renderer(r), animator(a) {
+    interpreter = new Interpreter();
+}
+
 // Alias para acortar el código
 namespace fs = std::filesystem;
-
 bool ScenesManager::loadScenes(std::string folder_path) {
     try {
         // Verificamos si la ruta existe y es un directorio
         if (!fs::exists(folder_path) || !fs::is_directory(folder_path)) {
-            std::cerr << "Error: La ruta no existe o no es un directorio: " << folder_path << std::endl;
+            std::cerr << "Error: Path doesnt exist or is not a folder: " << folder_path << std::endl;
             return false;
         }
 
@@ -27,8 +29,13 @@ bool ScenesManager::loadScenes(std::string folder_path) {
                 std::cout << "Cargando escena: " << fileName << " desde " << filePath << std::endl;
 
                 // Aquí llamarías a tu Interpreter/Parser
-                // Scene* newScene = interpreter->parse(filePath);
-                // this->scenes[fileName] = newScene;
+                Scene* newScene = new Scene(
+                    interpreter->getEntities(filePath), 
+                    interpreter->getAnimations(filePath),
+                    renderer, animator
+                );
+                
+                this->scenes[fileName] = newScene;
             }
         }
         return true;

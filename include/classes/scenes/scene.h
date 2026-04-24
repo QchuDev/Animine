@@ -12,16 +12,17 @@
 class Scene {
 private:
     std::map<std::string, IEntity*> entities;       // All entities of the scene
-    std::map<std::string, IAnimation*> animations;  // All animations of the scene
+    std::vector<std::vector<IAnimation*>> animations;  // All animations of the scene
     
     Renderer* renderer;
     Animator* animator;
     
 public:
     Scene(
-        std::map<std::string, IEntity> entities, 
-        std::vector<IAnimation> animations, 
-        Renderer* r, Animator* a);
+        const std::map<std::string, IEntity*> entities, 
+        const std::vector<std::vector<IAnimation*>> animations, 
+        Renderer* r, Animator* a
+    );
     
     ~Scene();
     
