@@ -4,7 +4,7 @@
 #include <string>
 
 ScenesManager::ScenesManager(Renderer* r, Animator* a): renderer(r), animator(a) {
-    interpreter = new Interpreter();
+    interpreter = new Interpreter("./assets/scenes/");
 }
 
 // Alias para acortar el código
@@ -44,4 +44,8 @@ bool ScenesManager::loadScenes(std::string folder_path) {
         std::cerr << "Excepción de filesystem: " << e.what() << std::endl;
         return false;
     }
+}
+
+Scene* ScenesManager::getCurrentScene() {
+    return current_scene;
 }

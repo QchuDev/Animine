@@ -9,12 +9,12 @@
  */
 class Interpreter {
     private:
-        std::string file_path; 
+        const std::string& folder_path; 
         IEntity entityCreation(std::string& type, std::stringstream& ss);
         void parseLine(const std::string& line);
         
     public:
-        Interpreter();
+        Interpreter(const std::string& folder_path);
         std::map<std::string, IEntity*> getEntities(std::string& file_name);
         std::vector<std::vector<IAnimation*>> getAnimations(std::string& file_name);
             

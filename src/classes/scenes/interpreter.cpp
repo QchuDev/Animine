@@ -49,27 +49,35 @@ enum class EntityType {
 
 
 // Constructor, just assign the path where the scenes lie
-Interpreter::Interpreter() {}
+Interpreter::Interpreter(const std::string& fp) : folder_path(fp) {}
 
 /**
  * Get the entities at the specified scene (ordered)
  */
 std::map<std::string, IEntity*> Interpreter::getEntities(std::string& file_name) {
     
-    // We ignore comments -> lines starting with '#'
-    if (line.empty() || line[0] == '#') { return; }
-    std::cout << "Processing --> " + line << std::endl; // temp.
+    // Creates an input file stream and open the file 
+    std::ifstream myFile(folder_path + file_name);
     
-    std::stringstream ss(line);
-    std::string typeStr;
-    ss >> typeStr;     // Extracts the firt word --> the object type (example: line)
-    
-    if (!entityCreation(typeStr, ss)) {
-        std::cout << "Error: couldn't create entity " << std::endl;
+    // Check if the file was opened successfullu
+    if (!myFile.is_open()) {
+        std::cerr << "Error: Could not find the specified file" << std::endl;
+        return std::map<std::string, IEntity*>();
     }
     
+    // we read and pring (for now...) the content of the file
+    std::string line;
     
+    while (std::getline(myFile, line))
+    {
+        parseLine(line);
+        entityCreation(line[0], ss);
+    }
+    
+    // Close the file
+    myFile.close();
     return std::map<std::string, IEntity*>();
+    
 }
 
 /**

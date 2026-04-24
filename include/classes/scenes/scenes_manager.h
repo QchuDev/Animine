@@ -9,7 +9,7 @@
 class ScenesManager {
 private:
     
-    Scene* current_scene = nullptr;                    // The scene to be used
+    Scene* current_scene;                    // The scene to be used
     std::map<std::string, Scene*> scenes;    // All uploaded scenes
     Interpreter* interpreter;
     Renderer* renderer;
@@ -18,8 +18,8 @@ private:
 public:
     ScenesManager(Renderer* renderer, Animator* Animator);
     ~ScenesManager();
-    Scene& getCurrentScene();
-    Scene& getScene(std::string& scene_name);
+    Scene* getCurrentScene();
+    Scene* getScene(std::string& scene_name);
     bool loadScenes(std::string folder_path);
 };
 
