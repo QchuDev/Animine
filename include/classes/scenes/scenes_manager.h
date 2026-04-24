@@ -4,18 +4,20 @@
 #include <iostream>
 #include "classes/scenes/scene.h"
 #include "classes/animations/animator.h"
+#include "classes/scenes/interpreter.h"
 class ScenesManager {
 private:
-    // The scene to be used
-    Scene current_scene;
     
-    // All uploaded scenes
-    std::map<std::string, Scene> scenes;
+    Scene current_scene;                    // The scene to be used
+    std::map<std::string, Scene> scenes;    // All uploaded scenes
+    Interpreter interpreter;
     
 public:
+    ScenesManager();
+    ~ScenesManager();
     Scene& getCurrentScene();
     Scene& getScene(std::string& scene_name);
-    bool loadScenes(std::string path);
+    bool loadScenes(std::string folder_path);
 };
 
 

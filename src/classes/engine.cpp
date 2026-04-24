@@ -47,16 +47,12 @@ bool Engine::init(int width, int height, const char* title) {
  * etc...
  */
 void Engine::run() {
-    
-    // Create ScenesManager
-    // Init ScenesManager --> Gets all uploaded Scenes
-    // Load the first scene to use
-    
-    // Set up the main scene
+    // Set up the Scenes Manager
     ScenesManager sM();
-    
-    // We try finding the main scene
-    scene.loadScene("./assets/scenes/main_scene.txt"); 
+    if (!sM.loadScene("./assets/scenes/")) {
+        std::cout << "ERROR: - Scenes Folder not Found -" << std::endl;
+        return;
+    }; 
 
     // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {
@@ -67,7 +63,7 @@ void Engine::run() {
         lastFrame = currentFrame;   
         
         // Recibes una referencia constante
-        const auto& entities = scene.getAllEntities();
+        const auto& entities = sM.getCurrentScene().getAllEntities();
         
         // -> All inputs here <-
         processInput();
@@ -148,5 +144,6 @@ void Engine::processInput() {
  */
 Engine::~Engine() {
     delete renderer;
+    delete animator;
     glfwTerminate();
 }
