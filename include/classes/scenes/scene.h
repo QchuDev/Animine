@@ -6,6 +6,7 @@
 #include <map>
 #include "classes/entities/entity.h"
 #include "classes/animations/animation.h"
+#include "classes/animations/animator.h"
 #include "classes/render/renderer.h"
 
 class Scene {
@@ -14,26 +15,21 @@ private:
     std::map<std::string, IAnimation*> animations;  // All animations of the scene
     
     Renderer* renderer;
-    void parseLine(const std::string& line);
-    bool entityCreation(std::string& type, std::stringstream& ss);
+    Animator* animator;
+    
 public:
-    Scene(Renderer* r) : renderer(r) {};
+    Scene(
+        std::map<std::string, IEntity> entities, 
+        std::vector<IAnimation> animations, 
+        Renderer* r, Animator* a);
+    
     ~Scene();
-
-    /**
-     * This init method takes a path as an argument. 
-     * It should be a .txt where the wanted entities are specified
-     * 
-     * returns if it was correctly initialized
-     */
-    bool loadScene(std::string path);
     
-    
-    /**
-     * Returns a vector with all the entities in this scene
-     */
+    // Get
     const std::map<std::string, IEntity*>& getAllEntities() const;
+    const std::vector<IAnimation*>& getAllAnimations() const;
 
+    
 };
 
 #endif

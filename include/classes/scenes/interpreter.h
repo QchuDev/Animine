@@ -10,6 +10,9 @@
 class Interpreter {
     private:
         std::string file_path; 
+        IEntity entityCreation(std::string& type, std::stringstream& ss);
+        void parseLine(const std::string& line);
+        
     public:
         Interpreter(std::string filePath);
         std::vector<IEntity> getEntities(std::string& file_name);

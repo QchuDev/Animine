@@ -1,0 +1,50 @@
+@startuml
+allow_mixing
+skinparam Linetype ortho
+
+package scenes {
+    file scene_i
+}
+
+class Interpreter {
+    - scenes_path
+    + getEntities()    
+    + getAnimations()
+    
+    - entityCreation()
+    - animationCreation()
+    - parseLine()
+}
+Interpreter --> scenes
+
+class Scene {
+    ...
+}
+
+class ScenesManager {
+    - Interpreter& interpreter
+    - List<Scene> allScenes
+    + init()
+    
+}
+ScenesManager *-- Interpreter
+ScenesManager *-- Scene
+
+
+class Engine {
+    - ScenesManager sM
+    ...
+}
+Engine --> ScenesManager
+
+class Animator {
+    ...
+}
+class Renderer {
+    ...
+}
+Engine *-- Animator
+Engine *-- Renderer
+
+
+@enduml

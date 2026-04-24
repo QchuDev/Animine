@@ -4,7 +4,7 @@
 #include <numbers>
 
 #include "classes/engine.h"
-#include "classes/scenes/scene.h"
+#include "classes/scenes/scenes_manager.h"
 
 
 Engine::Engine() : window(nullptr), renderer(nullptr) {}
@@ -28,7 +28,8 @@ bool Engine::init(int width, int height, const char* title) {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     
-    renderer = new Renderer(); // Create the renderer to draw entities on the window
+    renderer = new Renderer(); // Draws entities 
+    animator = new Animator(); // Transforms entities 
     
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
@@ -51,9 +52,8 @@ void Engine::run() {
     // Init ScenesManager --> Gets all uploaded Scenes
     // Load the first scene to use
     
-    
     // Set up the main scene
-    Scene scene(renderer);
+    ScenesManager sM();
     
     // We try finding the main scene
     scene.loadScene("./assets/scenes/main_scene.txt"); 
@@ -81,11 +81,11 @@ void Engine::run() {
     
         // 3. FOREACH DE ENTIDADES (Para Animator o lógica extra)
         // Usamos structured bindings [key, value] de C++17
-        for (auto const& [name, entity] : entities) {
-            entity->transform.scale.x = std::sin(currentFrame*0.1)+1;
-            entity->transform.scale.y = std::sin(currentFrame*0.4)+1;
-            entity->transform.scale.z = std::sin(currentFrame*0.8)+1;
-        }
+        // for (auto const& [name, entity] : entities) {
+        //     entity->transform.scale.x = std::sin(currentFrame*0.1)+1;
+        //     entity->transform.scale.y = std::sin(currentFrame*0.4)+1;
+        //     entity->transform.scale.z = std::sin(currentFrame*0.8)+1;
+        // }
         
         
         // Good stuff idk what it does

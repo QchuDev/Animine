@@ -8,9 +8,12 @@
     4. Lines    |  (completed)      CREATION
     5. Quads    |  (completed)      CREATION    
     6. Curves   |  (completed)      CREATION
+    7. ScenesM  |     (wip)         CREATION
+    8. Animator |                   ANIMATION
     ...
-    7. Animator |                   ANIMATION
-    8. Editor   |                   QUALITY OF LIFE
+    9. Editor   |                   QUALITY OF LIFE
+    
+        
     
 
 "scene_i.txt" Format:

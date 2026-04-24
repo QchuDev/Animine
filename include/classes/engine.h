@@ -22,7 +22,10 @@ class Engine {
         bool firstMouse = true;
     private:
         GLFWwindow* window;
+        
         Renderer* renderer; // Instance of the one who draws on screen
+        Animator* animator; // Instance of the one who draws on screen
+        
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
         void processInput(); // Listens to the the user inputs 

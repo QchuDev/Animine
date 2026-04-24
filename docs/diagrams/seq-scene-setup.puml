@@ -1,0 +1,30 @@
+@startuml
+autonumber
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor User
+participant "Engine" as E
+participant "ScenesManager" as SM
+participant "Interpreter" as IPR
+participant "Scenes" as S
+
+participant "IEntity" as IE
+participant "IAnimation" as IA
+
+participant "Animator" as A
+participant "Renderer" as R
+
+User -> E : run()
+activate E
+
+note over SM : Cargamos las escenas,\niterando por file
+E -> SM : loadScenes("./assets/scenes/")
+activate SM
+loop \tFor each scene file (scene_i)\t
+    SM -> IPR:\tents=getEntities(scene_i)\n\t anims=getAnimations(scene_i)
+    activate IPR
+    
+end
+
+@enduml
