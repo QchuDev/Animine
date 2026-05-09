@@ -56,7 +56,7 @@ void Engine::run() {
     Scene scene(renderer);
     
     // We try finding the main scene
-    scene.loadScene("./assets/scenes/main_scene.txt"); 
+    scene.loadScene("../assets/scenes/main_scene.txt"); 
 
     // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {
