@@ -1,11 +1,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "classes/entities/entity.h"
+
 #include "classes/entities/axises.h"
 #include "classes/render/shader.h"
 #include "classes/render/camera.h"
-
-#include "classes/entities/entity.h"
 
 #include <string>
 #include <map>

@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "classes/render/renderer.h"
+#include "classes/animations/animator.h
 
 /*
     In this file we define the atributtes, methods, public and private of the class.
@@ -22,7 +23,10 @@ class Engine {
         bool firstMouse = true;
     private:
         GLFWwindow* window;
+        
         Renderer* renderer; // Instance of the one who draws on screen
+        Animator* animator; // Instance of the one who transforms the entities
+
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
         void processInput(); // Listens to the the user inputs 

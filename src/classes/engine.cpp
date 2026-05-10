@@ -5,9 +5,10 @@
 
 #include "classes/engine.h"
 #include "classes/scenes/scene.h"
+#include "classes/creation/scenes_parser.h"
 
 
-Engine::Engine() : window(nullptr), renderer(nullptr) {}
+Engine::Engine() : window(nullptr), renderer(nullptr), animator(nullptr) {}
 
 /**
  * Setup of the engine, creates the window and render
@@ -47,10 +48,7 @@ bool Engine::init(int width, int height, const char* title) {
  */
 void Engine::run() {
     
-    // Create ScenesManager
-    // Init ScenesManager --> Gets all uploaded Scenes
-    // Load the first scene to use
-    
+    ScenesParser parser(renderer, animator);
     
     // Set up the main scene
     Scene scene(renderer);
