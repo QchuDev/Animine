@@ -31,7 +31,7 @@ public:
     /**
      * Returns a vector with all the entities in this scene
      */
-    const std::vector<IEntity*>& getAllEntities() const;
+    const std::map<std::string, IEntity*>& getAllEntities() const;
 
 };
 

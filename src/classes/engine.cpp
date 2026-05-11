@@ -59,12 +59,12 @@ void Engine::run() {
     // Main loop -> run until glfw wants to close 
     while(!glfwWindowShouldClose(window)) {
         
-        // Calcular deltaTime
+        // Calculate deltaTime
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;   
         
-        // Recibes una referencia constante
+        // Constant reference of all current scene entities
         const auto& entities = scene.getAllEntities();
         
         // -> All inputs here <-
@@ -75,15 +75,14 @@ void Engine::run() {
         renderer->drawScene(entities);
       
         // Animator segment...
-        // animator->update()
-    
+        // animator->update(entities)
         // 3. FOREACH DE ENTIDADES (Para Animator o lógica extra)
         // Usamos structured bindings [key, value] de C++17
-        for (auto const& [name, entity] : entities) {
-            entity->transform.scale.x = std::sin(currentFrame*0.1)+1;
-            entity->transform.scale.y = std::sin(currentFrame*0.4)+1;
-            entity->transform.scale.z = std::sin(currentFrame*0.8)+1;
-        }
+        // for (auto const& [id, entity] : entities) {
+        //     entity->transform.scale.x = std::sin(currentFrame*0.1)+1;
+        //     entity->transform.scale.y = std::sin(currentFrame*0.4)+1;
+        //     entity->transform.scale.z = std::sin(currentFrame*0.8)+1;
+        // }
         
         
         // Good stuff idk what it does

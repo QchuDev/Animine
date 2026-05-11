@@ -11,10 +11,6 @@ private:
     
     // All uploaded scenes
     std::map<std::string, Scene> scenes;
-    
-    // The component responsible of the motion 
-    // of each Entity on the current scene
-    Animator animator;
 
 public:
         Scene& getCurrentScene();

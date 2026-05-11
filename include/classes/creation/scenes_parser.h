@@ -18,9 +18,10 @@ namespace fs = std::filesystem;
 
 class ScenesParser {
 private:
+    // References of the animator and renderer
     Renderer* renderer;
     Animator* animator;
-
+    
     /**
      * @brief Procesa una línea individual del archivo.
      * Es llamado por parseFile por cada línea válida.

@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "classes/render/renderer.h"
-#include "classes/animations/animator.h
+#include "classes/animations/animator.h"
 
 /*
     In this file we define the atributtes, methods, public and private of the class.
