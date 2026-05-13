@@ -1,0 +1,24 @@
+# anim_test.txt — Animation system verification scene
+#
+# Timeline:
+#   t=0.0 → t=2.0  box slides right along a curved path (Catmull-Rom, ease_out)
+#   t=2.0 → t=3.5  box spins 180° on Y (linear interpolation, ease_in_out)
+#   t=3.5 → t=4.5  box scales up (linear interpolation, ease_in)
+#   t=0.0 → t=4.5  chicken drifts forward the whole time (linear, no wait)
+
+quad box      wood.png       1 1
+quad chicken  fat_chicken.png  1 1
+
+# --- box: curved path right then up ---
+animate box  position  ease_out  smooth   0 0 0   2 1 0   3 0 0   2.0
+wait 2.0
+
+# --- box: spin 180 on Y ---
+animate box  rotation  ease_in_out  linear   0 0 0   0 180 0   1.5
+wait 1.5
+
+# --- box: scale up ---
+animate box  scale  ease_in  linear   1 1 1   2 2 2   1.0
+
+# --- chicken: slow drift forward, runs the whole time independently ---
+animate chicken  position  linear  linear   0 0 2   0 0 -2   4.5

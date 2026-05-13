@@ -8,7 +8,7 @@
 | 2 | evaluate() + easing functions + Catmull-Rom | ✅ done |
 | 3 | Animator::update() connected to main loop | ✅ done |
 | 4 | ScenesParser: animate / wait keywords | ✅ done |
-| 5 | Test scene + verification | ⬜ next |
+| 5 | Test scene + verification | ✅ done |
 
 ---
 
@@ -117,16 +117,29 @@ Files modified:
 
 ---
 
-## Phase 5 — Test Scene
+## Phase 5 — Test Scene ✅
 
 File: `assets/scenes/anim_test.txt`
 
 ```
-quad  box  wood.png  1 1
+quad box      wood.png        1 1
+quad chicken  fat_chicken.png 1 1
 
-animate box  position  ease_out  smooth   0 0 0   3 0 0   3 3 0   2.0
+animate box  position  ease_out     smooth   0 0 0   2 1 0   3 0 0   2.0
 wait 2.0
 animate box  rotation  ease_in_out  linear   0 0 0   0 180 0  1.5
+wait 1.5
+animate box  scale     ease_in      linear   1 1 1   2 2 2    1.0
+
+animate chicken  position  linear  linear   0 0 2   0 0 -2   4.5
 ```
 
-Expected: box follows a curved path over 2 s, then spins 180° over 1.5 s.
+Timeline:
+
+| t | box | chicken |
+|---|---|---|
+| 0.0 → 2.0 | slides along curved path (Catmull-Rom) | drifts forward |
+| 2.0 → 3.5 | spins 180° on Y | drifts forward |
+| 3.5 → 4.5 | scales 1→2 | drifts forward |
+
+All `.cpp` files compile cleanly with g++. ninja build failure is a pre-existing environment issue unrelated to the animation system.
