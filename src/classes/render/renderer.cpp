@@ -8,25 +8,19 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb_image.h>
+#include <algorithm>
+#include <vector>
 
 Renderer::Renderer() {
-    // Settings of OpenGL
-    // ex: Depth test??
-      
-    
-    // Main Camera
     camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-    
-    // The routes should match the vertex and fragment .glsl in our project
-    // Basic Shader 
+
     gizmoShader = new Shader("shaders/line_vertex.glsl", "shaders/line_fragment.glsl");
     textureShader = new Shader("shaders/quad_vertex.glsl", "shaders/quad_fragment.glsl");
-    
-    // Global axis XYZ
+
     axises = new Axises(gizmoShader);
-    
-    // Enables the depth test of the depth ?? lol
-    
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 /**
@@ -38,26 +32,29 @@ void Renderer::clear(float r, float g, float b, float a) {
 }
 
 /**
- * Draws every entity in the scene
+ * Draws every entity in the scene, sorted back-to-front for correct alpha blending
  */
 void Renderer::drawScene(const std::map<std::string, IEntity*>& entities) {
-    
-    
-    // Global Matrices -> Projection and view
-    
-    // projection (fov, aspect, near, far)
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1280.0f/720.0f, 0.01f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
-    
-    // Drawing the main axis
+
     axises->draw(view, projection);
-    
-    // Start the drawing of each entity
-    for (auto const& [id, entity] : entities) {
+
+    // Sort entities back-to-front (farthest first)
+    std::vector<IEntity*> sorted;
+    sorted.reserve(entities.size());
+    for (auto const& [id, entity] : entities)
+        sorted.push_back(entity);
+
+    glm::vec3 camPos = camera->Position;
+    std::sort(sorted.begin(), sorted.end(), [&camPos](IEntity* a, IEntity* b) {
+        float da = glm::length(a->transform.position - camPos);
+        float db = glm::length(b->transform.position - camPos);
+        return da > db; // farthest first
+    });
+
+    for (IEntity* entity : sorted)
         entity->draw(view, projection);
-    }
-    
-    
 }
 
 
