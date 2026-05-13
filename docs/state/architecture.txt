@@ -26,7 +26,7 @@ Main Loop
 
     while window is open:
         processInput()          ← keyboard + mouse → camera
-        animator.update(dt, currentScene)   ← advances t, writes transforms  [Phase 3 — pending]
+        animator.update(dt, currentScene)   ← advances t, writes transforms
         renderer.clear()
         renderer.drawScene(currentScene.getEntities())
         glfwSwapBuffers / glfwPollEvents
@@ -52,7 +52,6 @@ Scene           Pure data container: entities + animations.
 Animator        Owns global time t. Each frame calls evaluate() on every Track
                 of every Animation in the active scene and writes the result
                 to the entity's transform via setPosition/setRotation/setScale.
-                Not yet connected to the main loop (Phase 3 pending).
 
 Dependencies
 ------------

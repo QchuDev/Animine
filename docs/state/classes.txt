@@ -28,6 +28,7 @@ Fields:   id (string)
           animations vector<IAnimation*>
 Methods:  addEntity(id, ptr), addAnimation(ptr)
           getEntities(), getAnimations()
+          getEntity(id) → IEntity*  (returns nullptr if not found)
 Owns its entities and animations (deletes in destructor).
 
 ─────────────────────────────────────────────────────────────────────
@@ -113,6 +114,8 @@ evaluate  (include/classes/animations/evaluate.h)
 Transformation  (include/classes/animations/transformation.h)
   Legacy stub — unused, kept for reference.
 
-Animator  (include/classes/animations/animator.h)
-  Fields: t, maxT, isPlaying
-  update() — stub, not yet connected to main loop. (Phase 3 pending)
+Animator  (include/classes/animations/animator.h / src/classes/animations/animator.cpp)
+  Fields:  t (float) — global playback time
+  Methods: update(float deltaTime, Scene*) — advances t, evaluates all tracks, writes transforms
+           reset() — resets t to 0
+  Connected to main loop in Engine::run() before drawScene().

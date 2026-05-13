@@ -12,6 +12,11 @@ const std::map<std::string, IEntity*>& Scene::getEntities() const {
     return entities;
 }
 
+IEntity* Scene::getEntity(const std::string& entityId) const {
+    auto it = entities.find(entityId);
+    return it != entities.end() ? it->second : nullptr;
+}
+
 const std::vector<IAnimation*>& Scene::getAnimations() const {
     return animations;
 }

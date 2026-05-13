@@ -17,6 +17,7 @@ public:
     void addEntity(const std::string& entityId, IEntity* entity);
     void addAnimation(IAnimation* animation);
 
+    IEntity* getEntity(const std::string& entityId) const;
     const std::map<std::string, IEntity*>& getEntities() const;
     const std::vector<IAnimation*>& getAnimations() const;
 

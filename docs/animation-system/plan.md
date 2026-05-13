@@ -6,8 +6,8 @@
 |---|---|---|
 | 1 | Data types (EasingType, Keyframe, Track, Animation) | ✅ done |
 | 2 | evaluate() + easing functions + Catmull-Rom | ✅ done |
-| 3 | Animator::update() connected to main loop | ⬜ next |
-| 4 | ScenesParser: animate / wait keywords | ⬜ |
+| 3 | Animator::update() connected to main loop | ✅ done |
+| 4 | ScenesParser: animate / wait keywords | ⬜ next |
 | 5 | Test scene + verification | ⬜ |
 
 ---
@@ -98,30 +98,14 @@ Catmull-Rom: mirrors endpoints to synthesize missing neighbors (`p(-1) = 2·p0 -
 
 ---
 
-## Phase 3 — Animator::update()
+## Phase 3 — Animator::update() ✅
 
-Files to modify:
-- `include/classes/animations/animator.h`
-- `src/classes/animations/animator.cpp`
-- `src/classes/engine.cpp` — add `animator.update(deltaTime, scene)` to main loop
-
-```cpp
-void Animator::update(float deltaTime, Scene* scene);
-```
-
-```
-t += deltaTime
-for each Animation* anim in scene->getAnimations():
-    localT = t - anim->startTime
-    if localT < 0 or localT > anim->duration: skip
-    for each Track& track in anim->tracks:
-        vec3 value = evaluate(track, localT)
-        IEntity* e = scene->getEntity(track.entity_id)
-        switch property:
-            POSITION → e->setPosition(value)
-            ROTATION → e->setRotation(value)
-            SCALE    → e->setScale(value)
-```
+Files modified/created:
+- `include/classes/animations/animator.h` — rewritten: `update(float, Scene*)`, `reset()`
+- `src/classes/animations/animator.cpp`   — implementation
+- `include/classes/scenes/scene.h`        — added `getEntity(id) → IEntity*`
+- `src/classes/scenes/scene.cpp`          — implementation of `getEntity`
+- `src/classes/engine.cpp`                — `animator = new Animator()` in `init()`, `animator->update(deltaTime, scene)` before `drawScene()`, `delete animator` in destructor
 
 ---
 

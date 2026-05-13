@@ -4,6 +4,7 @@
 #include <numbers>
 
 #include "classes/engine.h"
+#include "classes/animations/animator.h"
 #include "classes/scenes/scenes_manager.h"
 #include "classes/creation/scenes_parser.h"
 #include "classes/paths.h"
@@ -31,6 +32,7 @@ bool Engine::init(int width, int height, const char* title) {
     glDepthFunc(GL_LESS);
     
     renderer = new Renderer(); // Create the renderer to draw entities on the window
+    animator = new Animator();
     
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
@@ -65,6 +67,7 @@ void Engine::run() {
         if (!scene) { glfwSwapBuffers(window); glfwPollEvents(); continue; }
 
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
+        animator->update(deltaTime, scene);
         renderer->drawScene(scene->getEntities());
 
         glfwSwapBuffers(window);
@@ -126,6 +129,7 @@ void Engine::processInput() {
  */
 Engine::~Engine() {
     delete scenesManager;
+    delete animator;
     delete renderer;
     glfwTerminate();
 }
