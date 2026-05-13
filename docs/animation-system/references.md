@@ -15,6 +15,15 @@
 | Smooth interpolation of irregularly spaced keyframes | https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/smooth-interpolation-of-irregularly-spaced-keyframes-r1497 | How to interpolate between keyframes that are not evenly spaced in time. |
 | Understanding Game Engines — Lesson 8: Animation (CMU) | https://courses.etc.cmu.edu/53-353/index.php/2025/10/29/lesson-8-animation/ | Solid conceptual overview of keyframes, dopesheet, and animation state machines. |
 
+## Path Animation
+
+| Title | Link | Why read it |
+|-------|------|-------------|
+| Smooth interpolation of irregularly spaced keyframes | https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/smooth-interpolation-of-irregularly-spaced-keyframes-r1497 | Core reference for Catmull-Rom over non-uniform keyframe spacing. Directly applicable to QchuAnims. |
+| Catmull-Rom splines — interactive visualizer | https://www.cs.cmu.edu/~quake/robust.html | Visual intuition for how the curve passes through control points. |
+| Bézier curves for motion paths (CSS / game dev) | https://cubic-bezier.com | Interactive tool to understand how control points shape a Bézier path. |
+| Splines and Interpolation — Freya Holmér (YouTube) | https://www.youtube.com/watch?v=jvPPXbo87ds | 30 min visual deep-dive into splines, Catmull-Rom, and Bézier. Best intro available. |
+
 ## Tools / Cheat Sheets
 
 | Resource | Link |

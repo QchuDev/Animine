@@ -84,3 +84,87 @@ Most engines use **parallel tracks** — each property of each entity has its ow
 3. **Which easing types at launch?** (`linear`, `ease_in`, `ease_out` is enough to start)
 4. **Loop support?** Can an animation repeat?
 5. **Who applies the result?** Animator calls `entity->setPosition()` directly, or via a message/event system?
+
+---
+
+## Path Animation
+
+### The problem with linear lerp between keyframes
+
+With `lerp(a, b, alpha)` between consecutive keyframes, the path is always a straight line segment. An object moving through 4 keyframes traces a **polyline** — it reaches each point exactly, but the direction changes abruptly at every keyframe. This looks mechanical for position tracks.
+
+```
+K0 ──────── K1
+             \
+              \──── K2 ──── K3
+```
+
+There are two families of solutions:
+
+---
+
+### Option A — Catmull-Rom Spline (recommended)
+
+Catmull-Rom is a **cubic spline** that passes through every keyframe and automatically computes smooth tangents from the surrounding points. No extra data needed — just the keyframes you already have.
+
+```
+given four consecutive keyframes: K(i-1), K(i), K(i+1), K(i+2)
+alpha ∈ [0, 1]  (local t between K(i) and K(i+1))
+
+p(alpha) = 0.5 * (
+    (2 * K(i))
+  + (-K(i-1) + K(i+1)) * alpha
+  + (2*K(i-1) - 5*K(i) + 4*K(i+1) - K(i+2)) * alpha²
+  + (-K(i-1) + 3*K(i) - 3*K(i+1) + K(i+2)) * alpha³
+)
+```
+
+For the first and last segments, mirror the endpoint to synthesize the missing neighbor:
+`K(-1) = 2*K(0) - K(1)`.
+
+**Pros:** smooth C1 continuity, no extra authoring, works with the existing `vector<Keyframe>`.  
+**Cons:** requires at least 4 keyframes to be meaningful; with only 2 it degrades to linear.
+
+GLM has no built-in Catmull-Rom, but it's ~15 lines of code. See [^1].
+
+---
+
+### Option B — Bézier Curves (explicit control points)
+
+A cubic Bézier uses 4 points: 2 anchors (the keyframe positions) and 2 control points (tangent handles). The path does **not** pass through the control points — they pull the curve.
+
+```
+B(alpha) = (1-α)³·P0 + 3(1-α)²α·P1 + 3(1-α)α²·P2 + α³·P3
+```
+
+This is what tools like Blender's graph editor and CSS `cubic-bezier()` use.
+
+**Pros:** precise artistic control over the curve shape.  
+**Cons:** requires authoring control points per segment — harder to define in a plain `.txt` file.
+
+---
+
+### Which to use in QchuAnims
+
+| | Catmull-Rom | Bézier |
+|---|---|---|
+| Extra data in `.txt` | None | 2 control points per segment |
+| Passes through keyframes | Yes | Yes (anchors only) |
+| Smooth by default | Yes | Only if control points are set well |
+| Implementation cost | Low | Medium |
+
+**Recommendation:** implement Catmull-Rom as the `SMOOTH` interpolation mode on a `Track`. Keep `LINEAR` as the default. The scene file just needs one extra token:
+
+```
+animate box  position  smooth   0 0 0   3 2 0   3 5 0   0 5 0   duration 3.0
+```
+
+The `evaluate()` function checks the track's interpolation mode and dispatches to either `lerp` or `catmullRom`.
+
+---
+
+### Impact on current architecture
+
+`Track` already holds `vector<Keyframe>` — no struct changes needed. The only addition is an `InterpolationMode` field on `Track` (or reuse `EasingType` with a `SMOOTH` variant). The change is isolated to `evaluate()`.
+
+[^1]: Catmull-Rom implementation reference: *Smooth interpolation of irregularly spaced keyframes* — https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/smooth-interpolation-of-irregularly-spaced-keyframes-r1497
