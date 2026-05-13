@@ -4,6 +4,10 @@
 #include "classes/entities/line.h"
 #include "classes/entities/quad.h"
 #include "classes/entities/curve.h"
+#include "classes/animations/animation.h"
+#include "classes/animations/easing_type.h"
+#include "classes/animations/track.h"
+#include "classes/animations/keyframe.h"
 
 #include <fstream>
 #include <filesystem>
@@ -106,6 +110,64 @@ bool ScenesParser::createEntity(const std::string& typeStr, std::stringstream& s
     return false;
 }
 
+// ── Animation parsing ─────────────────────────────────────────────────────────
+
+static EasingType parseEasing(const std::string& s) {
+    if (s == "ease_in")     return EasingType::EASE_IN;
+    if (s == "ease_out")    return EasingType::EASE_OUT;
+    if (s == "ease_in_out") return EasingType::EASE_IN_OUT;
+    return EasingType::LINEAR;
+}
+
+static InterpolationMode parseInterp(const std::string& s) {
+    if (s == "smooth") return InterpolationMode::SMOOTH;
+    return InterpolationMode::LINEAR;
+}
+
+// animate <entity_id> <property> <easing> <interp> <x y z>... <duration>
+bool ScenesParser::createAnimation(std::stringstream& ss, float startTime, Scene* scene) {
+    std::string entityId, propStr, easingStr, interpStr;
+    if (!(ss >> entityId >> propStr >> easingStr >> interpStr)) return false;
+
+    // Read remaining floats: groups of 3 (keyframe values) then last one is duration
+    std::vector<float> nums;
+    float v;
+    while (ss >> v) nums.push_back(v);
+
+    // Need at least one keyframe (3 floats) + duration (1 float) = 4 floats minimum
+    if (nums.size() < 4 || (nums.size() - 1) % 3 != 0) {
+        std::cerr << "animate: bad format for '" << entityId << "'\n";
+        return false;
+    }
+
+    float duration = nums.back();
+    int kfCount = (int)(nums.size() - 1) / 3;
+
+    Track track;
+    track.entity_id    = entityId;
+    track.easing       = parseEasing(easingStr);
+    track.interpolation = parseInterp(interpStr);
+
+    if      (propStr == "position") track.property = TransformProp::POSITION;
+    else if (propStr == "rotation") track.property = TransformProp::ROTATION;
+    else if (propStr == "scale")    track.property = TransformProp::SCALE;
+    else { std::cerr << "animate: unknown property '" << propStr << "'\n"; return false; }
+
+    // Distribute keyframes evenly over [0, duration]
+    float step = (kfCount > 1) ? duration / (kfCount - 1) : 0.0f;
+    for (int i = 0; i < kfCount; ++i) {
+        int base = i * 3;
+        track.keyframes.push_back({ i * step, glm::vec3(nums[base], nums[base+1], nums[base+2]) });
+    }
+
+    auto* anim = new Animation();
+    anim->startTime = startTime;
+    anim->duration  = duration;
+    anim->tracks.push_back(std::move(track));
+    scene->addAnimation(anim);
+    return true;
+}
+
 // ── Line / file parsing ───────────────────────────────────────────────────────
 
 void ScenesParser::parseLine(const std::string& line, Scene* scene) {
@@ -129,9 +191,27 @@ std::unique_ptr<Scene> ScenesParser::parseFile(const std::string& file_path) {
     std::string sceneId = fs::path(file_path).stem().string();
     auto scene = std::make_unique<Scene>(sceneId);
 
+    float timeOffset = 0.0f;
     std::string line;
-    while (std::getline(file, line))
-        parseLine(line, scene.get());
+    while (std::getline(file, line)) {
+        if (line.empty() || line[0] == '#') continue;
+
+        std::stringstream ss(line);
+        std::string token;
+        ss >> token;
+
+        if (token == "animate") {
+            if (!createAnimation(ss, timeOffset, scene.get()))
+                std::cerr << "Failed to parse animate line: " << line << "\n";
+        } else if (token == "wait") {
+            float secs = 0.0f;
+            ss >> secs;
+            timeOffset += secs;
+        } else {
+            // entity line — rewind and delegate
+            parseLine(line, scene.get());
+        }
+    }
 
     return scene;
 }

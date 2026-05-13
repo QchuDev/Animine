@@ -7,8 +7,8 @@
 | 1 | Data types (EasingType, Keyframe, Track, Animation) | ✅ done |
 | 2 | evaluate() + easing functions + Catmull-Rom | ✅ done |
 | 3 | Animator::update() connected to main loop | ✅ done |
-| 4 | ScenesParser: animate / wait keywords | ⬜ next |
-| 5 | Test scene + verification | ⬜ |
+| 4 | ScenesParser: animate / wait keywords | ✅ done |
+| 5 | Test scene + verification | ⬜ next |
 
 ---
 
@@ -109,13 +109,11 @@ Files modified/created:
 
 ---
 
-## Phase 4 — ScenesParser extension
+## Phase 4 — ScenesParser extension ✅
 
-File to modify: `src/classes/creation/scenes_parser.cpp`
-
-- Local `float timeOffset = 0.0f` in `parseFile()`
-- `animate` line → parse tokens, build `Track` with N keyframes evenly spaced over duration, wrap in `Animation{startTime=timeOffset}`, add to scene
-- `wait N` → `timeOffset += N`
+Files modified:
+- `include/classes/creation/scenes_parser.h` — added `createAnimation(ss, startTime, scene)` declaration
+- `src/classes/creation/scenes_parser.cpp`   — implemented `createAnimation()`; `parseFile()` now handles `animate`/`wait` with a local `timeOffset` accumulator; `parseLine`/`createEntity` unchanged
 
 ---
 

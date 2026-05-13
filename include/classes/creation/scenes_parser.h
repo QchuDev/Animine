@@ -22,6 +22,7 @@ private:
     std::unique_ptr<Scene> parseFile(const std::string& file_path);
     void parseLine(const std::string& line, Scene* scene);
     bool createEntity(const std::string& typeStr, std::stringstream& ss, Scene* scene);
+    bool createAnimation(std::stringstream& ss, float startTime, Scene* scene);
 };
 
 #endif

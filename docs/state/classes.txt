@@ -42,8 +42,12 @@ Methods:
     iterates folder, calls parseFile for each .txt
   parseFile(file_path)       → unique_ptr<Scene>
     scene id = filename stem (e.g. "main_scene")
+    handles animate / wait lines with a local timeOffset accumulator
   parseLine / createEntity   (private)
     dispatches on first token: line | quad | curve
+  createAnimation(ss, startTime, scene)  (private)
+    parses: animate <id> <prop> <easing> <interp> <x y z>... <duration>
+    builds Track with N evenly-spaced keyframes, wraps in Animation, adds to scene
 
 Expression evaluation (curves):
   Uses tinyexpr. ExprContext compiles x(t), y(t), z(t) at parse time.
