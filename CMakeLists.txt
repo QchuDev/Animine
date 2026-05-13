@@ -28,10 +28,6 @@ message(STATUS "Sources found: ${SOURCES}")
 # 4. Crear el ejecutable con la lista de fuentes
 add_executable(qchu-anims ${SOURCES})
 
-if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(qchu-anims PRIVATE -Wa,-mbig-obj)
-endif()
-
 # 5. Vinculación
 target_link_libraries(qchu-anims glfw opengl32)
 target_include_directories(qchu-anims PRIVATE external)

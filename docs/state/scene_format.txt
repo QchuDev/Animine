@@ -1,0 +1,59 @@
+QchuAnims - Scene File Format
+==============================
+
+Location:  assets/scenes/*.txt
+Encoding:  UTF-8, one entity per line
+Comments:  lines starting with # are ignored
+IDs:       must be unique within a scene, no spaces
+
+General syntax
+--------------
+    <type> <id> <args...>
+
+Supported types
+---------------
+
+LINE
+    line <id> <x1> <y1> <z1> <x2> <y2> <z2> <r> <g> <b>
+
+    Draws a straight line from point 1 to point 2.
+    Color is RGB in [0.0, 1.0].
+
+    Example:
+        line axis_x  0 0 0  1 0 0  1 0 0
+
+QUAD
+    Full (4 explicit vertices):
+        quad <id> <texture> <x1> <y1> <z1> <x2> <y2> <z2> <x3> <y3> <z3> <x4> <y4> <z4>
+
+    Sized (centered at origin, width × height):
+        quad <id> <texture> <w> <h>
+
+    Default (1×1 centered at origin):
+        quad <id> <texture>
+
+    Texture is a filename relative to assets/textures/.
+    Vertices are wound counter-clockwise: bottom-left, bottom-right, top-right, top-left.
+
+    Examples:
+        quad bg wood.png 2 1
+        quad logo pixels.png  0 0 0  1 0 0  1 1 0  0 1 0
+
+CURVE
+    curve <id> <x(t)> <y(t)> <z(t)> <r> <g> <b>
+
+    Parametric curve. t runs from 0 to 2*pi (defined in Curve constructor).
+    Expressions are evaluated by tinyexpr. Supported: +,-,*,/,^,
+    sin, cos, tan, sqrt, abs, log, exp, pi, e.
+    No spaces allowed inside expressions.
+
+    Examples:
+        curve helix  cos(t)  sin(t)  t/6  0 1 1
+        curve circle cos(t)  sin(t)  0    1 0 0
+
+Notes
+-----
+- All scenes in assets/scenes/ are loaded at startup.
+- The first scene found becomes the active scene.
+- Switch scenes at runtime with ScenesManager::setCurrentScene(id).
+- Scene id = filename without extension (e.g. main_scene.txt → "main_scene").

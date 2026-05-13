@@ -5,33 +5,27 @@
 #include <GLFW/glfw3.h>
 #include "classes/render/renderer.h"
 #include "classes/animations/animator.h"
-
-/*
-    In this file we define the atributtes, methods, public and private of the class.
-    The interface of the class is here, everything we have and can do.
-    
-    NOT HOW, BUT WHAT
-*/
+#include "classes/scenes/scenes_manager.h"
 
 class Engine {
-    public:
-        Engine();   // Constructor of the class
-        ~Engine();  // Destructor of the class -> to free memory
-        bool init(int width, int height, const char* title);
-        void run(); // Method to start the main loop
-        double lastX = 640.0, lastY = 360.0; // Inicializar en el centro de tu ventana
-        bool firstMouse = true;
-    private:
-        GLFWwindow* window;
-        
-        Renderer* renderer; // Instance of the one who draws on screen
-        Animator* animator; // Instance of the one who transforms the entities
+public:
+    Engine();
+    ~Engine();
+    bool init(int width, int height, const char* title);
+    void run();
 
-        float deltaTime = 0.0f;
-        float lastFrame = 0.0f;
-        void processInput(); // Listens to the the user inputs 
-        
+    double lastX = 640.0, lastY = 360.0;
+    bool firstMouse = true;
+
+private:
+    GLFWwindow* window;
+    Renderer* renderer;
+    Animator* animator;
+    ScenesManager* scenesManager = nullptr;
+
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
+    void processInput();
 };
 
 #endif
-

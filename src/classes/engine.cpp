@@ -4,11 +4,11 @@
 #include <numbers>
 
 #include "classes/engine.h"
-#include "classes/scenes/scene.h"
+#include "classes/scenes/scenes_manager.h"
 #include "classes/creation/scenes_parser.h"
 
 
-Engine::Engine() : window(nullptr), renderer(nullptr), animator(nullptr) {}
+Engine::Engine() : window(nullptr), renderer(nullptr), animator(nullptr), scenesManager(nullptr) {}
 
 /**
  * Setup of the engine, creates the window and render
@@ -47,47 +47,27 @@ bool Engine::init(int width, int height, const char* title) {
  * etc...
  */
 void Engine::run() {
-    
-    ScenesParser parser(renderer, animator);
-    
-    // Set up the main scene
-    Scene scene(renderer);
-    
-    // We try finding the main scene
-    scene.loadScene("../assets/scenes/main_scene.txt"); 
+    // Build all scenes from assets/scenes/ and hand them to the manager
+    ScenesParser parser(renderer);
+    auto scenes = parser.extractScenes("../assets/scenes/");
+    scenesManager = new ScenesManager(std::move(scenes));
 
-    // Main loop -> run until glfw wants to close 
-    while(!glfwWindowShouldClose(window)) {
-        
-        // Calculate deltaTime
+    // Main loop
+    while (!glfwWindowShouldClose(window)) {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;   
-        
-        // Constant reference of all current scene entities
-        const auto& entities = scene.getAllEntities();
-        
-        // -> All inputs here <-
+        lastFrame = currentFrame;
+
         processInput();
-    
-        // Renderer --> the guy who draws
+
+        Scene* scene = scenesManager->getCurrentScene();
+        if (!scene) { glfwSwapBuffers(window); glfwPollEvents(); continue; }
+
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
-        renderer->drawScene(entities);
-      
-        // Animator segment...
-        // animator->update(entities)
-        // 3. FOREACH DE ENTIDADES (Para Animator o lógica extra)
-        // Usamos structured bindings [key, value] de C++17
-        // for (auto const& [id, entity] : entities) {
-        //     entity->transform.scale.x = std::sin(currentFrame*0.1)+1;
-        //     entity->transform.scale.y = std::sin(currentFrame*0.4)+1;
-        //     entity->transform.scale.z = std::sin(currentFrame*0.8)+1;
-        // }
-        
-        
-        // Good stuff idk what it does
+        renderer->drawScene(scene->getEntities());
+
         glfwSwapBuffers(window);
-        glfwPollEvents();   
+        glfwPollEvents();
     }
 }
 
@@ -144,6 +124,7 @@ void Engine::processInput() {
  * Destoying correctly the Engine --> with the renderer and terminating the GLFW
  */
 Engine::~Engine() {
+    delete scenesManager;
     delete renderer;
     glfwTerminate();
 }

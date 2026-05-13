@@ -1,38 +1,28 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <map>
 #include <vector>
 #include <string>
 #include "classes/entities/entity.h"
 #include "classes/animations/animation.h"
-#include "classes/render/renderer.h"
 
 class Scene {
-private:
-    std::vector<IEntity*> entities;       // All entities of the scene
-    std::vector<IAnimation*> animations;  // All animations of the scene
-    
-    Renderer* renderer;
-    void parseLine(const std::string& line);
-    bool entityCreation(std::string& type, std::stringstream& ss);
 public:
-    Scene(Renderer* r) : renderer(r) {};
+    std::string id;
+
+    Scene(const std::string& id) : id(id) {}
     ~Scene();
 
-    /**
-     * This init method takes a path as an argument. 
-     * It should be a .txt where the wanted entities are specified
-     * 
-     * returns if it was correctly initialized
-     */
-    bool loadScene(std::string path);
-    
-    
-    /**
-     * Returns a vector with all the entities in this scene
-     */
-    const std::map<std::string, IEntity*>& getAllEntities() const;
+    void addEntity(const std::string& entityId, IEntity* entity);
+    void addAnimation(IAnimation* animation);
 
+    const std::map<std::string, IEntity*>& getEntities() const;
+    const std::vector<IAnimation*>& getAnimations() const;
+
+private:
+    std::map<std::string, IEntity*> entities;
+    std::vector<IAnimation*> animations;
 };
 
 #endif

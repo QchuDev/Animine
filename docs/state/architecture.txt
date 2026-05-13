@@ -1,0 +1,59 @@
+QchuAnims - Architecture
+========================
+
+Overview
+--------
+QchuAnims is a 3D animation engine built on OpenGL (via GLAD) and GLFW.
+It renders parametric scenes defined in plain-text .txt files.
+
+Creation Pipeline
+-----------------
+
+    Engine::run()
+        │
+        ├─ ScenesParser(renderer)
+        │       └─ extractScenes("../assets/scenes/")
+        │               reads every .txt in the folder
+        │               builds one Scene per file (id = filename stem)
+        │               entity creation happens here (line / quad / curve)
+        │
+        └─ ScenesManager(scenes)
+                owns all scenes in a map<id, Scene>
+                exposes getCurrentScene() / setCurrentScene(id)
+
+Main Loop
+---------
+
+    while window is open:
+        processInput()          ← keyboard + mouse → camera
+        renderer.clear()
+        renderer.drawScene(currentScene.getEntities())
+        glfwSwapBuffers / glfwPollEvents
+
+Responsibilities
+----------------
+Engine          Owns window, renderer, animator, scenesManager.
+                Orchestrates init and the main loop.
+
+Renderer        Owns shaders (gizmoShader, textureShader), camera, axises.
+                Draws all entities each frame.
+                Manages texture cache (getOrCreateTexture).
+
+ScenesParser    Reads .txt files, builds Scene objects.
+                Only dependency: Renderer* (needed to get shaders and textures).
+
+ScenesManager   Stores scenes by id. Switches active scene.
+                Does not know about files or parsing.
+
+Scene           Pure data container: entities + animations.
+                No OpenGL, no file I/O.
+
+Animator        (stub) Will own the animation playback loop.
+
+Dependencies
+------------
+- OpenGL 3.3 core (via GLAD)
+- GLFW 3
+- GLM  (math)
+- stb_image (texture loading, header-only)
+- tinyexpr  (expression evaluator for parametric curves, ~500 lines C)

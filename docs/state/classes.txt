@@ -1,0 +1,102 @@
+QchuAnims - Class Reference
+===========================
+
+IEntity  (include/classes/entities/entity.h)
+--------------------------------------------
+Base interface for all scene objects.
+Fields:   id (string), transform (Transform)
+Methods:  draw(view, projection) [pure virtual]
+          getPosition/setPosition, getRotation/setRotation, getScale/setScale
+
+Transform  (same file)
+  position, rotation (degrees), scale  — all glm::vec3
+  getModelMatrix() → glm::mat4
+
+Concrete entities
+  Line   (x1,y1,z1) → (x2,y2,z2), color rgb       uses gizmoShader
+  Quad   4 vertices + textureID                     uses textureShader
+  Curve  parametric fn(t)→vec3, color rgb           uses gizmoShader
+  Axises global XYZ reference lines                 uses gizmoShader
+
+─────────────────────────────────────────────────────────────────────
+
+Scene  (include/classes/scenes/scene.h)
+---------------------------------------
+Data container. No OpenGL, no file I/O.
+Fields:   id (string)
+          entities   map<string, IEntity*>
+          animations vector<IAnimation*>
+Methods:  addEntity(id, ptr), addAnimation(ptr)
+          getEntities(), getAnimations()
+Owns its entities and animations (deletes in destructor).
+
+─────────────────────────────────────────────────────────────────────
+
+ScenesParser  (include/classes/creation/scenes_parser.h)
+---------------------------------------------------------
+Reads .txt scene files and builds Scene objects.
+Constructor: ScenesParser(Renderer* r)
+Methods:
+  extractScenes(folder_path) → vector<unique_ptr<Scene>>
+    iterates folder, calls parseFile for each .txt
+  parseFile(file_path)       → unique_ptr<Scene>
+    scene id = filename stem (e.g. "main_scene")
+  parseLine / createEntity   (private)
+    dispatches on first token: line | quad | curve
+
+Expression evaluation (curves):
+  Uses tinyexpr. ExprContext compiles x(t), y(t), z(t) at parse time.
+  Lambda captures shared_ptr<ExprContext>, evaluates at draw time.
+
+─────────────────────────────────────────────────────────────────────
+
+ScenesManager  (include/classes/scenes/scenes_manager.h)
+---------------------------------------------------------
+Owns all scenes, manages the active one.
+Constructor: ScenesManager(vector<unique_ptr<Scene>>)
+Methods:
+  getCurrentScene()        → Scene*
+  setCurrentScene(id)      sets active scene by id string
+
+─────────────────────────────────────────────────────────────────────
+
+Engine  (include/classes/engine.h)
+-----------------------------------
+Top-level class. Entry point is main.cpp.
+init(w, h, title)  → creates window, loads OpenGL, creates Renderer
+run()              → builds scenes via parser, hands to manager, main loop
+processInput()     → WASD + mouse → camera, ESC → close
+
+─────────────────────────────────────────────────────────────────────
+
+Renderer  (include/classes/render/renderer.h)
+----------------------------------------------
+Owns: gizmoShader, textureShader, camera, axises, texture cache
+clear(r,g,b,a)                  glClear
+drawScene(entities)             draws axises + all entities
+getOrCreateTexture(filename)    loads from assets/textures/ if not cached
+getGizmoShader() / getTextureShader()
+
+Camera  (include/classes/render/camera.h)
+  ProcessKeyboard(direction, deltaTime)
+  ProcessMouseMovement(xoffset, yoffset)
+  GetViewMatrix() → glm::mat4
+
+Shader  (include/classes/render/shader.h)
+  Loads and compiles vertex + fragment GLSL files.
+  setMat4 / setInt helpers.
+
+─────────────────────────────────────────────────────────────────────
+
+IAnimation  (include/classes/animations/animation.h)
+-----------------------------------------------------
+Empty interface. Placeholder for the animation system.
+
+Transformation  (include/classes/animations/transformation.h)
+  Fields: entity_id, transform_prop, transition_type,
+          current_time, duration, target (vec3)
+  No methods yet.
+
+Animator  (include/classes/animations/animator.h)
+  Fields: t, maxT, isPlaying
+  update() — stub, not connected to the main loop yet.
