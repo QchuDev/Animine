@@ -2,6 +2,7 @@
 
 #include "classes/entities/axises.h"
 #include "classes/render/camera.h"
+#include "classes/paths.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -65,7 +66,7 @@ unsigned int Renderer::getOrCreateTexture(const std::string& fileName) {
         return loadedTextures[fileName];
     }
 
-    std::string fullPath = "assets/textures/" + fileName;
+    std::string fullPath = assetPath("assets/textures/" + fileName);
     unsigned int id = loadTextureFromDisk(fullPath.c_str());
     loadedTextures[fileName] = id;
     return id;

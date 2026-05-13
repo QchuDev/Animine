@@ -6,6 +6,7 @@
 #include "classes/engine.h"
 #include "classes/scenes/scenes_manager.h"
 #include "classes/creation/scenes_parser.h"
+#include "classes/paths.h"
 
 
 Engine::Engine() : window(nullptr), renderer(nullptr), animator(nullptr), scenesManager(nullptr) {}
@@ -49,7 +50,7 @@ bool Engine::init(int width, int height, const char* title) {
 void Engine::run() {
     // Build all scenes from assets/scenes/ and hand them to the manager
     ScenesParser parser(renderer);
-    auto scenes = parser.extractScenes("../assets/scenes/");
+    auto scenes = parser.extractScenes(assetPath("assets/scenes/"));
     scenesManager = new ScenesManager(std::move(scenes));
 
     // Main loop
