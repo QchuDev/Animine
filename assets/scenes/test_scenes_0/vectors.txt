@@ -19,13 +19,14 @@ line y_axis  0 -1 0   0 4 0   0.3 0.3 0.3
 # Animated point showing A then B then arriving at C
 quad tip  yellow.png  0.15 0.15
 
-# Phase 1: follow vector A
-animate tip  position  ease_out  linear   2 1 0   3.0
-# Phase 2: from tip of A, follow B to reach C
+# Phase 1: follow vector A from origin to (2,1,0)
+animate tip  position  ease_out  path  t*2  t*1  0   3.0
+# Phase 2: from tip of A (2,1,0), follow B direction to reach C (3,3,0): delta=(1,2,0)
 wait 3.0
-animate tip  position  ease_out  linear   3 3 0   3.0
-# Phase 3: return to origin and go directly to C
+animate tip  position  ease_out  path  t*1  t*2  0   3.0
+# Phase 3: return to origin: delta=(-3,-3,0)
 wait 3.0
-animate tip  position  ease_in_out  linear   0 0 0   1.5
+animate tip  position  ease_in_out  path  t*(-3)  t*(-3)  0   1.5
+# Phase 4: go directly to C (3,3,0)
 wait 1.5
-animate tip  position  ease_out  linear   3 3 0   2.5
+animate tip  position  ease_out  path  t*3  t*3  0   2.5

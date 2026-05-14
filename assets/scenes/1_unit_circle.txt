@@ -1,0 +1,10 @@
+# Scene 1: The Unit Circle
+# A circle of radius 1 centered at origin. Axes for reference.
+
+curve circle  cos(t)  sin(t)  0   1 1 1
+
+# A point appears at (1,0) — the starting angle θ=0
+quad dot yellow.png 0.1 0.1
+
+# Dot slides in from off-screen to (1,0)
+animate dot position ease_out path t*1 0 0 2.0

@@ -25,6 +25,8 @@ line <id> <x1> <y1> <z1> <x2> <y2> <z2> <r> <g> <b>
 
 Draws a straight line from point 1 to point 2. Color is RGB in [0.0, 1.0].
 
+**Transform behavior:** The two points are baked in local space at creation. Animating `position` moves both endpoints together. Animating `rotation` rotates the line around the **world origin** (not around its midpoint). To rotate a line around one of its endpoints, define that endpoint at (0,0,0) in local space.
+
 ```
 line axis_x  0 0 0  1 0 0  1 0 0
 ```
@@ -77,21 +79,25 @@ Animation lines must appear **after** all entity declarations.
 ### ANIMATE
 
 ```
-animate <entity_id> <property> <easing> <interpolation> <waypoints x y z>... <duration>
+animate <entity_id> <property> <easing> <interpolation> <args...> <duration>
 ```
 
 | Token | Values |
 |---|---|
 | `<property>` | `position` \| `rotation` \| `scale` |
 | `<easing>` | `linear` \| `ease_in` \| `ease_out` \| `ease_in_out` |
-| `<interpolation>` | `linear` (straight segments) \| `smooth` (Catmull-Rom spline) |
-| `<waypoints>` | 1 or more `x y z` triplets — destinations to reach |
+| `<interpolation>` | `linear` (straight segments) \| `smooth` (Catmull-Rom spline) \| `path` (parametric expressions) |
+| `<args>` | depends on interpolation mode (see below) |
 | `<duration>` | total duration in seconds (last number on the line) |
 
 **Key behavior:**
 - The **start value is NOT in the file**. It's captured from the entity's current transform when the animation begins.
 - The **easing** applies globally to `t / duration` — it controls acceleration over the entire animation, not per-segment.
 - The **interpolation** defines the path shape between all points (start + waypoints).
+
+#### Interpolation: `linear` / `smooth`
+
+Args = one or more `x y z` waypoint triplets.
 
 ```
 # Simple A→B: entity moves from current position to (3, 0, 0)
@@ -102,6 +108,30 @@ animate box  position  linear  smooth   3 2 0   3 5 0   0 5 0   3.0
 
 # Rotation: current rotation → 180° on Y
 animate box  rotation  ease_in_out  linear   0 180 0   1.5
+```
+
+#### Interpolation: `path`
+
+Args = three parametric expressions `x(t)` `y(t)` `z(t)`.
+
+```
+animate <entity_id> <property> <easing> path <x_expr> <y_expr> <z_expr> <duration>
+```
+
+- `t` ranges from 0 to 1 (normalized progress, **after** easing is applied).
+- The result is a **displacement** relative to `capturedStart`: final position = `capturedStart + (x(t), y(t), z(t))`.
+- At `t=0` the expressions should return `(0,0,0)` to start at the current position.
+- No spaces inside expressions. Same functions as curves: `sin`, `cos`, `tan`, `sqrt`, `abs`, `log`, `exp`, `pow`, `pi`, `e`.
+
+```
+# Spiral in XY over 3 seconds
+animate my_quad position ease_in_out path cos(t*6.28)*2 sin(t*6.28)*2 t*5 3.0
+
+# Smooth Y rotation
+animate my_quad rotation linear path 0 t*360 0 2.0
+
+# Parabolic bounce in Y
+animate ball position ease_out path t*10 4*t*(1-t)*3 0 1.5
 ```
 
 ---

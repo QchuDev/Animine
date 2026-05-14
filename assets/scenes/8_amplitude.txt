@@ -1,0 +1,23 @@
+# Scene 8: Amplitude — Scaling the Wave
+# Compare sin(t) with 2*sin(t). Amplitude stretches vertically.
+
+line x_axis  -1 0 0   7 0 0   0.3 0.3 0.3
+line y_axis  0 -2.5 0   0 2.5 0   0.3 0.3 0.3
+
+# Normal sine (amplitude = 1)
+curve sin_1  t/(2*pi)*4+1  sin(t)  0   0.4 0.6 0.4
+
+# Double amplitude sine (amplitude = 2)
+curve sin_2  t/(2*pi)*4+1  2*sin(t)  0   0.2 0.9 0.3
+
+# Dot on normal wave
+quad dot_1 yellow.png 0.06 0.06
+
+# Dot on amplified wave
+quad dot_2 yellow.png 0.1 0.1
+
+# Normal amplitude dot
+animate dot_1 position linear path t*4+1 sin(t*6.28) 0 8.0
+
+# Double amplitude dot — same frequency, double height
+animate dot_2 position linear path t*4+1 2*sin(t*6.28) 0 8.0

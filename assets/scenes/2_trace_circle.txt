@@ -1,0 +1,18 @@
+# Scene 2: Tracing the Circle
+# The dot traces the full circle. A radius line connects origin to dot.
+
+line x_axis  -2 0 0   2 0 0   0.3 0.3 0.3
+line y_axis  0 -2 0   0 2 0   0.3 0.3 0.3
+curve circle  cos(t)  sin(t)  0   1 1 1
+
+# Radius line (will be animated to rotate)
+line radius  0 0 0   1 0 0   1 0.8 0.2
+
+# Dot starts at (1,0) — continues from scene 1
+quad dot yellow.png 0.1 0.1
+
+# Dot traces full circle in 6 seconds
+animate dot position linear path cos(t*6.28) sin(t*6.28) 0 6.0
+
+# Radius rotates with the dot (360 degrees on Z)
+animate radius rotation linear path 0 0 t*360 6.0

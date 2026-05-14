@@ -121,27 +121,16 @@ static EasingType parseEasing(const std::string& s) {
 
 static InterpolationMode parseInterp(const std::string& s) {
     if (s == "smooth") return InterpolationMode::SMOOTH;
+    if (s == "path")   return InterpolationMode::PATH;
     return InterpolationMode::LINEAR;
 }
 
-// animate <entity_id> <property> <easing> <interp> <waypoints x y z>... <duration>
-// Waypoints are destinations only — the start value is captured at runtime.
+// animate <entity_id> <property> <easing> <interp> <args> <duration>
+// For linear/smooth: args = waypoints (x y z)...
+// For path: args = x_expr y_expr z_expr
 bool ScenesParser::createAnimation(std::stringstream& ss, float startTime, Scene* scene) {
     std::string entityId, propStr, easingStr, interpStr;
     if (!(ss >> entityId >> propStr >> easingStr >> interpStr)) return false;
-
-    std::vector<float> nums;
-    float v;
-    while (ss >> v) nums.push_back(v);
-
-    // At least 1 waypoint (3 floats) + duration (1 float) = 4 minimum
-    if (nums.size() < 4 || (nums.size() - 1) % 3 != 0) {
-        std::cerr << "animate: bad format for '" << entityId << "'\n";
-        return false;
-    }
-
-    float duration = nums.back();
-    int wpCount = (int)(nums.size() - 1) / 3;
 
     Track track;
     track.entity_id     = entityId;
@@ -153,10 +142,43 @@ bool ScenesParser::createAnimation(std::stringstream& ss, float startTime, Scene
     else if (propStr == "scale")    track.property = TransformProp::SCALE;
     else { std::cerr << "animate: unknown property '" << propStr << "'\n"; return false; }
 
-    // Store waypoints (time field unused in new design, kept for struct compat)
-    for (int i = 0; i < wpCount; ++i) {
-        int base = i * 3;
-        track.keyframes.push_back({ 0.0f, glm::vec3(nums[base], nums[base+1], nums[base+2]) });
+    float duration = 0.0f;
+
+    if (track.interpolation == InterpolationMode::PATH) {
+        // Read 3 expressions + duration
+        std::string xExpr, yExpr, zExpr;
+        if (!(ss >> xExpr >> yExpr >> zExpr >> duration)) {
+            std::cerr << "animate path: expected <x_expr> <y_expr> <z_expr> <duration>\n";
+            return false;
+        }
+        track.pathT = new double(0.0);
+        te_variable vars[] = { {"t", track.pathT} };
+        int err = 0;
+        track.pathExprX = te_compile(xExpr.c_str(), vars, 1, &err);
+        if (err) std::cerr << "animate path: bad x expr '" << xExpr << "'\n";
+        err = 0;
+        track.pathExprY = te_compile(yExpr.c_str(), vars, 1, &err);
+        if (err) std::cerr << "animate path: bad y expr '" << yExpr << "'\n";
+        err = 0;
+        track.pathExprZ = te_compile(zExpr.c_str(), vars, 1, &err);
+        if (err) std::cerr << "animate path: bad z expr '" << zExpr << "'\n";
+    } else {
+        // Read waypoints + duration
+        std::vector<float> nums;
+        float v;
+        while (ss >> v) nums.push_back(v);
+
+        if (nums.size() < 4 || (nums.size() - 1) % 3 != 0) {
+            std::cerr << "animate: bad format for '" << entityId << "'\n";
+            return false;
+        }
+
+        duration = nums.back();
+        int wpCount = (int)(nums.size() - 1) / 3;
+        for (int i = 0; i < wpCount; ++i) {
+            int base = i * 3;
+            track.keyframes.push_back({ 0.0f, glm::vec3(nums[base], nums[base+1], nums[base+2]) });
+        }
     }
 
     auto* anim = new Animation();

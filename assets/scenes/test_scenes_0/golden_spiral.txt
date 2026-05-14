@@ -22,4 +22,5 @@ line y_axis  0 -2 0   0 2 0   0.2 0.2 0.2
 # Point tracing the spiral outward
 quad tracer  yellow.png  0.1 0.1
 
-animate tracer  position  ease_in  smooth   0.15 0 0   0.1 0.15 0   -0.1 0.2 0   -0.3 0 0   -0.1 -0.4 0   0.5 -0.3 0   0.7 0.5 0   -0.2 1.0 0   -1.3 0 0   -0.2 -1.6 0   2 -0.5 0   10.0
+# t ∈ [0,1]. We map to ~3 full turns (t*18.85 ≈ 6π) with exponential growth
+animate tracer  position  linear  path  exp(t*3)*cos(t*18.85)/8  exp(t*3)*sin(t*18.85)/8  0   5.0

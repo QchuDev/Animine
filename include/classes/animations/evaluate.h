@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include "classes/animations/track.h"
 #include "classes/animations/easing.h"
+#include "external/tinyexpr.h"
 
 // Catmull-Rom: smooth curve through p1→p2, using p0 and p3 as tangent guides.
 inline glm::vec3 catmullRom(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, float alpha) {
@@ -20,16 +21,27 @@ inline glm::vec3 catmullRom(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 
 // Evaluates the track at localT ∈ [0, duration].
 // The full path is: [capturedStart, waypoint0, waypoint1, ...].
 // Easing is applied ONCE globally to t/duration, then that alpha samples the path.
-inline glm::vec3 evaluate(const Track& track, float localT, float duration) {
+inline glm::vec3 evaluate(Track& track, float localT, float duration) {
+    // Global alpha with easing
+    float alpha = (duration > 0.0f) ? glm::clamp(localT / duration, 0.0f, 1.0f) : 1.0f;
+    alpha = applyEasing(alpha, track.easing);
+
+    // PATH mode: evaluate parametric expressions with t = alpha
+    if (track.interpolation == InterpolationMode::PATH) {
+        if (track.pathT) *track.pathT = (double)alpha;
+        glm::vec3 offset(
+            track.pathExprX ? (float)te_eval(track.pathExprX) : 0.0f,
+            track.pathExprY ? (float)te_eval(track.pathExprY) : 0.0f,
+            track.pathExprZ ? (float)te_eval(track.pathExprZ) : 0.0f
+        );
+        return track.capturedStart + offset;
+    }
+
     // Build full path: start + waypoints
     const auto& kf = track.keyframes;
     int numPoints = (int)kf.size() + 1;  // capturedStart + waypoints
 
     if (numPoints == 1) return track.capturedStart;  // no waypoints, stay put
-
-    // Global alpha with easing
-    float alpha = (duration > 0.0f) ? glm::clamp(localT / duration, 0.0f, 1.0f) : 1.0f;
-    alpha = applyEasing(alpha, track.easing);
 
     // Map alpha to path segment
     int segments = numPoints - 1;
@@ -37,7 +49,6 @@ inline glm::vec3 evaluate(const Track& track, float localT, float duration) {
     int seg = glm::min((int)scaled, segments - 1);
     float segAlpha = scaled - (float)seg;
 
-    // Get the 4 points for this segment (p0, p1, p2, p3)
     // Helper to get point by index in the full path
     auto getPoint = [&](int idx) -> glm::vec3 {
         if (idx == 0) return track.capturedStart;

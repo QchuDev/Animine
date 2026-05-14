@@ -70,11 +70,15 @@ Animator        Owns global time t. Each frame:
 
 Animation Model
 ---------------
-    animate <entity> <property> <easing> <interpolation> <waypoints...> <duration>
+    animate <entity> <property> <easing> <interpolation> <args...> <duration>
 
     - Start value is NOT in the file — captured at runtime from entity's current state.
     - Easing applies ONCE globally to t/duration (not per-segment).
-    - Interpolation defines path shape: LINEAR (segments) or SMOOTH (Catmull-Rom).
+    - Interpolation defines path shape:
+        LINEAR  → straight segments between waypoints (glm::mix)
+        SMOOTH  → Catmull-Rom spline through waypoints
+        PATH    → parametric expressions x(t) y(t) z(t), result = capturedStart + offset
+    - For PATH, t ∈ [0,1] with easing already applied. Expressions compiled with tinyexpr.
     - Animations chain: if A moves entity to X, then B captures X as its start.
 
 Dependencies

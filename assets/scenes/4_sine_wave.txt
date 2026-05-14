@@ -1,0 +1,21 @@
+# Scene 4: The Sine Wave
+# The circle's Y projection unfolds into a sine wave to the right.
+
+line x_axis  -2 0 0   6 0 0   0.3 0.3 0.3
+line y_axis  0 -2 0   0 2 0   0.3 0.3 0.3
+curve circle  cos(t)  sin(t)  0   0.4 0.4 0.4
+
+# The sine wave (drawn as a curve, x = t scaled, y = sin(t))
+curve sine  t/(2*pi)*4+1.5  sin(t)  0   0.2 0.9 0.3
+
+# Dot on circle
+quad dot yellow.png 0.1 0.1
+
+# Dot tracing the sine wave itself
+quad wave_dot yellow.png 0.08 0.08
+
+# Circle dot traces
+animate dot position linear path cos(t*6.28) sin(t*6.28) 0 8.0
+
+# Wave dot moves along the sine curve to the right
+animate wave_dot position linear path t*4+1.5 sin(t*6.28) 0 8.0

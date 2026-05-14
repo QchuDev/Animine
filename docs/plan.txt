@@ -9,7 +9,7 @@
     5. Quads    |  (completed)      CREATION    
     6. Curves   |  (completed)      CREATION
     ...
-    7. Animator |                   ANIMATION
+    7. Animator |  (in progress)  ANIMATION
     8. Editor   |                   QUALITY OF LIFE
     
 
@@ -26,9 +26,11 @@
         curve id x(t) y(t) z(t) r g b
 
     # ANIMATION
-        animate id transform_type  arg x y z
+        animate id transform_type easing interpolation <args> duration
             # transform_type: position/rotation/scale
-            # formula(t): example --> { sin(t) where 0 <= t <= 1 }
+            # interpolation: linear / smooth / path
+            # For linear/smooth: args = waypoints (x y z)...
+            # For path: args = x(t) y(t) z(t) where t ∈ [0,1]
         wait ammount
 
 

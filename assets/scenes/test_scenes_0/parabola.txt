@@ -14,5 +14,6 @@ quad point  yellow.png  0.12 0.12
 # Vertex marker
 line vertex_mark  -0.1 0 0   0.1 0 0   1 1 0
 
-# Animate point along the parabola: starts at (-2, 2) → vertex (0,0) → (2, 2)
-animate point  position  ease_in_out  smooth   -1.5 1.125 0   -1 0.5 0   -0.5 0.125 0   0 0 0   0.5 0.125 0   1 0.5 0   1.5 1.125 0   2 2 0   10.0
+# Animate point along the parabola: x goes -2→2, y = x²/2
+# x(t) = t*4-2 maps [0,1]→[-2,2], y(t) = (t*4-2)^2/2
+animate point  position  ease_in_out  path  t*4-2  (t*4-2)^2/2  0   10.0

@@ -103,12 +103,15 @@ Keyframe  (include/classes/animations/keyframe.h)
 
 TransformProp / InterpolationMode / Track  (include/classes/animations/track.h)
   enum class TransformProp     { POSITION, ROTATION, SCALE }
-  enum class InterpolationMode { LINEAR, SMOOTH }
+  enum class InterpolationMode { LINEAR, SMOOTH, PATH }
   struct Track:
     entity_id, property, easing, interpolation
-    keyframes: vector<Keyframe>   — waypoints (destinations only)
+    keyframes: vector<Keyframe>   — waypoints (destinations only, used by LINEAR/SMOOTH)
+    pathExprX/Y/Z: te_expr*       — compiled parametric expressions (used by PATH)
+    pathT: double                 — variable bound to 't' in expressions
     capturedStart: glm::vec3      — filled at runtime on first active frame
     hasCaptured: bool
+    ~Track() frees te_expr pointers. Move-only (copy disabled).
 
 IAnimation / Animation  (include/classes/animations/animation.h)
   IAnimation: base interface with virtual destructor
@@ -118,9 +121,11 @@ applyEasing  (include/classes/animations/easing.h)
   inline float applyEasing(float alpha, EasingType) — 4 easing curves
 
 evaluate  (include/classes/animations/evaluate.h)
-  inline glm::vec3 evaluate(const Track&, float localT, float duration)
-  Global easing on t/duration, then samples path [capturedStart + waypoints].
-  Dispatches to glm::mix (LINEAR) or Catmull-Rom spline (SMOOTH).
+  inline glm::vec3 evaluate(Track&, float localT, float duration)
+  Global easing on t/duration, then:
+    PATH   → sets track.pathT = alpha, evaluates expressions, returns capturedStart + offset
+    LINEAR → samples path [capturedStart + waypoints] with glm::mix
+    SMOOTH → samples path with Catmull-Rom spline
 
 Animator  (include/classes/animations/animator.h / src/classes/animations/animator.cpp)
   Fields:  t (float) — global playback time

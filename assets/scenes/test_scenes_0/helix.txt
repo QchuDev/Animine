@@ -15,7 +15,8 @@ line x_axis  -2 0 0   2 0 0   1 0.3 0.3
 line y_axis  0 -2 0   0 2 0   0.3 1 0.3
 line z_axis  0 0 -2   0 0 2   0.3 0.3 1
 
-# A point climbing the helix
+# A point climbing the helix (one full turn, z from -1 to 1.4)
 quad climber  yellow.png  0.1 0.1
 
-animate climber  position  linear  smooth   0.7 0.7 -0.7   0 1 -0.4   -0.7 0.7 -0.1   -1 0 0.2   -0.7 -0.7 0.5   0 -1 0.8   0.7 -0.7 1.1   1 0 1.4   10.0
+# Helix: x=cos(θ), y=sin(θ), z advances linearly. θ goes 0→2π for one turn.
+animate climber  position  linear  path  cos(t*6.28)  sin(t*6.28)  t*2.4-1   10.0

@@ -1,0 +1,57 @@
+# Binary Tree — depth-3 tree structure
+# Demonstrates recursive data structures (CS fundamentals)
+
+# Level 0 (root)
+line root_L   0 2 0   -2 1 0   0.8 0.8 0.8
+line root_R   0 2 0    2 1 0   0.8 0.8 0.8
+
+# Level 1
+line L_LL    -2 1 0   -3 0 0   0.6 0.6 0.6
+line L_LR    -2 1 0   -1 0 0   0.6 0.6 0.6
+line R_RL     2 1 0    1 0 0   0.6 0.6 0.6
+line R_RR     2 1 0    3 0 0   0.6 0.6 0.6
+
+# Level 2 (leaves)
+line LL_a   -3 0 0   -3.5 -1 0   0.4 0.4 0.4
+line LL_b   -3 0 0   -2.5 -1 0   0.4 0.4 0.4
+line LR_a   -1 0 0   -1.5 -1 0   0.4 0.4 0.4
+line LR_b   -1 0 0   -0.5 -1 0   0.4 0.4 0.4
+line RL_a    1 0 0    0.5 -1 0   0.4 0.4 0.4
+line RL_b    1 0 0    1.5 -1 0   0.4 0.4 0.4
+line RR_a    3 0 0    2.5 -1 0   0.4 0.4 0.4
+line RR_b    3 0 0    3.5 -1 0   0.4 0.4 0.4
+
+# Node markers (quads)
+quad root_node  yellow.png  0.2 0.2
+
+# BFS traversal animation: visit nodes level by level
+# Each path is relative displacement from previous position
+# Start at origin → root (0,2,0)
+animate root_node  position  ease_out  path  0  t*2  0   1.0
+wait 1.0
+# root → left child (-2,1,0): delta = (-2,-1,0)
+animate root_node  position  ease_out  path  t*(-2)  t*(-1)  0   1.0
+wait 1.0
+# left child → right child (2,1,0): delta = (4,0,0)
+animate root_node  position  ease_out  path  t*4  0  0   1.0
+wait 1.0
+# right child (2,1,0) → (-3,0,0): delta = (-5,-1,0)
+animate root_node  position  ease_out  path  t*(-5)  t*(-1)  0   0.75
+wait 0.75
+# (-3,0,0) → (-1,0,0): delta = (2,0,0)
+animate root_node  position  ease_out  path  t*2  0  0   0.75
+wait 0.75
+# (-1,0,0) → (1,0,0): delta = (2,0,0)
+animate root_node  position  ease_out  path  t*2  0  0   0.75
+wait 0.75
+# (1,0,0) → (3,0,0): delta = (2,0,0)
+animate root_node  position  ease_out  path  t*2  0  0   0.75
+wait 0.75
+# (3,0,0) → (-3.5,-1,0): delta = (-6.5,-1,0)
+animate root_node  position  ease_out  path  t*(-6.5)  t*(-1)  0   0.5
+wait 0.5
+# (-3.5,-1,0) → (-2.5,-1,0): delta = (1,0,0)
+animate root_node  position  ease_out  path  t*1  0  0   0.5
+wait 0.5
+# (-2.5,-1,0) → (0,-2,0): delta = (2.5,-1,0)
+animate root_node  position  ease_out  path  t*2.5  t*(-1)  0   0.5

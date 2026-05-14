@@ -1,0 +1,23 @@
+# Scene 9: Frequency — Faster Oscillation
+# Compare sin(t) with sin(2t). Higher frequency = more cycles in same space.
+
+line x_axis  -1 0 0   7 0 0   0.3 0.3 0.3
+line y_axis  0 -1.5 0   0 1.5 0   0.3 0.3 0.3
+
+# Normal frequency (1 cycle in 2π)
+curve sin_f1  t/(2*pi)*4+1  sin(t)  0   0.4 0.6 0.4
+
+# Double frequency (2 cycles in 2π)
+curve sin_f2  t/(2*pi)*4+1  sin(2*t)  0   0.2 0.9 0.3
+
+# Dot on normal frequency
+quad dot_1 yellow.png 0.06 0.06
+
+# Dot on double frequency
+quad dot_2 yellow.png 0.1 0.1
+
+# Normal frequency dot
+animate dot_1 position linear path t*4+1 sin(t*6.28) 0 8.0
+
+# Double frequency dot — oscillates twice as fast
+animate dot_2 position linear path t*4+1 sin(t*12.56) 0 8.0

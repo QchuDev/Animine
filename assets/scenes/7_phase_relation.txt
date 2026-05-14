@@ -1,0 +1,19 @@
+# Scene 7: Sin & Cos Together — Phase Relationship
+# Both waves side by side. Cosine leads sine by 90 degrees (π/2).
+
+line x_axis  -1 0 0   7 0 0   0.3 0.3 0.3
+line y_axis  0 -1.5 0   0 1.5 0   0.3 0.3 0.3
+
+# Both waves visible
+curve sine    t/(2*pi)*4+1  sin(t)  0   0.2 0.9 0.3
+curve cosine  t/(2*pi)*4+1  cos(t)  0   0.9 0.2 0.2
+
+# Two dots tracing each wave
+quad sin_dot yellow.png 0.08 0.08
+quad cos_dot yellow.png 0.08 0.08
+
+# Sin dot (green path)
+animate sin_dot position linear path t*4+1 sin(t*6.28) 0 8.0
+
+# Cos dot (red path) — same speed, different phase
+animate cos_dot position linear path t*4+1 cos(t*6.28) 0 8.0

@@ -17,7 +17,7 @@ line y_axis  0 -2 0   0 6 0   0.3 0.3 0.3
 # A point that traces the circle (represented as a small quad)
 quad tracer  yellow.png  0.1 0.1
 
-# Animate the tracer around the circle path
-animate tracer  position  linear  smooth   1 0 0   0.7 0.7 0   0 1 0   -0.7 0.7 0   -1 0 0   -0.7 -0.7 0   0 -1 0   0.7 -0.7 0   1 0 0   10.0
-animate sine_wave position linear smooth   100 0 0 100.0
-animate cosine_wave position linear smooth   0 100 0 100.0
+# Animate the tracer around the unit circle (one full revolution)
+animate tracer  position  linear  path  cos(10*t*6.28)  sin(10*t*6.28)  0   100.0
+animate sine_wave position linear path  t*100  0  0  100.0
+animate cosine_wave position linear path  0  t*100  0  100.0
