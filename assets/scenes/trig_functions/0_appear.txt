@@ -1,0 +1,11 @@
+# Scene 0: The Unit Circle Appears
+curve circle  cos(t)  sin(t)  0   1 1 1
+quad dot yellow.png 0.1 0.1
+
+set circle scale 0 0 0
+set dot scale 0 0 0
+
+wait 2.0
+
+animate circle scale ease_out path t t 1 2.0
+animate dot scale ease_out path t t 1 2.0

@@ -1,5 +1,5 @@
-# Scene 3: The Y Projection — Sine
-# As the dot moves around the circle, a horizontal line shows its Y value.
+# Scene 5: The Y Projection — Sine
+# sin(θ) is the Y component. A horizontal line shows the dot's Y value.
 
 line x_axis  -2 0 0   2 0 0   0.3 0.3 0.3
 line y_axis  0 -2 0   0 2 0   0.3 0.3 0.3
@@ -13,6 +13,10 @@ quad y_proj yellow.png 0.08 0.08
 
 # Horizontal line from Y axis to dot (defined 0,0,0 → 1,0,0, scaled in X)
 line h_line  0 0 0   1 0 0   0.2 0.8 0.2
+
+set dot position 0 0 0
+set y_proj position 0 0 0
+set h_line position 0 0 0
 
 # Dot traces circle
 animate dot position linear path cos(t*6.28) sin(t*6.28) 0 8.0

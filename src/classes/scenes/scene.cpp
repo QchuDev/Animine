@@ -2,6 +2,7 @@
 
 void Scene::addEntity(const std::string& entityId, IEntity* entity) {
     entities[entityId] = entity;
+    entity->saveInitialTransform();
 }
 
 void Scene::addAnimation(IAnimation* animation) {

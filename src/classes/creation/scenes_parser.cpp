@@ -228,6 +228,22 @@ std::unique_ptr<Scene> ScenesParser::parseFile(const std::string& file_path) {
             float secs = 0.0f;
             ss >> secs;
             timeOffset += secs;
+        } else if (token == "set") {
+            std::string entityId, propStr;
+            float x, y, z;
+            if (!(ss >> entityId >> propStr >> x >> y >> z)) {
+                std::cerr << "set: bad format: " << line << "\n";
+                continue;
+            }
+            auto* cmd = new InstantSet();
+            cmd->startTime = timeOffset;
+            cmd->entity_id = entityId;
+            cmd->value = glm::vec3(x, y, z);
+            if      (propStr == "position") cmd->property = TransformProp::POSITION;
+            else if (propStr == "rotation") cmd->property = TransformProp::ROTATION;
+            else if (propStr == "scale")    cmd->property = TransformProp::SCALE;
+            else { std::cerr << "set: unknown property '" << propStr << "'\n"; delete cmd; continue; }
+            scene->addAnimation(cmd);
         } else {
             // entity line — rewind and delegate
             parseLine(line, scene.get());

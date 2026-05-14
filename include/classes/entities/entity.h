@@ -38,6 +38,7 @@ protected:
 public:
     std::string id; // each entity has an id 
     Transform transform;
+    Transform initialTransform; // saved at creation, restored on scene reset
     IEntity(Shader* s) : shader(s) {}
     virtual ~IEntity() {};
     virtual void draw(const glm::mat4& view, const glm::mat4& projection) = 0;
@@ -49,6 +50,9 @@ public:
     virtual void setRotation(glm::vec3 rot) { transform.rotation = rot; }
     virtual glm::vec3 getScale() { return transform.scale; }
     virtual void setScale(glm::vec3 sca) { transform.scale = sca; }
+
+    void saveInitialTransform() { initialTransform = transform; }
+    void restoreInitialTransform() { transform = initialTransform; }
 };
 
 #endif 

@@ -91,14 +91,14 @@ void Engine::processInput() {
     // Scene cycling with arrow keys (with debounce)
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && !rightPressed) {
         scenesManager->nextScene();
-        animator->reset();
+        animator->reset(scenesManager->getCurrentScene());
         rightPressed = true;
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_RELEASE) rightPressed = false;
 
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && !leftPressed) {
         scenesManager->prevScene();
-        animator->reset();
+        animator->reset(scenesManager->getCurrentScene());
         leftPressed = true;
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_RELEASE) leftPressed = false;
