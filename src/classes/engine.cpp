@@ -88,6 +88,21 @@ void Engine::processInput() {
         glfwSetWindowShouldClose(window, true);
     }
 
+    // Scene cycling with arrow keys (with debounce)
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && !rightPressed) {
+        scenesManager->nextScene();
+        animator->reset();
+        rightPressed = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_RELEASE) rightPressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && !leftPressed) {
+        scenesManager->prevScene();
+        animator->reset();
+        leftPressed = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_RELEASE) leftPressed = false;
+
     // For the camera movement
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         renderer->camera->ProcessKeyboard(FORWARD, this->deltaTime);

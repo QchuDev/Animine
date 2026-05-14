@@ -9,11 +9,12 @@
 
 class ScenesManager {
 public:
-    // Takes ownership of all scenes. Sets current to the first one.
     ScenesManager(std::vector<std::unique_ptr<Scene>> scenes);
 
     Scene* getCurrentScene() const;
     void setCurrentScene(const std::string& id);
+    void nextScene();
+    void prevScene();
 
 private:
     std::map<std::string, std::unique_ptr<Scene>> scenes;

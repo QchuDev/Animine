@@ -1,0 +1,31 @@
+# Vector Addition — shows A + B = C graphically
+# Demonstrates linear algebra fundamentals
+
+# Vector A (blue): from origin to (2, 1, 0)
+line vec_a   0 0 0   2 1 0   0.2 0.4 1.0
+# Vector B (green): from origin to (1, 2, 0)
+line vec_b   0 0 0   1 2 0   0.2 1.0 0.4
+# Resultant C (yellow): from origin to (3, 3, 0)
+line vec_c   0 0 0   3 3 0   1.0 0.9 0.2
+
+# Parallelogram construction lines (dashed effect with short lines)
+line par_1   2 1 0   3 3 0   0.5 0.5 0.5
+line par_2   1 2 0   3 3 0   0.5 0.5 0.5
+
+# Axes
+line x_axis  -1 0 0   4 0 0   0.3 0.3 0.3
+line y_axis  0 -1 0   0 4 0   0.3 0.3 0.3
+
+# Animated point showing A then B then arriving at C
+quad tip  yellow.png  0.15 0.15
+
+# Phase 1: follow vector A
+animate tip  position  ease_out  linear   2 1 0   3.0
+# Phase 2: from tip of A, follow B to reach C
+wait 3.0
+animate tip  position  ease_out  linear   3 3 0   3.0
+# Phase 3: return to origin and go directly to C
+wait 3.0
+animate tip  position  ease_in_out  linear   0 0 0   1.5
+wait 1.5
+animate tip  position  ease_out  linear   3 3 0   2.5

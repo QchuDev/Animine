@@ -1,0 +1,21 @@
+# Helix — 3D spiral combining circular motion with linear advance
+# Demonstrates parametric curves in 3D space
+
+# The helix: x=cos(t), y=sin(t), z=t scaled
+curve helix  cos(t)  sin(t)  t/3-1   0.3 0.7 1.0
+
+# Its projection on the XY plane (circle)
+curve xy_proj  cos(t)  sin(t)  -1   0.5 0.5 0.5
+
+# Its projection on the XZ plane (cosine wave)
+curve xz_proj  cos(t)  -1.5  t/3-1   0.5 0.5 0.5
+
+# Reference axes
+line x_axis  -2 0 0   2 0 0   1 0.3 0.3
+line y_axis  0 -2 0   0 2 0   0.3 1 0.3
+line z_axis  0 0 -2   0 0 2   0.3 0.3 1
+
+# A point climbing the helix
+quad climber  yellow.png  0.1 0.1
+
+animate climber  position  linear  smooth   0.7 0.7 -0.7   0 1 -0.4   -0.7 0.7 -0.1   -1 0 0.2   -0.7 -0.7 0.5   0 -1 0.8   0.7 -0.7 1.1   1 0 1.4   10.0

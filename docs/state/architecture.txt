@@ -5,6 +5,7 @@ Overview
 --------
 QchuAnims is a 3D animation engine built on OpenGL (via GLAD) and GLFW.
 It renders parametric scenes defined in plain-text .txt files.
+Scenes are navigable at runtime with arrow keys.
 
 Creation Pipeline
 -----------------
@@ -16,20 +17,30 @@ Creation Pipeline
         │               reads every .txt in the folder
         │               builds one Scene per file (id = filename stem)
         │               entity creation happens here (line / quad / curve)
+        │               animation parsing: animate / wait keywords
         │
         └─ ScenesManager(scenes)
                 owns all scenes in a map<id, Scene>
-                exposes getCurrentScene() / setCurrentScene(id)
+                exposes getCurrentScene() / nextScene() / prevScene()
 
 Main Loop
 ---------
 
     while window is open:
         processInput()          ← keyboard + mouse → camera
-        animator.update(dt, currentScene)   ← advances t, writes transforms
+                                ← arrow keys → cycle scenes (resets animator)
+        animator.update(dt, currentScene)   ← advances t, captures start, writes transforms
         renderer.clear()
         renderer.drawScene(currentScene.getEntities())
         glfwSwapBuffers / glfwPollEvents
+
+Controls
+--------
+    W A S D         Camera movement (forward/back/strafe)
+    Space / Ctrl    Camera up / down
+    Mouse           Camera look (yaw/pitch)
+    ← →            Previous / next scene (wraps around)
+    Esc             Close window
 
 Responsibilities
 ----------------
@@ -37,21 +48,34 @@ Engine          Owns window, renderer, animator, scenesManager.
                 Orchestrates init and the main loop.
 
 Renderer        Owns shaders (gizmoShader, textureShader), camera, axises.
-                Draws all entities each frame.
+                Draws all entities each frame (sorted back-to-front for alpha).
                 Manages texture cache (getOrCreateTexture).
 
 ScenesParser    Reads .txt files, builds Scene objects.
                 Only dependency: Renderer* (needed to get shaders and textures).
+                Parses animate/wait keywords into Animation objects.
 
-ScenesManager   Stores scenes by id. Switches active scene.
+ScenesManager   Stores scenes by id. Cycles through them with next/prev.
                 Does not know about files or parsing.
 
 Scene           Pure data container: entities + animations.
                 No OpenGL, no file I/O.
 
-Animator        Owns global time t. Each frame calls evaluate() on every Track
-                of every Animation in the active scene and writes the result
-                to the entity's transform via setPosition/setRotation/setScale.
+Animator        Owns global time t. Each frame:
+                - Captures entity's current transform on first active frame (capturedStart)
+                - Applies global easing to t/duration
+                - Samples the path (capturedStart + waypoints) at that alpha
+                - Writes result to entity via setPosition/setRotation/setScale
+                Resets t to 0 on scene change.
+
+Animation Model
+---------------
+    animate <entity> <property> <easing> <interpolation> <waypoints...> <duration>
+
+    - Start value is NOT in the file — captured at runtime from entity's current state.
+    - Easing applies ONCE globally to t/duration (not per-segment).
+    - Interpolation defines path shape: LINEAR (segments) or SMOOTH (Catmull-Rom).
+    - Animations chain: if A moves entity to X, then B captures X as its start.
 
 Dependencies
 ------------

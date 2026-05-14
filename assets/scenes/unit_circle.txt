@@ -1,0 +1,23 @@
+# Unit Circle — sin(t) and cos(t) traced on the unit circle
+# Shows the relationship between the circle and trigonometric functions
+
+# The unit circle
+curve circle  cos(t)  sin(t)  0   1 1 1
+
+# Sine wave projected to the right
+curve sine_wave  t/(2*pi)*4+2  sin(t)  0   0.2 0.8 0.2
+
+# Cosine wave projected upward
+curve cosine_wave  cos(t)  t/(2*pi)*4+2  0   0.8 0.2 0.2
+
+# Reference axes
+line x_axis  -2 0 0   6 0 0   0.3 0.3 0.3
+line y_axis  0 -2 0   0 6 0   0.3 0.3 0.3
+
+# A point that traces the circle (represented as a small quad)
+quad tracer  yellow.png  0.1 0.1
+
+# Animate the tracer around the circle path
+animate tracer  position  linear  smooth   1 0 0   0.7 0.7 0   0 1 0   -0.7 0.7 0   -1 0 0   -0.7 -0.7 0   0 -1 0   0.7 -0.7 0   1 0 0   10.0
+animate sine_wave position linear smooth   100 0 0 100.0
+animate cosine_wave position linear smooth   0 100 0 100.0
