@@ -77,28 +77,31 @@ Animation lines must appear **after** all entity declarations.
 ### ANIMATE
 
 ```
-animate <entity_id> <property> <easing> <interpolation> <x y z>... <duration>
+animate <entity_id> <property> <easing> <interpolation> <waypoints x y z>... <duration>
 ```
 
 | Token | Values |
 |---|---|
 | `<property>` | `position` \| `rotation` \| `scale` |
 | `<easing>` | `linear` \| `ease_in` \| `ease_out` \| `ease_in_out` |
-| `<interpolation>` | `linear` \| `smooth` (Catmull-Rom spline) |
-| `<x y z>...` | 2 or more space-separated triplets — each is a keyframe value |
+| `<interpolation>` | `linear` (straight segments) \| `smooth` (Catmull-Rom spline) |
+| `<waypoints>` | 1 or more `x y z` triplets — destinations to reach |
 | `<duration>` | total duration in seconds (last number on the line) |
 
-Keyframes are distributed evenly over `[0, duration]`.
+**Key behavior:**
+- The **start value is NOT in the file**. It's captured from the entity's current transform when the animation begins.
+- The **easing** applies globally to `t / duration` — it controls acceleration over the entire animation, not per-segment.
+- The **interpolation** defines the path shape between all points (start + waypoints).
 
 ```
-# A→B transition
-animate box  position  ease_out  linear   0 0 0   3 0 0   2.0
+# Simple A→B: entity moves from current position to (3, 0, 0)
+animate box  position  ease_out  linear   3 0 0   2.0
 
-# Multi-point curved path (Catmull-Rom)
-animate box  position  linear  smooth   0 0 0   3 2 0   3 5 0   0 5 0   3.0
+# Curved path: current pos → (3,2,0) → (3,5,0) → (0,5,0)
+animate box  position  linear  smooth   3 2 0   3 5 0   0 5 0   3.0
 
-# Rotation
-animate box  rotation  ease_in_out  linear   0 0 0   0 180 0   1.5
+# Rotation: current rotation → 180° on Y
+animate box  rotation  ease_in_out  linear   0 180 0   1.5
 ```
 
 ---
@@ -113,19 +116,19 @@ Offsets the `startTime` of every subsequent `animate` by `<seconds>`.
 Animations before and after a `wait` run in sequence. Animations with no `wait` between them start simultaneously.
 
 ```
-animate box  position  ease_out  linear   0 0 0   3 0 0   2.0
+animate box  position  ease_out  linear   3 0 0   2.0
 wait 2.0
-animate box  rotation  linear    linear   0 0 0   0 90 0  1.0
+animate box  rotation  linear    linear   0 90 0  1.0
 ```
 
 Timeline:
 
 ```
 t=0 ──────────────── t=2
-[position: 0→3      ]
+[position: current→3 ]
 
                       t=2 ──── t=3
-                      [rotation: 0→90°]
+                      [rotation: current→90°]
 ```
 
 ---
@@ -136,3 +139,4 @@ t=0 ──────────────── t=2
 - The first scene found becomes the active scene.
 - Switch scenes at runtime with `ScenesManager::setCurrentScene(id)`.
 - Scene id = filename without extension (`main_scene.txt` → `"main_scene"`).
+- Animations chain naturally: if animation A moves box to (3,0,0) and animation B starts after, B captures (3,0,0) as its start.

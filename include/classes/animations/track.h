@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <glm/glm.hpp>
 #include "classes/animations/easing_type.h"
 #include "classes/animations/keyframe.h"
 
@@ -14,7 +15,11 @@ struct Track {
     TransformProp    property;
     EasingType       easing;
     InterpolationMode interpolation = InterpolationMode::LINEAR;
-    std::vector<Keyframe> keyframes;
+    std::vector<Keyframe> keyframes;  // waypoints only (no start value)
+
+    // Captured at runtime on first frame of animation
+    glm::vec3 capturedStart{0.0f};
+    bool      hasCaptured = false;
 };
 
 #endif

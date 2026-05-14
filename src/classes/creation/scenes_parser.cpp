@@ -124,28 +124,28 @@ static InterpolationMode parseInterp(const std::string& s) {
     return InterpolationMode::LINEAR;
 }
 
-// animate <entity_id> <property> <easing> <interp> <x y z>... <duration>
+// animate <entity_id> <property> <easing> <interp> <waypoints x y z>... <duration>
+// Waypoints are destinations only — the start value is captured at runtime.
 bool ScenesParser::createAnimation(std::stringstream& ss, float startTime, Scene* scene) {
     std::string entityId, propStr, easingStr, interpStr;
     if (!(ss >> entityId >> propStr >> easingStr >> interpStr)) return false;
 
-    // Read remaining floats: groups of 3 (keyframe values) then last one is duration
     std::vector<float> nums;
     float v;
     while (ss >> v) nums.push_back(v);
 
-    // Need at least one keyframe (3 floats) + duration (1 float) = 4 floats minimum
+    // At least 1 waypoint (3 floats) + duration (1 float) = 4 minimum
     if (nums.size() < 4 || (nums.size() - 1) % 3 != 0) {
         std::cerr << "animate: bad format for '" << entityId << "'\n";
         return false;
     }
 
     float duration = nums.back();
-    int kfCount = (int)(nums.size() - 1) / 3;
+    int wpCount = (int)(nums.size() - 1) / 3;
 
     Track track;
-    track.entity_id    = entityId;
-    track.easing       = parseEasing(easingStr);
+    track.entity_id     = entityId;
+    track.easing        = parseEasing(easingStr);
     track.interpolation = parseInterp(interpStr);
 
     if      (propStr == "position") track.property = TransformProp::POSITION;
@@ -153,11 +153,10 @@ bool ScenesParser::createAnimation(std::stringstream& ss, float startTime, Scene
     else if (propStr == "scale")    track.property = TransformProp::SCALE;
     else { std::cerr << "animate: unknown property '" << propStr << "'\n"; return false; }
 
-    // Distribute keyframes evenly over [0, duration]
-    float step = (kfCount > 1) ? duration / (kfCount - 1) : 0.0f;
-    for (int i = 0; i < kfCount; ++i) {
+    // Store waypoints (time field unused in new design, kept for struct compat)
+    for (int i = 0; i < wpCount; ++i) {
         int base = i * 3;
-        track.keyframes.push_back({ i * step, glm::vec3(nums[base], nums[base+1], nums[base+2]) });
+        track.keyframes.push_back({ 0.0f, glm::vec3(nums[base], nums[base+1], nums[base+2]) });
     }
 
     auto* anim = new Animation();

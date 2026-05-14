@@ -6,7 +6,6 @@
 #include "classes/animations/easing.h"
 
 // Catmull-Rom: smooth curve through p1→p2, using p0 and p3 as tangent guides.
-// alpha ∈ [0,1] is the local parameter between p1 and p2.
 inline glm::vec3 catmullRom(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, float alpha) {
     float a2 = alpha * alpha;
     float a3 = a2 * alpha;
@@ -18,31 +17,43 @@ inline glm::vec3 catmullRom(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 
     );
 }
 
-// Returns the interpolated value for a track at localT (time relative to animation start).
-inline glm::vec3 evaluate(const Track& track, float localT) {
+// Evaluates the track at localT ∈ [0, duration].
+// The full path is: [capturedStart, waypoint0, waypoint1, ...].
+// Easing is applied ONCE globally to t/duration, then that alpha samples the path.
+inline glm::vec3 evaluate(const Track& track, float localT, float duration) {
+    // Build full path: start + waypoints
     const auto& kf = track.keyframes;
-    if (kf.empty()) return glm::vec3(0.0f);
-    if (kf.size() == 1 || localT <= kf.front().time) return kf.front().value;
-    if (localT >= kf.back().time)                     return kf.back().value;
+    int numPoints = (int)kf.size() + 1;  // capturedStart + waypoints
 
-    // Find segment: kf[i] <= localT < kf[i+1]
-    int i = 0;
-    for (int n = (int)kf.size() - 1; i < n - 1 && kf[i+1].time <= localT; ++i);
+    if (numPoints == 1) return track.capturedStart;  // no waypoints, stay put
 
-    float segDuration = kf[i+1].time - kf[i].time;
-    float alpha = (localT - kf[i].time) / segDuration;
+    // Global alpha with easing
+    float alpha = (duration > 0.0f) ? glm::clamp(localT / duration, 0.0f, 1.0f) : 1.0f;
     alpha = applyEasing(alpha, track.easing);
 
-    if (track.interpolation == InterpolationMode::SMOOTH && kf.size() >= 2) {
-        // Mirror endpoints to synthesize missing neighbors
-        glm::vec3 p0 = (i > 0)                    ? kf[i-1].value : 2.0f*kf[i].value   - kf[i+1].value;
-        glm::vec3 p1 = kf[i].value;
-        glm::vec3 p2 = kf[i+1].value;
-        glm::vec3 p3 = (i+2 < (int)kf.size())     ? kf[i+2].value : 2.0f*kf[i+1].value - kf[i].value;
-        return catmullRom(p0, p1, p2, p3, alpha);
+    // Map alpha to path segment
+    int segments = numPoints - 1;
+    float scaled = alpha * segments;
+    int seg = glm::min((int)scaled, segments - 1);
+    float segAlpha = scaled - (float)seg;
+
+    // Get the 4 points for this segment (p0, p1, p2, p3)
+    // Helper to get point by index in the full path
+    auto getPoint = [&](int idx) -> glm::vec3 {
+        if (idx == 0) return track.capturedStart;
+        return kf[idx - 1].value;
+    };
+
+    glm::vec3 p1 = getPoint(seg);
+    glm::vec3 p2 = getPoint(seg + 1);
+
+    if (track.interpolation == InterpolationMode::SMOOTH && numPoints >= 2) {
+        glm::vec3 p0 = (seg > 0)              ? getPoint(seg - 1) : 2.0f*p1 - p2;
+        glm::vec3 p3 = (seg + 2 < numPoints)  ? getPoint(seg + 2) : 2.0f*p2 - p1;
+        return catmullRom(p0, p1, p2, p3, segAlpha);
     }
 
-    return glm::mix(kf[i].value, kf[i+1].value, alpha);
+    return glm::mix(p1, p2, segAlpha);
 }
 
 #endif

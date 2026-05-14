@@ -9,6 +9,7 @@
 | 3 | Animator::update() connected to main loop | ✅ done |
 | 4 | ScenesParser: animate / wait keywords | ✅ done |
 | 5 | Test scene + verification | ✅ done |
+| 6 | Redesign: global easing + runtime start capture | ✅ done |
 
 ---
 
@@ -22,6 +23,27 @@
 | Interpolation modes | `linear` (lerp), `smooth` (Catmull-Rom spline) |
 | Loop support | No (first implementation) |
 | Who applies the result? | `Animator` calls `entity->setPosition/setRotation/setScale` directly |
+| Start value | Captured at runtime from entity's current transform (not in file) |
+| Easing scope | Applied ONCE globally to `t/duration`, not per-segment |
+
+---
+
+## Core Concept
+
+The `animate` command means: **"go to these waypoints, in this way"**.
+
+- The **start value** is never written in the file — it's the entity's current transform when the animation begins.
+- The **easing** controls how the entity accelerates/decelerates over the **total duration** (one global alpha).
+- The **interpolation** defines the **shape of the path** between points (linear segments or smooth Catmull-Rom curve).
+
+```
+animate box  position  ease_out  smooth   3 2 0   3 5 0   0 5 0   3.0
+```
+
+At runtime:
+1. Capture `box.getPosition()` → e.g. `(0,0,0)` → this becomes the path start.
+2. Full path = `[(0,0,0), (3,2,0), (3,5,0), (0,5,0)]`
+3. Each frame: `alpha = easing(t / 3.0)` → sample spline at `alpha` → write to entity.
 
 ---
 
@@ -30,46 +52,43 @@
 ```
 quad  my_quad  wood.png  2 1
 
-# A→B transition
-animate my_quad  position  ease_out  linear   0 0 0   3 2 0   1.5
+# Move to (3,2,0) with deceleration
+animate my_quad  position  ease_out  linear   3 2 0   1.5
 
-# Multi-keyframe path (Catmull-Rom)
-animate my_quad  position  linear  smooth   0 0 0   3 2 0   3 5 0   0 5 0   3.0
+# Curved path through multiple waypoints
+animate my_quad  position  linear  smooth   3 2 0   3 5 0   0 5 0   3.0
 
 wait 1.5
-animate my_quad  rotation  linear  linear   0 0 0   0 90 0  1.0
+animate my_quad  rotation  linear  linear   0 90 0  1.0
 ```
 
-Syntax: `animate <entity_id> <property> <easing> <interpolation> <x y z>... <duration>`
+Syntax: `animate <entity_id> <property> <easing> <interpolation> <waypoints x y z>... <duration>`
 - `<property>`: `position` | `rotation` | `scale`
 - `<easing>`: `linear` | `ease_in` | `ease_out` | `ease_in_out`
 - `<interpolation>`: `linear` | `smooth`
-- Followed by 2+ `x y z` triplets (keyframe values), then `duration`
+- Followed by 1+ `x y z` triplets (destination waypoints), then `duration`
 - `wait <seconds>` — shifts `startTime` of all subsequent animations
 
 ---
 
-## Phase 1 — Data Types ✅
-
-Files created:
-- `include/classes/animations/easing_type.h` — `EasingType` enum
-- `include/classes/animations/keyframe.h`    — `Keyframe { float time; glm::vec3 value; }`
-- `include/classes/animations/track.h`       — `TransformProp`, `InterpolationMode`, `Track`
-- `include/classes/animations/animation.h`   — `IAnimation` (virtual dtor) + `Animation` class
+## Data Types
 
 ```cpp
 enum class EasingType        { LINEAR, EASE_IN, EASE_OUT, EASE_IN_OUT };
 enum class TransformProp     { POSITION, ROTATION, SCALE };
 enum class InterpolationMode { LINEAR, SMOOTH };
 
-struct Keyframe { float time; glm::vec3 value; };
+struct Keyframe { float time; glm::vec3 value; };  // time unused, kept for compat
 
 struct Track {
     std::string       entity_id;
     TransformProp     property;
     EasingType        easing;
     InterpolationMode interpolation = InterpolationMode::LINEAR;
-    std::vector<Keyframe> keyframes;
+    std::vector<Keyframe> keyframes;   // waypoints only (destinations)
+
+    glm::vec3 capturedStart{0.0f};     // filled at runtime
+    bool      hasCaptured = false;
 };
 
 class Animation : public IAnimation {
@@ -82,64 +101,44 @@ public:
 
 ---
 
-## Phase 2 — Evaluation ✅
+## Evaluation Pipeline
 
-Files created:
-- `include/classes/animations/easing.h`   — `applyEasing(alpha, EasingType)` inline
-- `include/classes/animations/evaluate.h` — `evaluate(track, localT) → glm::vec3`
+`evaluate(track, localT, duration)`:
 
-`evaluate()` logic:
-1. Clamp to first/last keyframe if out of range
-2. Find segment `[kf[i], kf[i+1]]` containing `localT`
-3. Compute `alpha`, apply easing
-4. Dispatch: `LINEAR` → `glm::mix`, `SMOOTH` → Catmull-Rom
-
-Catmull-Rom: mirrors endpoints to synthesize missing neighbors (`p(-1) = 2·p0 - p1`).
+1. Build full path: `[capturedStart, waypoint0, waypoint1, ...]`
+2. Compute global alpha: `alpha = clamp(localT / duration, 0, 1)`
+3. Apply easing: `alpha = applyEasing(alpha, track.easing)`
+4. Map alpha to path segment: `seg = alpha * numSegments`
+5. Dispatch: `LINEAR` → `glm::mix`, `SMOOTH` → Catmull-Rom with mirrored endpoints
 
 ---
 
-## Phase 3 — Animator::update() ✅
-
-Files modified/created:
-- `include/classes/animations/animator.h` — rewritten: `update(float, Scene*)`, `reset()`
-- `src/classes/animations/animator.cpp`   — implementation
-- `include/classes/scenes/scene.h`        — added `getEntity(id) → IEntity*`
-- `src/classes/scenes/scene.cpp`          — implementation of `getEntity`
-- `src/classes/engine.cpp`                — `animator = new Animator()` in `init()`, `animator->update(deltaTime, scene)` before `drawScene()`, `delete animator` in destructor
-
----
-
-## Phase 4 — ScenesParser extension ✅
-
-Files modified:
-- `include/classes/creation/scenes_parser.h` — added `createAnimation(ss, startTime, scene)` declaration
-- `src/classes/creation/scenes_parser.cpp`   — implemented `createAnimation()`; `parseFile()` now handles `animate`/`wait` with a local `timeOffset` accumulator; `parseLine`/`createEntity` unchanged
-
----
-
-## Phase 5 — Test Scene ✅
-
-File: `assets/scenes/anim_test.txt`
+## Animator::update()
 
 ```
-quad box      wood.png        1 1
-quad chicken  fat_chicken.png 1 1
+for each active animation:
+    localT = globalT - anim.startTime
+    if localT not in [0, duration]: skip
 
-animate box  position  ease_out     smooth   0 0 0   2 1 0   3 0 0   2.0
-wait 2.0
-animate box  rotation  ease_in_out  linear   0 0 0   0 180 0  1.5
-wait 1.5
-animate box  scale     ease_in      linear   1 1 1   2 2 2    1.0
-
-animate chicken  position  linear  linear   0 0 2   0 0 -2   4.5
+    for each track:
+        if not captured yet:
+            track.capturedStart = entity->getProperty()
+            track.hasCaptured = true
+        value = evaluate(track, localT, duration)
+        entity->setProperty(value)
 ```
 
-Timeline:
+---
 
-| t | box | chicken |
-|---|---|---|
-| 0.0 → 2.0 | slides along curved path (Catmull-Rom) | drifts forward |
-| 2.0 → 3.5 | spins 180° on Y | drifts forward |
-| 3.5 → 4.5 | scales 1→2 | drifts forward |
+## Files
 
-All `.cpp` files compile cleanly with g++. ninja build failure is a pre-existing environment issue unrelated to the animation system.
+| File | Role |
+|---|---|
+| `include/classes/animations/easing_type.h` | `EasingType` enum |
+| `include/classes/animations/easing.h` | `applyEasing()` — 4 easing curves |
+| `include/classes/animations/keyframe.h` | `Keyframe` struct |
+| `include/classes/animations/track.h` | `Track` with capturedStart + hasCaptured |
+| `include/classes/animations/animation.h` | `IAnimation` + `Animation` |
+| `include/classes/animations/evaluate.h` | `evaluate()` + `catmullRom()` |
+| `include/classes/animations/animator.h` | `Animator` class declaration |
+| `src/classes/animations/animator.cpp` | `update()` implementation |
