@@ -41,6 +41,8 @@ Controls
     W A S D         Camera movement (forward/back/strafe)
     Space / Ctrl    Camera up / down
     Mouse           Camera look (yaw/pitch)
+    Tab             Toggle perspective / orthographic
+    Q / E           Zoom out / in (orthographic mode)
     ← →            Previous / next scene (wraps around)
     Esc             Close window
 

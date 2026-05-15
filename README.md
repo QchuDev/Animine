@@ -72,6 +72,8 @@ Animations are declared inline after entity definitions:
 | `Space` | Move up |
 | `Left Ctrl` | Move down |
 | Mouse | Look around (yaw/pitch) |
+| `Tab` | Toggle perspective / orthographic |
+| `Q` / `E` | Zoom out / in (orthographic mode) |
 | `←` `→` | Previous / next scene |
 | `Esc` | Close window |
 

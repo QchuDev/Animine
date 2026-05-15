@@ -111,6 +111,22 @@ void Engine::processInput() {
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_RELEASE) leftPressed = false;
 
+    // Toggle ortho/perspective with Tab
+    if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS && !tabPressed) {
+        renderer->useOrtho = !renderer->useOrtho;
+        tabPressed = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE) tabPressed = false;
+
+    // Ortho zoom with Q/E
+    if (renderer->useOrtho) {
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+            renderer->orthoZoom += 5.0f * deltaTime;
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+            renderer->orthoZoom -= 5.0f * deltaTime;
+        if (renderer->orthoZoom < 0.5f) renderer->orthoZoom = 0.5f;
+    }
+
     // For the camera movement
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         renderer->camera->ProcessKeyboard(FORWARD, this->deltaTime);

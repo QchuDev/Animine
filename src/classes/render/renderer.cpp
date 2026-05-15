@@ -87,7 +87,15 @@ void Renderer::clear(float r, float g, float b, float a) {
  * Draws every entity in the scene, sorted back-to-front for correct alpha blending
  */
 void Renderer::drawScene(const std::map<std::string, IEntity*>& entities) {
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1280.0f/720.0f, 0.01f, 100.0f);
+    float aspect = 1280.0f / 720.0f;
+    glm::mat4 projection;
+    if (useOrtho) {
+        float h = orthoZoom;
+        float w = h * aspect;
+        projection = glm::ortho(-w, w, -h, h, 0.01f, 100.0f);
+    } else {
+        projection = glm::perspective(glm::radians(90.0f), aspect, 0.01f, 100.0f);
+    }
     glm::mat4 view = camera->GetViewMatrix();
 
     axisX->draw(view, projection);

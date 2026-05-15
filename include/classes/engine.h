@@ -27,6 +27,7 @@ private:
     float lastFrame = 0.0f;
     bool rightPressed = false;
     bool leftPressed = false;
+    bool tabPressed = false;
     void processInput();
 };
 

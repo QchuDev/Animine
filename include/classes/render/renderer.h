@@ -27,6 +27,8 @@ class Renderer {
         Line* axisY;
         Line* axisZ;
         Camera* camera;
+        bool useOrtho = false;
+        float orthoZoom = 5.0f;
         
         Renderer();
         void clear(float r, float g, float b, float a);
