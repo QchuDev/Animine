@@ -110,6 +110,22 @@ El fondo es un quad fijo en screen-space que no se mueve con la cámara. Se dibu
 13. Ajuste de grosor de trazo (uniform o por entidad)
 14. (Opcional) Capa de viñeta/marco en screen-space
 
+### Fase 5: Cámara ortográfica
+
+15. Toggle perspectiva/ortográfica (1 línea en `Renderer::drawScene`)
+16. Agregar `zoom` float a la cámara para escalar bounds del ortho
+17. Ajustar input de zoom (scroll o teclas) para modificar los bounds en vez de mover la cámara
+
+**Consideraciones:**
+
+| Aspecto | Perspectiva | Ortográfica |
+|---------|-------------|-------------|
+| Cámara (WASD) | Funciona igual | Funciona igual |
+| Sorting back-to-front | Por distancia | Sigue funcionando |
+| Billboard de líneas | Mismo cálculo | Mismo cálculo |
+| Grosor de líneas | Se achica con distancia | Constante en pantalla (mejor para hand-drawn) |
+| Zoom | Mover cámara | Escalar bounds del ortho |
+
 ---
 
 ## 4. Cambios al engine
