@@ -1,6 +1,6 @@
 #include "classes/render/renderer.h"
 
-#include "classes/entities/axises.h"
+#include "classes/entities/line.h"
 #include "classes/render/camera.h"
 #include "classes/paths.h"
 
@@ -19,10 +19,13 @@ Renderer::Renderer() {
     strokeShader = new Shader("shaders/stroke_vertex.glsl", "shaders/stroke_fragment.glsl");
     bgShader = new Shader("shaders/bg_vertex.glsl", "shaders/bg_fragment.glsl");
 
-    axises = new Axises(gizmoShader);
-
     // Load default stroke texture
     defaultStrokeTexture = getOrCreateTexture("strokes/line_default.png");
+
+    // Create axis lines [-0.2, 0.2]
+    axisX = new Line(glm::vec3(-0.2f, 0, 0), glm::vec3(0.2f, 0, 0), glm::vec3(1, 0, 0), strokeShader, defaultStrokeTexture);
+    axisY = new Line(glm::vec3(0, -0.2f, 0), glm::vec3(0, 0.2f, 0), glm::vec3(0, 1, 0), strokeShader, defaultStrokeTexture);
+    axisZ = new Line(glm::vec3(0, 0, -0.2f), glm::vec3(0, 0, 0.2f), glm::vec3(0, 0, 1), strokeShader, defaultStrokeTexture);
 
     setupBgQuad();
 
@@ -87,7 +90,9 @@ void Renderer::drawScene(const std::map<std::string, IEntity*>& entities) {
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), 1280.0f/720.0f, 0.01f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
 
-    axises->draw(view, projection);
+    axisX->draw(view, projection);
+    axisY->draw(view, projection);
+    axisZ->draw(view, projection);
 
     // Sort entities back-to-front (farthest first)
     std::vector<IEntity*> sorted;

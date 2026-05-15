@@ -54,7 +54,13 @@ bool ScenesParser::createEntity(const std::string& typeStr, std::stringstream& s
         std::string id;
         float x1, y1, z1, x2, y2, z2, r, g, b;
         if (!(ss >> id >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> r >> g >> b)) return false;
-        scene->addEntity(id, new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b), renderer->getStrokeShader(), renderer->getDefaultStrokeTexture()));
+
+        std::string strokeName;
+        unsigned int strokeTex = renderer->getDefaultStrokeTexture();
+        if (ss >> strokeName)
+            strokeTex = renderer->getOrCreateTexture("strokes/" + strokeName + ".png");
+
+        scene->addEntity(id, new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b), renderer->getStrokeShader(), strokeTex));
         return true;
     }
 
@@ -93,7 +99,25 @@ bool ScenesParser::createEntity(const std::string& typeStr, std::stringstream& s
         if (!(ss >> id >> xt >> yt >> zt >> r >> g >> b)) return false;
 
         float tMin = 0.0f, tMax = 6.2832f;
-        ss >> tMin >> tMax; // optional, keeps defaults if not present
+        std::string strokeName;
+        unsigned int strokeTex = renderer->getDefaultStrokeTexture();
+
+        // Try reading optional t_min t_max, then optional stroke name
+        std::string token;
+        if (ss >> token) {
+            try {
+                tMin = std::stof(token);
+                if (ss >> tMax) {
+                    // Got range, try stroke name
+                    if (ss >> strokeName)
+                        strokeTex = renderer->getOrCreateTexture("strokes/" + strokeName + ".png");
+                }
+            } catch (...) {
+                // Not a float — it's the stroke name
+                strokeName = token;
+                strokeTex = renderer->getOrCreateTexture("strokes/" + strokeName + ".png");
+            }
+        }
 
         auto ctx = std::make_shared<ExprContext>(xt, yt, zt);
         auto fn = [ctx](float t) -> glm::vec3 {
@@ -105,7 +129,7 @@ bool ScenesParser::createEntity(const std::string& typeStr, std::stringstream& s
             );
         };
 
-        scene->addEntity(id, new Curve(fn, glm::vec3(r,g,b), renderer->getStrokeShader(), renderer->getDefaultStrokeTexture(), tMin, tMax));
+        scene->addEntity(id, new Curve(fn, glm::vec3(r,g,b), renderer->getStrokeShader(), strokeTex, tMin, tMax));
         return true;
     }
 

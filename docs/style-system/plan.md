@@ -103,12 +103,10 @@ El fondo es un quad fijo en screen-space que no se mueve con la cámara. Se dibu
 9. ~~Se dibuja primero, sin depth write~~
 10. ~~Comando `background <texture>` en el parser~~
 
-### Fase 4: Pulido
+### Fase 4: Ejes como Lines ✓
 
-11. Reestilizar ejes con el sistema 3-slice
-12. Soporte para múltiples estilos de trazo (seleccionable por línea)
-13. Ajuste de grosor de trazo (uniform o por entidad)
-14. (Opcional) Capa de viñeta/marco en screen-space
+11. ~~Reemplazar clase `Axises` por 3 instancias de `Line` creadas en Renderer~~
+12. ~~Ejes con longitud [-0.2, 0.2], colores RGB, misma textura de trazo~~
 
 ### Fase 5: Cámara ortográfica
 

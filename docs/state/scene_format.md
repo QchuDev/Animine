@@ -20,15 +20,15 @@
 ### LINE
 
 ```
-line <id> <x1> <y1> <z1> <x2> <y2> <z2> <r> <g> <b>
+line <id> <x1> <y1> <z1> <x2> <y2> <z2> <r> <g> <b> [stroke_name]
 ```
 
-Draws a straight line from point 1 to point 2. Color is RGB in [0.0, 1.0].
-
-**Transform behavior:** The two points are baked in local space at creation. Animating `position` moves both endpoints together. Animating `rotation` rotates the line around the **world origin** (not around its midpoint). To rotate a line around one of its endpoints, define that endpoint at (0,0,0) in local space.
+Draws a textured line (billboard quad) from point 1 to point 2. Color is RGB in [0.0, 1.0].  
+Optional `stroke_name` loads `assets/textures/strokes/<stroke_name>.png`. Defaults to `line_default` if omitted.
 
 ```
 line axis_x  0 0 0  1 0 0  1 0 0
+line dashed  0 0 0  3 0 0  0.5 0.5 0.5  dotted
 ```
 
 ---
@@ -58,20 +58,22 @@ quad logo  pixels.png  0 0 0  1 0 0  1 1 0  0 1 0
 ### CURVE
 
 ```
-curve <id> <x(t)> <y(t)> <z(t)> <r> <g> <b> [t_min t_max]
+curve <id> <x(t)> <y(t)> <z(t)> <r> <g> <b> [t_min t_max] [stroke_name]
 ```
 
 Parametric curve. `t` runs from `t_min` to `t_max` (default: `0` to `2π` if omitted).  
+Optional `stroke_name` loads `assets/textures/strokes/<stroke_name>.png`. Defaults to `line_default` if omitted.  
 Expressions evaluated by tinyexpr.  
 Supported: `+` `-` `*` `/` `^` `sin` `cos` `tan` `sqrt` `abs` `log` `exp` `pi` `e`.  
 No spaces inside expressions.
 
-Rendered as a textured triangle strip (billboard quads oriented toward camera) using the default stroke texture.
+Rendered as a textured triangle strip (billboard quads oriented toward camera).
 
 ```
 curve helix   cos(t)  sin(t)  t/6  0 1 1
 curve circle  cos(t)  sin(t)  0    1 0 0
 curve sine    t/(2*pi)*4  sin(t)  0  0.2 0.9 0.3  -12.57 12.57
+curve sketch  cos(t)  sin(t)  0  1 1 1  -6.28 6.28  pencil_thin
 ```
 
 ---

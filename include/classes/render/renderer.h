@@ -3,7 +3,7 @@
 
 #include "classes/entities/entity.h"
 
-#include "classes/entities/axises.h"
+#include "classes/entities/line.h"
 #include "classes/render/shader.h"
 #include "classes/render/camera.h"
 
@@ -23,7 +23,9 @@ class Renderer {
 
         void setupBgQuad();
     public:
-        Axises* axises;
+        Line* axisX;
+        Line* axisY;
+        Line* axisZ;
         Camera* camera;
         
         Renderer();
