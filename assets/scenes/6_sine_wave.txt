@@ -4,7 +4,7 @@
 curve circle  cos(t)  sin(t)  0   0.4 0.4 0.4
 
 # The sine wave (unfolds rightward: x = t scaled, y = sin(t))
-curve sine  t/(2*pi)*4  sin(t)  0   0.2 0.9 0.3
+curve sine  t/(2*pi)*4  sin(t)  0   0.2 0.9 0.3  -12.57 12.57
 
 # Dot on circle
 quad dot yellow.png 0.1 0.1

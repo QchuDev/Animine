@@ -6,7 +6,7 @@ line y_axis  0 -2 0   0 2 0   0.3 0.3 0.3
 curve circle  cos(t)  sin(t)  0   0.4 0.4 0.4
 
 # The cosine wave (unfolds rightward: x = t scaled, y = cos(t))
-curve cosine    cos(t) t/(2*pi)*4  0   0.9 0.2 0.2
+curve cosine    cos(t) t/(2*pi)*4  0   0.9 0.2 0.2  -12.57 12.57
 
 # Dot on circle
 quad dot yellow.png 0.1 0.1

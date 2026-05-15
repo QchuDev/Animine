@@ -5,10 +5,10 @@ line x_axis  -1 0 0   7 0 0   0.3 0.3 0.3
 line y_axis  0 -1.5 0   0 1.5 0   0.3 0.3 0.3
 
 # Normal frequency (1 cycle in 2π)
-curve sin_f1  t/(2*pi)*4+1  sin(t)  0   0.4 0.6 0.4
+curve sin_f1  t/(2*pi)*4+1  sin(t)  0   0.4 0.6 0.4  -12.57 12.57
 
 # Double frequency (2 cycles in 2π)
-curve sin_f2  t/(2*pi)*4+1  sin(2*t)  0   0.2 0.9 0.3
+curve sin_f2  t/(2*pi)*4+1  sin(2*t)  0   0.2 0.9 0.3  -12.57 12.57
 
 # Dot on normal frequency
 quad dot_1 yellow.png 0.06 0.06

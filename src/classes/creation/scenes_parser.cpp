@@ -92,6 +92,9 @@ bool ScenesParser::createEntity(const std::string& typeStr, std::stringstream& s
         float r, g, b;
         if (!(ss >> id >> xt >> yt >> zt >> r >> g >> b)) return false;
 
+        float tMin = 0.0f, tMax = 6.2832f;
+        ss >> tMin >> tMax; // optional, keeps defaults if not present
+
         auto ctx = std::make_shared<ExprContext>(xt, yt, zt);
         auto fn = [ctx](float t) -> glm::vec3 {
             ctx->t_val = t;
@@ -102,7 +105,7 @@ bool ScenesParser::createEntity(const std::string& typeStr, std::stringstream& s
             );
         };
 
-        scene->addEntity(id, new Curve(fn, glm::vec3(r,g,b), renderer->getGizmoShader()));
+        scene->addEntity(id, new Curve(fn, glm::vec3(r,g,b), renderer->getStrokeShader(), renderer->getDefaultStrokeTexture(), tMin, tMax));
         return true;
     }
 
