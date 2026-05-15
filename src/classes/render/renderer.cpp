@@ -30,7 +30,7 @@ Renderer::Renderer() {
     setupBgQuad();
 
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::setupBgQuad() {
@@ -142,6 +142,18 @@ unsigned int Renderer::loadTextureFromDisk(const char* path) {
 
     if (data) {
         GLenum format = (nrComponents == 4) ? GL_RGBA : GL_RGB;
+
+        // Premultiply alpha for RGBA textures
+        if (nrComponents == 4) {
+            int totalPixels = width * height;
+            for (int i = 0; i < totalPixels; i++) {
+                unsigned char* px = data + i * 4;
+                float a = px[3] / 255.0f;
+                px[0] = (unsigned char)(px[0] * a);
+                px[1] = (unsigned char)(px[1] * a);
+                px[2] = (unsigned char)(px[2] * a);
+            }
+        }
 
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
