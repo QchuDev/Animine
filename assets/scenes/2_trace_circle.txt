@@ -7,7 +7,7 @@ curve circle  cos(t)  sin(t)  0   1 1 1    dotted_default
 line radius  0 0 0   1 0 0   1 0.8 0.2      arrow_default
 
 # Dot starts at (1,0) — continues from scene 1
-quad dot yellow.png 0.1 0.1
+quad dot marks/dot.png 0.15 0.15
 
 # Dot traces full circle in 6 seconds
 animate dot position linear path cos(t*6.28) sin(t*6.28) 0 6.0
