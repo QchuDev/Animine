@@ -84,24 +84,24 @@ El fondo es un quad fijo en screen-space que no se mueve con la cámara. Se dibu
 
 ## 3. Implementación — Pasos
 
-### Fase 1: Line rendering con texturas (core)
+### Fase 1: Line rendering con texturas (core) ✓
 
-1. Crear clase `TexturedLine` (o modificar `Line`) que genera un quad entre dos puntos
-2. Calcular orientación del quad (billboard hacia cámara)
-3. Implementar UV mapping con 3-slice logic
-4. Fragment shader: `texture * tintColor`, con alpha test para bordes del trazo
+1. ~~Crear clase `TexturedLine` (o modificar `Line`) que genera un quad entre dos puntos~~
+2. ~~Calcular orientación del quad (billboard hacia cámara)~~
+3. ~~Implementar UV mapping con 3-slice logic~~
+4. ~~Fragment shader: `texture * tintColor`, con alpha test para bordes del trazo~~
 
-### Fase 2: Curvas optimizadas
+### Fase 2: Curvas optimizadas ✓
 
-5. Generar todos los quads de la curva en un solo VBO como `GL_TRIANGLE_STRIP`
-6. Cada segmento agrega 2 vértices (lado B), caps solo en extremos
-7. UV mapping: caps en primer/último segmento, middle tileado en el resto
+5. ~~Generar todos los quads de la curva en un solo VBO como `GL_TRIANGLE_STRIP`~~
+6. ~~Cada segmento agrega 2 vértices (lado B), caps solo en extremos~~
+7. ~~UV mapping: caps en primer/último segmento, middle tileado en el resto~~
 
-### Fase 3: Fondo fijo
+### Fase 3: Fondo fijo ✓
 
-8. Quad fullscreen en screen-space con projection ortográfica, sin view matrix
-9. Se dibuja primero, sin depth write
-10. Comando `background <texture>` en el parser
+8. ~~Quad fullscreen en screen-space con projection ortográfica, sin view matrix~~
+9. ~~Se dibuja primero, sin depth write~~
+10. ~~Comando `background <texture>` en el parser~~
 
 ### Fase 4: Pulido
 

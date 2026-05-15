@@ -17,14 +17,59 @@ Renderer::Renderer() {
     gizmoShader = new Shader("shaders/line_vertex.glsl", "shaders/line_fragment.glsl");
     textureShader = new Shader("shaders/quad_vertex.glsl", "shaders/quad_fragment.glsl");
     strokeShader = new Shader("shaders/stroke_vertex.glsl", "shaders/stroke_fragment.glsl");
+    bgShader = new Shader("shaders/bg_vertex.glsl", "shaders/bg_fragment.glsl");
 
     axises = new Axises(gizmoShader);
 
     // Load default stroke texture
     defaultStrokeTexture = getOrCreateTexture("strokes/line_default.png");
 
+    setupBgQuad();
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Renderer::setupBgQuad() {
+    // Fullscreen quad in NDC: positions (vec2) + UVs (vec2)
+    float quad[] = {
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f,
+    };
+
+    glGenVertexArrays(1, &bgVAO);
+    glGenBuffers(1, &bgVBO);
+    glBindVertexArray(bgVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, bgVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
+}
+
+void Renderer::drawBackground() {
+    if (bgTextureID == 0) return;
+
+    glDepthMask(GL_FALSE);
+
+    bgShader->use();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, bgTextureID);
+    bgShader->setInt("bgTexture", 0);
+
+    glBindVertexArray(bgVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
+
+    glDepthMask(GL_TRUE);
 }
 
 /**

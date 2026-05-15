@@ -10,6 +10,7 @@
 class Scene {
 public:
     std::string id;
+    std::string backgroundTexture; // filename for background, empty = no background
 
     Scene(const std::string& id) : id(id) {}
     ~Scene();

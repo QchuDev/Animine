@@ -58,16 +58,36 @@ quad logo  pixels.png  0 0 0  1 0 0  1 1 0  0 1 0
 ### CURVE
 
 ```
-curve <id> <x(t)> <y(t)> <z(t)> <r> <g> <b>
+curve <id> <x(t)> <y(t)> <z(t)> <r> <g> <b> [t_min t_max]
 ```
 
-Parametric curve. `t` runs from `0` to `2π`. Expressions evaluated by tinyexpr.  
+Parametric curve. `t` runs from `t_min` to `t_max` (default: `0` to `2π` if omitted).  
+Expressions evaluated by tinyexpr.  
 Supported: `+` `-` `*` `/` `^` `sin` `cos` `tan` `sqrt` `abs` `log` `exp` `pi` `e`.  
 No spaces inside expressions.
+
+Rendered as a textured triangle strip (billboard quads oriented toward camera) using the default stroke texture.
 
 ```
 curve helix   cos(t)  sin(t)  t/6  0 1 1
 curve circle  cos(t)  sin(t)  0    1 0 0
+curve sine    t/(2*pi)*4  sin(t)  0  0.2 0.9 0.3  -12.57 12.57
+```
+
+---
+
+## Scene Commands
+
+### BACKGROUND
+
+```
+background <texture>
+```
+
+Sets a fullscreen background texture for the scene. Rendered in screen-space (does not move with camera). Texture path is relative to `assets/textures/`.
+
+```
+background backgrounds/bg_paper.png
 ```
 
 ---

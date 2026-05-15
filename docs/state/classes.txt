@@ -13,9 +13,9 @@ Transform  (same file)
   getModelMatrix() → glm::mat4
 
 Concrete entities
-  Line   (x1,y1,z1) → (x2,y2,z2), color rgb       uses gizmoShader
+  Line   (start, end, color, strokeTex)             billboard quad, uses strokeShader
   Quad   4 vertices + textureID                     uses textureShader
-  Curve  parametric fn(t)→vec3, color rgb           uses gizmoShader
+  Curve  parametric fn(t)→vec3, color, strokeTex    GL_TRIANGLE_STRIP billboard, uses strokeShader
   Axises global XYZ reference lines                 uses gizmoShader
 
 ─────────────────────────────────────────────────────────────────────
@@ -24,6 +24,7 @@ Scene  (include/classes/scenes/scene.h)
 ---------------------------------------
 Data container. No OpenGL, no file I/O.
 Fields:   id (string)
+          backgroundTexture (string) — filename for background, empty = none
           entities   map<string, IEntity*>
           animations vector<IAnimation*>
 Methods:  addEntity(id, ptr), addAnimation(ptr)
@@ -78,11 +79,14 @@ processInput()     → WASD + mouse → camera, ESC → close, ← → → cycle
 
 Renderer  (include/classes/render/renderer.h)
 ----------------------------------------------
-Owns: gizmoShader, textureShader, camera, axises, texture cache
+Owns: gizmoShader, textureShader, strokeShader, bgShader, camera, axises, texture cache
 clear(r,g,b,a)                  glClear
+setBackground(texID)            sets background texture for next drawBackground call
+drawBackground()                fullscreen quad in NDC, no depth write, screen-space
 drawScene(entities)             draws axises + all entities (sorted back-to-front)
 getOrCreateTexture(filename)    loads from assets/textures/ if not cached
-getGizmoShader() / getTextureShader()
+getGizmoShader() / getTextureShader() / getStrokeShader()
+getDefaultStrokeTexture()       returns the default line stroke texture ID
 
 Camera  (include/classes/render/camera.h)
   ProcessKeyboard(direction, deltaTime)

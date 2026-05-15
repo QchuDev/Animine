@@ -67,6 +67,14 @@ void Engine::run() {
         if (!scene) { glfwSwapBuffers(window); glfwPollEvents(); continue; }
 
         renderer->clear(0.1f, 0.1f, 0.1f, 1.0f);
+
+        // Set background from scene
+        if (!scene->backgroundTexture.empty())
+            renderer->setBackground(renderer->getOrCreateTexture(scene->backgroundTexture));
+        else
+            renderer->setBackground(0);
+
+        renderer->drawBackground();
         animator->update(deltaTime, scene);
         renderer->drawScene(scene->getEntities());
 

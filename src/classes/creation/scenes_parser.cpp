@@ -231,6 +231,10 @@ std::unique_ptr<Scene> ScenesParser::parseFile(const std::string& file_path) {
             float secs = 0.0f;
             ss >> secs;
             timeOffset += secs;
+        } else if (token == "background") {
+            std::string texName;
+            if (ss >> texName)
+                scene->backgroundTexture = texName;
         } else if (token == "set") {
             std::string entityId, propStr;
             float x, y, z;

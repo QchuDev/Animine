@@ -37,7 +37,13 @@ animate my_line rotation linear smooth 0 0 90 0 0 180 2.0
 |---------|--------|-------------|
 | `line`  | `line <id> <x1 y1 z1> <x2 y2 z2> <r g b>` | A colored line segment between two 3D points. Color is RGB normalized (0–1). |
 | `quad`  | `quad <id> <texture> [w h]` or `quad <id> <texture> <12 floats>` | A textured quad. Specify width/height for a centered rectangle, or 4 explicit vertices (12 floats). |
-| `curve` | `curve <id> <x(t)> <y(t)> <z(t)> <r g b>` | A parametric curve. Expressions are evaluated with `t` using tinyexpr (supports `sin`, `cos`, `tan`, `sqrt`, `exp`, `log`, `pi`, `e`, arithmetic, and parentheses). |
+| `curve` | `curve <id> <x(t)> <y(t)> <z(t)> <r g b> [t_min t_max]` | A parametric curve. Expressions are evaluated with `t` using tinyexpr (supports `sin`, `cos`, `tan`, `sqrt`, `exp`, `log`, `pi`, `e`, arithmetic, and parentheses). Range defaults to [0, 2π] if omitted. |
+
+### Scene commands
+
+| Command | Syntax | Description |
+|---------|--------|-------------|
+| `background` | `background <texture>` | Set a fullscreen background texture (screen-space, fixed) |
 
 ### Animation system
 

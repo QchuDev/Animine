@@ -29,8 +29,10 @@ Main Loop
     while window is open:
         processInput()          ← keyboard + mouse → camera
                                 ← arrow keys → cycle scenes (resets animator)
-        animator.update(dt, currentScene)   ← advances t, captures start, writes transforms
         renderer.clear()
+        renderer.setBackground(scene.backgroundTexture)
+        renderer.drawBackground()       ← fullscreen quad, screen-space, no depth write
+        animator.update(dt, currentScene)
         renderer.drawScene(currentScene.getEntities())
         glfwSwapBuffers / glfwPollEvents
 
@@ -47,9 +49,12 @@ Responsibilities
 Engine          Owns window, renderer, animator, scenesManager.
                 Orchestrates init and the main loop.
 
-Renderer        Owns shaders (gizmoShader, textureShader), camera, axises.
+Renderer        Owns shaders (gizmoShader, textureShader, strokeShader, bgShader),
+                camera, axises.
+                Draws background (screen-space, no depth write).
                 Draws all entities each frame (sorted back-to-front for alpha).
                 Manages texture cache (getOrCreateTexture).
+                Lines and curves use strokeShader + stroke textures (billboard quads).
 
 ScenesParser    Reads .txt files, builds Scene objects.
                 Only dependency: Renderer* (needed to get shaders and textures).
