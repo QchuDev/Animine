@@ -1,8 +1,6 @@
 # Scene 3: The X Projection — Cosine
 # cos(θ) is the X component. A vertical line shows the dot's X value.
 
-line x_axis  -2 0 0   2 0 0   0.3 0.3 0.3
-line y_axis  0 -2 0   0 2 0   0.3 0.3 0.3
 curve circle  cos(t)  sin(t)  0   0.5 0.5 0.5
 
 # The dot on the circle

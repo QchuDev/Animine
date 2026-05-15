@@ -1,8 +1,6 @@
 # Scene 4: The Cosine Wave
 # cos(θ) is the X component. The wave unfolds to the right along the X axis.
 
-line x_axis  -2 0 0   6 0 0   0.3 0.3 0.3
-line y_axis  0 -2 0   0 2 0   0.3 0.3 0.3
 curve circle  cos(t)  sin(t)  0   0.4 0.4 0.4
 
 # The cosine wave (unfolds rightward: x = t scaled, y = cos(t))

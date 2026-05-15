@@ -1,8 +1,6 @@
 # Scene 8: Amplitude — Scaling the Wave
 # Compare sin(t) with 2*sin(t). Amplitude stretches vertically.
 
-line x_axis  -1 0 0   7 0 0   0.3 0.3 0.3
-line y_axis  0 -2.5 0   0 2.5 0   0.3 0.3 0.3
 
 # Normal sine (amplitude = 1)
 curve sin_1  t/(2*pi)*4+1  sin(t)  0   0.4 0.6 0.4  -12.57 12.57

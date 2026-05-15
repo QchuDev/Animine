@@ -1,8 +1,6 @@
 # Scene 2: Tracing the Circle
 # The dot traces the full circle. A radius line connects origin to dot.
 
-line x_axis  -2 0 0   2 0 0   0.3 0.3 0.3
-line y_axis  0 -2 0   0 2 0   0.3 0.3 0.3
 curve circle  cos(t)  sin(t)  0   1 1 1
 
 # Radius line (will be animated to rotate)
