@@ -54,7 +54,7 @@ bool ScenesParser::createEntity(const std::string& typeStr, std::stringstream& s
         std::string id;
         float x1, y1, z1, x2, y2, z2, r, g, b;
         if (!(ss >> id >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> r >> g >> b)) return false;
-        scene->addEntity(id, new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b), renderer->getGizmoShader()));
+        scene->addEntity(id, new Line(glm::vec3(x1,y1,z1), glm::vec3(x2,y2,z2), glm::vec3(r,g,b), renderer->getStrokeShader(), renderer->getDefaultStrokeTexture()));
         return true;
     }
 

@@ -16,8 +16,12 @@ Renderer::Renderer() {
 
     gizmoShader = new Shader("shaders/line_vertex.glsl", "shaders/line_fragment.glsl");
     textureShader = new Shader("shaders/quad_vertex.glsl", "shaders/quad_fragment.glsl");
+    strokeShader = new Shader("shaders/stroke_vertex.glsl", "shaders/stroke_fragment.glsl");
 
     axises = new Axises(gizmoShader);
+
+    // Load default stroke texture
+    defaultStrokeTexture = getOrCreateTexture("strokes/line_default.png");
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

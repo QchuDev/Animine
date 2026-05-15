@@ -14,7 +14,9 @@ class Renderer {
     private: 
         Shader* textureShader;
         Shader* gizmoShader;
+        Shader* strokeShader;
         std::map<std::string, unsigned int> loadedTextures;
+        unsigned int defaultStrokeTexture = 0;
     public:
         Axises* axises;
         Camera* camera;
@@ -26,6 +28,8 @@ class Renderer {
         // Getters
         Shader* getGizmoShader() const { return gizmoShader; }
         Shader* getTextureShader() const { return textureShader; }
+        Shader* getStrokeShader() const { return strokeShader; }
+        unsigned int getDefaultStrokeTexture() const { return defaultStrokeTexture; }
         
         // The renderer handles the textures, we use the same textures for various entities
         unsigned int getOrCreateTexture(const std::string& fileName);
