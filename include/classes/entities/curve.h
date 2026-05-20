@@ -23,6 +23,8 @@ public:
     Curve(ParamFunction formula, glm::vec3 color, Shader* s, unsigned int strokeTex, float tMin = 0.0f, float tMax = 6.2832f);
     ~Curve();
     void draw(const glm::mat4& view, const glm::mat4& projection) override;
+    glm::vec3 getColor() override { return color; }
+    void setColor(glm::vec3 c) override { color = c; }
 };
 
 #endif

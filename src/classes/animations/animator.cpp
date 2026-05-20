@@ -17,6 +17,7 @@ void Animator::update(float deltaTime, Scene* scene) {
                         case TransformProp::POSITION: e->setPosition(set->value); break;
                         case TransformProp::ROTATION: e->setRotation(set->value); break;
                         case TransformProp::SCALE:    e->setScale(set->value);    break;
+                        case TransformProp::COLOR:    e->setColor(set->value);    break;
                     }
                 }
                 set->applied = true;
@@ -41,6 +42,7 @@ void Animator::update(float deltaTime, Scene* scene) {
                     case TransformProp::POSITION: track.capturedStart = entity->getPosition(); break;
                     case TransformProp::ROTATION: track.capturedStart = entity->getRotation(); break;
                     case TransformProp::SCALE:    track.capturedStart = entity->getScale();    break;
+                    case TransformProp::COLOR:    track.capturedStart = entity->getColor();    break;
                 }
                 track.hasCaptured = true;
             }
@@ -51,6 +53,7 @@ void Animator::update(float deltaTime, Scene* scene) {
                 case TransformProp::POSITION: entity->setPosition(value); break;
                 case TransformProp::ROTATION: entity->setRotation(value); break;
                 case TransformProp::SCALE:    entity->setScale(value);    break;
+                case TransformProp::COLOR:    entity->setColor(value);    break;
             }
         }
     }

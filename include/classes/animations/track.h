@@ -13,7 +13,7 @@ extern "C" {
     void te_free(te_expr* n);
 }
 
-enum class TransformProp     { POSITION, ROTATION, SCALE };
+enum class TransformProp     { POSITION, ROTATION, SCALE, COLOR };
 enum class InterpolationMode { LINEAR, SMOOTH, PATH };  // PATH = parametric x(t) y(t) z(t)
 
 struct Track {

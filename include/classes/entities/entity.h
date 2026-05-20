@@ -51,6 +51,8 @@ public:
     virtual void setRotation(glm::vec3 rot) { transform.rotation = rot; }
     virtual glm::vec3 getScale() { return transform.scale; }
     virtual void setScale(glm::vec3 sca) { transform.scale = sca; }
+    virtual glm::vec3 getColor() { return glm::vec3(1.0f); }
+    virtual void setColor(glm::vec3 c) { (void)c; }
 
     void saveInitialTransform() { initialTransform = transform; }
     void restoreInitialTransform() { transform = initialTransform; }

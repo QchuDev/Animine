@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include "classes/entities/quad.h"
 
 // Constructor, we should pass the four vertices
@@ -48,23 +49,20 @@ void Quad::setupMesh() {
 void Quad::draw(const glm::mat4& view, const glm::mat4& projection) {
     shader->use();
     
-    // 1. Pasar matrices (asumiendo que tus variables en el shader se llaman así)
     shader->setMat4(shader->modelLoc, transform.getModelMatrix());
     shader->setMat4(shader->viewLoc, view);
     shader->setMat4(shader->projLoc, projection);
-    
-    // std::cout << "Texture ID:" << textureID  << std::endl;
-    
-    // 2. Configurar textura
-    glActiveTexture(GL_TEXTURE0); // Activar unidad de textura 0
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    shader->setInt("ourTexture", 0); // Decirle al shader que use la unidad 0
 
-    // 3. Dibujar
+    int tintLoc = glGetUniformLocation(shader->ID, "tintColor");
+    glUniform3f(tintLoc, color.r, color.g, color.b);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    shader->setInt("ourTexture", 0);
+
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     glBindVertexArray(0);
-    
 }
 
 Quad::~Quad() {}

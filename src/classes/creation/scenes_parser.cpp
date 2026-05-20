@@ -167,6 +167,7 @@ bool ScenesParser::createAnimation(std::stringstream& ss, float startTime, Scene
     if      (propStr == "position") track.property = TransformProp::POSITION;
     else if (propStr == "rotation") track.property = TransformProp::ROTATION;
     else if (propStr == "scale")    track.property = TransformProp::SCALE;
+    else if (propStr == "color")    track.property = TransformProp::COLOR;
     else { std::cerr << "animate: unknown property '" << propStr << "'\n"; return false; }
 
     float duration = 0.0f;
@@ -273,6 +274,7 @@ std::unique_ptr<Scene> ScenesParser::parseFile(const std::string& file_path) {
             if      (propStr == "position") cmd->property = TransformProp::POSITION;
             else if (propStr == "rotation") cmd->property = TransformProp::ROTATION;
             else if (propStr == "scale")    cmd->property = TransformProp::SCALE;
+            else if (propStr == "color")    cmd->property = TransformProp::COLOR;
             else { std::cerr << "set: unknown property '" << propStr << "'\n"; delete cmd; continue; }
             scene->addAnimation(cmd);
         } else {
