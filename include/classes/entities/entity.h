@@ -37,6 +37,7 @@ protected:
     Shader* shader;
 public:
     std::string id; // each entity has an id 
+    int creationOrder = 0; // order of declaration in scene file (for z-fighting resolution)
     Transform transform;
     Transform initialTransform; // saved at creation, restored on scene reset
     IEntity(Shader* s) : shader(s) {}

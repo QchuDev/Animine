@@ -1,5 +1,25 @@
 1. Animate color --> NEW proprty to animate (position, scale, rotation, color)
+    Propuesta: Agregar COLOR a TransformProp (o separar en AnimatableProp). Track guarda vec3 de color.
+    El Animator llama entity->setColor(). Las entidades exponen get/setColor (ya tienen color interno).
+    Sintaxis: animate <id> color <easing> <interp> <r g b>... <duration>
+
 2. Hot reload
-3. Fix 'z-fighting --> Priority defined by order in scene.txt
+    Propuesta: File watcher en el main loop — cada N frames checkear last_modified de los .txt en assets/scenes/.
+    Si cambió, re-parsear ese archivo, reconstruir la Scene y reemplazarla en ScenesManager.
+    Resetear el Animator. En Windows usar FindFirstChangeNotification o simplemente stat() polling.
+
+3. Fix 'z-fighting --> Priority defined by creation order in scene.txt
+    Propuesta: Asignar un depth bias incremental por orden de declaración en el .txt.
+    Cada entidad recibe un pequeño glPolygonOffset o un offset en Z en clip-space (ej: -0.0001 * index).
+    Entidades declaradas después se dibujan "encima". No tocar el sorting back-to-front existente.
+
 4. Preset loading --> Think a way to group multiple entities to animate directly on parent
-5. Meshes support 
+    Propuesta: Nuevo comando "group <id> <child_ids...>" que crea un nodo padre con Transform propio.
+    Los hijos heredan la transformación del grupo (model = parentModel * childModel).
+    Se puede animar el grupo como cualquier entidad. Parsear desde el .txt igual que entidades.
+    Opcionalmente: "preset <file>" que incluye otro .txt como sub-escena dentro de un grupo.
+
+5. Meshes support
+    Propuesta: Nueva entidad Mesh que carga .obj (solo triángulos, sin materiales complejos al inicio).
+    Usar tinyobjloader (header-only, ~1 archivo). Sintaxis: mesh <id> <file.obj> [texture] [scale].
+    Dibuja con textureShader existente. Soporta transform y animaciones como cualquier entidad.

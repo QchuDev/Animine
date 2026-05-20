@@ -1,6 +1,7 @@
 #include "classes/scenes/scene.h"
 
 void Scene::addEntity(const std::string& entityId, IEntity* entity) {
+    entity->creationOrder = (int)entities.size();
     entities[entityId] = entity;
     entity->saveInitialTransform();
 }
