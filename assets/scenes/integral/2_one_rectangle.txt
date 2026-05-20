@@ -1,0 +1,18 @@
+# Scene 2: One Rectangle — First Approximation
+# A single rectangle from x=0 to x=2, height = f(2) = 4.
+# Overestimates the area badly.
+
+# Axes
+line x_axis  -0.5 0 0   2.5 0 0   0.5 0.5 0.5
+line y_axis  0 -0.5 0   0 4.5 0   0.5 0.5 0.5
+
+# f(x) = x^2
+curve parabola  t  t^2  0   0.2 0.9 0.4  0 2
+
+# One rectangle: width=2, height=f(2)=4
+quad rect1 yellow.png  0 0 0  2 0 0  2 4 0  0 4 0
+
+set rect1 scale 0 0 0
+
+wait 1.0
+animate rect1 scale ease_out path t t t 1.5

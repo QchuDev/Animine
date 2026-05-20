@@ -1,0 +1,25 @@
+# Scene 8: The Antiderivative — F(x) = x³/3
+# The limit of the Riemann sum gives us the antiderivative.
+# Show f(x)=x² fading and F(x)=x³/3 appearing alongside.
+
+# Axes
+line x_axis  -0.5 0 0   2.5 0 0   0.5 0.5 0.5
+line y_axis  0 -0.5 0   0 4.5 0   0.5 0.5 0.5
+
+# f(x) = x^2 (the original function)
+curve parabola  t  t^2  0   0.2 0.9 0.4  0 2
+
+# F(x) = x^3/3 (the antiderivative) — appears shifted right for clarity
+curve antideriv  t  t^3/3  0   0.9 0.4 0.2  0 2
+
+# A filled area under f(x) to show what F(x) measures
+quad area yellow.png  0 0 0  2 0 0  2 4 0  0 0 0
+
+set antideriv scale 0 0 0
+set area scale 0 0 0
+
+wait 1.0
+animate area scale ease_out path t t t 1.5
+
+wait 2.0
+animate antideriv scale ease_out path t t t 2.0
