@@ -1,0 +1,5 @@
+1. Animate color --> NEW proprty to animate (position, scale, rotation, color)
+2. Hot reload
+3. Fix 'z-fighting --> Priority defined by order in scene.txt
+4. Preset loading --> Think a way to group multiple entities to animate directly on parent
+5. Meshes support 
