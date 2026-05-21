@@ -54,8 +54,11 @@ public:
     virtual glm::vec3 getColor() { return glm::vec3(1.0f); }
     virtual void setColor(glm::vec3 c) { (void)c; }
 
-    void saveInitialTransform() { initialTransform = transform; }
-    void restoreInitialTransform() { transform = initialTransform; }
+    void saveInitialTransform() { initialTransform = transform; initialColor = getColor(); }
+    void restoreInitialTransform() { transform = initialTransform; setColor(initialColor); }
+
+private:
+    glm::vec3 initialColor{1.0f};
 };
 
 #endif 

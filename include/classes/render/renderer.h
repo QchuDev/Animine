@@ -3,7 +3,6 @@
 
 #include "classes/entities/entity.h"
 
-#include "classes/entities/line.h"
 #include "classes/render/shader.h"
 #include "classes/render/camera.h"
 
@@ -23,9 +22,6 @@ class Renderer {
 
         void setupBgQuad();
     public:
-        Line* axisX;
-        Line* axisY;
-        Line* axisZ;
         Camera* camera;
         bool useOrtho = false;
         float orthoZoom = 5.0f;
