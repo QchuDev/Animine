@@ -3,8 +3,8 @@
 # Show f(x)=x² fading and F(x)=x³/3 appearing alongside.
 
 # Axes
-line x_axis  -0.5 0 0   2.5 0 0   0.5 0.5 0.5
-line y_axis  0 -0.5 0   0 4.5 0   0.5 0.5 0.5
+line x_axis  -0.5 0 0   2.5 0 0   0.8 0.4 0.4 arrow_default
+line y_axis  0 -0.5 0   0 4.5 0   0.4 0.4 0.8 arrow_default
 
 # f(x) = x^2 (the original function)
 curve parabola  t  t^2  0   0.2 0.9 0.4  0 2

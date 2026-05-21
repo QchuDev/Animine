@@ -2,12 +2,15 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include <numbers>
+#include <filesystem>
 
 #include "classes/engine.h"
 #include "classes/animations/animator.h"
 #include "classes/scenes/scenes_manager.h"
 #include "classes/creation/scenes_parser.h"
 #include "classes/paths.h"
+
+namespace fs = std::filesystem;
 
 
 Engine::Engine() : window(nullptr), renderer(nullptr), animator(nullptr), scenesManager(nullptr) {}
@@ -51,8 +54,16 @@ bool Engine::init(int width, int height, const char* title) {
  */
 void Engine::run() {
     // Build all scenes from assets/scenes/ and hand them to the manager
-    ScenesParser parser(renderer);
-    auto scenes = parser.extractScenes(assetPath("assets/scenes/"));
+    parser = new ScenesParser(renderer);
+    std::string scenesPath = assetPath("assets/scenes/");
+    auto scenes = parser->extractScenes(scenesPath);
+
+    // Record initial timestamps
+    for (auto& entry : fs::directory_iterator(scenesPath)) {
+        if (entry.path().extension() == ".txt")
+            fileTimestamps[entry.path().string()] = fs::last_write_time(entry);
+    }
+
     scenesManager = new ScenesManager(std::move(scenes));
 
     // Main loop
@@ -62,6 +73,12 @@ void Engine::run() {
         lastFrame = currentFrame;
 
         processInput();
+
+        // Hot reload check every 60 frames
+        if (++frameCount >= 60) {
+            frameCount = 0;
+            checkHotReload();
+        }
 
         Scene* scene = scenesManager->getCurrentScene();
         if (!scene) { glfwSwapBuffers(window); glfwPollEvents(); continue; }
@@ -164,11 +181,36 @@ void Engine::processInput() {
 }
 
 /**
+ * Checks if any scene file was modified and reloads it
+ */
+void Engine::checkHotReload() {
+    for (auto& [path, lastTime] : fileTimestamps) {
+        try {
+            auto currentTime = fs::last_write_time(path);
+            if (currentTime != lastTime) {
+                lastTime = currentTime;
+                auto scene = parser->parseFile(path);
+                if (!scene) continue;
+                std::string id = scene->id;
+                bool isActive = (scenesManager->getCurrentScene() &&
+                                 scenesManager->getCurrentScene()->id == id);
+                scenesManager->replaceScene(id, std::move(scene));
+                if (isActive)
+                    animator->reset(scenesManager->getCurrentScene());
+            }
+        } catch (...) {
+            // File might be mid-write, skip this cycle
+        }
+    }
+}
+
+/**
  * Destoying correctly the Engine --> with the renderer and terminating the GLFW
  */
 Engine::~Engine() {
     delete scenesManager;
     delete animator;
+    delete parser;
     delete renderer;
     glfwTerminate();
 }

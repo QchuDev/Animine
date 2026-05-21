@@ -103,7 +103,7 @@ void Renderer::drawScene(const std::map<std::string, IEntity*>& entities) {
     std::sort(sorted.begin(), sorted.end(), [&camPos](IEntity* a, IEntity* b) {
         float da = glm::length(a->transform.position - camPos);
         float db = glm::length(b->transform.position - camPos);
-        if (std::abs(da - db) > 0.001f) return da > db; // farthest first
+        if (std::abs(da - db) > 0.0001f) return da > db; // farthest first
         return a->creationOrder > b->creationOrder; // declared first draws on top
     });
 

@@ -42,3 +42,11 @@ void ScenesManager::prevScene() {
         }
     }
 }
+
+
+void ScenesManager::replaceScene(const std::string& id, std::unique_ptr<Scene> scene) {
+    bool wasCurrent = (scenes.count(id) && scenes[id].get() == currentScene);
+    scenes[id] = std::move(scene);
+    if (wasCurrent)
+        currentScene = scenes[id].get();
+}
