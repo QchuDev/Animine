@@ -1,0 +1,41 @@
+# Scene: Animated Grid Group
+# A grid made of lines, grouped and animated as a single unit.
+
+# Horizontal lines
+line h1  -4 -4 0   4 -4 0   0.4 0.4 0.6
+line h2  -4 -3 0   4 -3 0   0.4 0.4 0.6
+line h3  -4 -2 0   4 -2 0   0.4 0.4 0.6
+line h4  -4 -1 0   4 -1 0   0.4 0.4 0.6
+line h5  -4  0 0   4  0 0   0.6 0.6 0.8
+line h6  -4  1 0   4  1 0   0.4 0.4 0.6
+line h7  -4  2 0   4  2 0   0.4 0.4 0.6
+line h8  -4  3 0   4  3 0   0.4 0.4 0.6
+line h9  -4  4 0   4  4 0   0.4 0.4 0.6
+
+# Vertical lines
+line v1  -4 -4 0  -4  4 0   0.4 0.4 0.6
+line v2  -3 -4 0  -3  4 0   0.4 0.4 0.6
+line v3  -2 -4 0  -2  4 0   0.4 0.4 0.6
+line v4  -1 -4 0  -1  4 0   0.4 0.4 0.6
+line v5   0 -4 0   0  4 0   0.6 0.6 0.8
+line v6   1 -4 0   1  4 0   0.4 0.4 0.6
+line v7   2 -4 0   2  4 0   0.4 0.4 0.6
+line v8   3 -4 0   3  4 0   0.4 0.4 0.6
+line v9   4 -4 0   4  4 0   0.4 0.4 0.6
+
+# Group them all into a grid
+group grid  h1 h2 h3 h4 h5 h6 h7 h8 h9 v1 v2 v3 v4 v5 v6 v7 v8 v9
+
+# Start small, scale in
+set grid scale 0 0 0
+
+wait 0.5
+animate grid scale ease_out path t t t 1.5
+
+# Then rotate the whole grid
+wait 2.0
+animate grid rotation ease_in_out linear 0 0 0 0 0 360 4.0
+
+# And move it
+wait 4.5
+animate grid position ease_in_out linear 0 0 0 3 0 0 0 0 0 3.0

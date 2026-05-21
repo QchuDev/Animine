@@ -4,6 +4,7 @@
 #include "classes/entities/line.h"
 #include "classes/entities/quad.h"
 #include "classes/entities/curve.h"
+#include "classes/entities/group.h"
 #include "classes/animations/animation.h"
 #include "classes/animations/easing_type.h"
 #include "classes/animations/track.h"
@@ -277,6 +278,18 @@ std::unique_ptr<Scene> ScenesParser::parseFile(const std::string& file_path) {
             else if (propStr == "color")    cmd->property = TransformProp::COLOR;
             else { std::cerr << "set: unknown property '" << propStr << "'\n"; delete cmd; continue; }
             scene->addAnimation(cmd);
+        } else if (token == "group") {
+            std::string groupId;
+            if (!(ss >> groupId)) { std::cerr << "group: missing id\n"; continue; }
+            auto* group = new Group();
+            std::string childId;
+            while (ss >> childId) {
+                group->childIds.push_back(childId);
+                IEntity* child = scene->getEntity(childId);
+                if (child) child->parentId = groupId;
+                else std::cerr << "group: child '" << childId << "' not found\n";
+            }
+            scene->addEntity(groupId, group);
         } else {
             // entity line — rewind and delegate
             parseLine(line, scene.get());

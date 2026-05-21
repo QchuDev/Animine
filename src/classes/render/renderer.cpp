@@ -107,8 +107,17 @@ void Renderer::drawScene(const std::map<std::string, IEntity*>& entities) {
         return a->creationOrder > b->creationOrder; // declared first draws on top
     });
 
-    for (IEntity* entity : sorted)
+    for (IEntity* entity : sorted) {
+        // Resolve parent transform for grouped entities
+        if (!entity->parentId.empty()) {
+            auto it = entities.find(entity->parentId);
+            if (it != entities.end())
+                entity->transform.parentModel = it->second->transform.getModelMatrix();
+        } else {
+            entity->transform.parentModel = glm::mat4(1.0f);
+        }
         entity->draw(view, projection);
+    }
 }
 
 

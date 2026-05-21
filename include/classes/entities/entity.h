@@ -12,6 +12,7 @@ struct Transform
     glm::vec3 position = glm::vec3(0.0f);   
     glm::vec3 rotation = glm::vec3(0.0f);   // in degrees
     glm::vec3 scale = glm::vec3(1.0f);
+    glm::mat4 parentModel = glm::mat4(1.0f); // set by renderer for grouped entities
     
     glm::mat4 getModelMatrix() const {
         glm::mat4 model = glm::mat4(1.0f);
@@ -22,7 +23,7 @@ struct Transform
         model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
         model = glm::scale(model, scale);
         
-        return model;
+        return parentModel * model;
     }
     
 
@@ -37,6 +38,7 @@ protected:
     Shader* shader;
 public:
     std::string id; // each entity has an id 
+    std::string parentId; // empty = no parent, otherwise the id of the group
     int creationOrder = 0; // order of declaration in scene file (for z-fighting resolution)
     Transform transform;
     Transform initialTransform; // saved at creation, restored on scene reset
