@@ -16,6 +16,8 @@ public:
     void nextScene();
     void prevScene();
     void replaceScene(const std::string& id, std::unique_ptr<Scene> scene);
+    void removeScene(const std::string& id);
+    void addScene(std::unique_ptr<Scene> scene);
 
 private:
     std::map<std::string, std::unique_ptr<Scene>> scenes;

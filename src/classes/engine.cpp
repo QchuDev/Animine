@@ -186,14 +186,37 @@ void Engine::processInput() {
 }
 
 /**
- * Checks if any scene file was modified and reloads it
+ * Checks if any scene file was modified, added, or deleted and updates accordingly
  */
 void Engine::checkHotReload() {
+    std::string scenesPath = assetPath("assets/scenes/");
+
+    // Detect deleted files
+    std::vector<std::string> toRemove;
     for (auto& [path, lastTime] : fileTimestamps) {
-        try {
-            auto currentTime = fs::last_write_time(path);
-            if (currentTime != lastTime) {
-                lastTime = currentTime;
+        if (!fs::exists(path)) {
+            std::string id = fs::path(path).stem().string();
+            scenesManager->removeScene(id);
+            toRemove.push_back(path);
+        }
+    }
+    for (auto& p : toRemove) fileTimestamps.erase(p);
+
+    // Detect new and modified files
+    try {
+        for (auto& entry : fs::directory_iterator(scenesPath)) {
+            if (entry.path().extension() != ".txt") continue;
+            std::string path = entry.path().string();
+            auto currentTime = fs::last_write_time(entry);
+
+            if (fileTimestamps.find(path) == fileTimestamps.end()) {
+                // New file
+                fileTimestamps[path] = currentTime;
+                auto scene = parser->parseFile(path);
+                if (scene) scenesManager->addScene(std::move(scene));
+            } else if (currentTime != fileTimestamps[path]) {
+                // Modified file
+                fileTimestamps[path] = currentTime;
                 auto scene = parser->parseFile(path);
                 if (!scene) continue;
                 std::string id = scene->id;
@@ -203,10 +226,8 @@ void Engine::checkHotReload() {
                 if (isActive)
                     animator->reset(scenesManager->getCurrentScene());
             }
-        } catch (...) {
-            // File might be mid-write, skip this cycle
         }
-    }
+    } catch (...) {}
 }
 
 /**

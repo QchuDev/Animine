@@ -50,3 +50,17 @@ void ScenesManager::replaceScene(const std::string& id, std::unique_ptr<Scene> s
     if (wasCurrent)
         currentScene = scenes[id].get();
 }
+
+void ScenesManager::removeScene(const std::string& id) {
+    bool wasCurrent = (scenes.count(id) && scenes[id].get() == currentScene);
+    scenes.erase(id);
+    if (wasCurrent)
+        currentScene = scenes.empty() ? nullptr : scenes.begin()->second.get();
+}
+
+void ScenesManager::addScene(std::unique_ptr<Scene> scene) {
+    std::string id = scene->id;
+    scenes[id] = std::move(scene);
+    if (!currentScene)
+        currentScene = scenes[id].get();
+}
