@@ -20,8 +20,10 @@ Engine::Engine() : window(nullptr), renderer(nullptr), animator(nullptr), scenes
  */
 bool Engine::init(int width, int height, const char* title) {
 
-    if (!glfwInit()) return false;                                  // Check if glfw fails to init
-    
+    if (!glfwInit()) return false;
+
+    glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);                       // Always on top
+
     window = glfwCreateWindow(width, height, title, NULL, NULL);    // We create the window with the specifications given to the engine
     if(!window) {                                                   // check if correctly created
         glfwTerminate();
@@ -37,7 +39,7 @@ bool Engine::init(int width, int height, const char* title) {
     renderer = new Renderer(); // Create the renderer to draw entities on the window
     animator = new Animator();
     
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     
     // V-sync activation
     glfwSwapInterval(1);
@@ -144,7 +146,12 @@ void Engine::processInput() {
         if (renderer->orthoZoom < 0.5f) renderer->orthoZoom = 0.5f;
     }
 
-    // For the camera movement
+    // Camera movement only with right-click held
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) != GLFW_PRESS) {
+        firstMouse = true;
+        return;
+    }
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         renderer->camera->ProcessKeyboard(FORWARD, this->deltaTime);
     }
@@ -164,7 +171,6 @@ void Engine::processInput() {
         renderer->camera->ProcessKeyboard(DOWN, this->deltaTime);
     }
     
-    // The cursor input logic
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
     if (firstMouse) {
@@ -176,7 +182,6 @@ void Engine::processInput() {
     lastX = xpos;
     lastY = ypos;
     
-    // The camera takes this inputs to rotate 
     renderer->camera->ProcessMouseMovement(xoffset, yoffset); 
 }
 
