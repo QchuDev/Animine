@@ -1,6 +1,7 @@
 # Scene: Animated Grid Group (using preset)
 # Loads a grid from a preset file and animates it as a unit.
 
+curve g t gamma(t) 0    1 0 0 
 preset grid     grid.txt
 
 # Start small, scale in
