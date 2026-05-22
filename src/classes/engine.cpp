@@ -115,20 +115,7 @@ void Engine::processInput() {
         glfwSetWindowShouldClose(window, true);
     }
 
-    // Scene cycling with arrow keys (with debounce)
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && !rightPressed) {
-        scenesManager->nextScene();
-        animator->reset(scenesManager->getCurrentScene());
-        rightPressed = true;
-    }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_RELEASE) rightPressed = false;
-
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && !leftPressed) {
-        scenesManager->prevScene();
-        animator->reset(scenesManager->getCurrentScene());
-        leftPressed = true;
-    }
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_RELEASE) leftPressed = false;
+    // Scene cycling with arrow keys removed — app controls active scene
 
     // Toggle ortho/perspective with Tab
     if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS && !tabPressed) {
@@ -213,18 +200,21 @@ void Engine::checkHotReload() {
                 // New file
                 fileTimestamps[path] = currentTime;
                 auto scene = parser->parseFile(path);
-                if (scene) scenesManager->addScene(std::move(scene));
+                if (scene) {
+                    std::string id = scene->id;
+                    scenesManager->addScene(std::move(scene));
+                    scenesManager->setCurrentScene(id);
+                    animator->reset(scenesManager->getCurrentScene());
+                }
             } else if (currentTime != fileTimestamps[path]) {
                 // Modified file
                 fileTimestamps[path] = currentTime;
                 auto scene = parser->parseFile(path);
                 if (!scene) continue;
                 std::string id = scene->id;
-                bool isActive = (scenesManager->getCurrentScene() &&
-                                 scenesManager->getCurrentScene()->id == id);
                 scenesManager->replaceScene(id, std::move(scene));
-                if (isActive)
-                    animator->reset(scenesManager->getCurrentScene());
+                scenesManager->setCurrentScene(id);
+                animator->reset(scenesManager->getCurrentScene());
             }
         }
     } catch (...) {}
