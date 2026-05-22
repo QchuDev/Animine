@@ -27,7 +27,7 @@ Ordenado de menor a mayor complejidad.
 
 ---
 
-## Fase 2 — Animate Color
+## Fase 2 — Animate Color ✅
 
 **Problema:** Solo se animan position, rotation y scale. El color es estático.
 
@@ -93,7 +93,7 @@ set my_line color 0 1 0
 
 ---
 
-## Fase 4 — Preset Loading / Groups
+## Fase 4 — Preset Loading / Groups ✅
 
 **Problema:** No hay forma de agrupar entidades y animar el grupo como unidad.
 
@@ -130,7 +130,7 @@ animate my_group position ease_out linear 3 0 0 2.0
 
 ---
 
-## Fase 5 — Meshes Support
+## Fase 5 — Meshes Support ✅
 
 **Problema:** Solo hay líneas, quads y curvas. No se pueden cargar modelos 3D.
 

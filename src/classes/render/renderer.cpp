@@ -18,6 +18,7 @@ Renderer::Renderer() {
     textureShader = new Shader("shaders/quad_vertex.glsl", "shaders/quad_fragment.glsl");
     strokeShader = new Shader("shaders/stroke_vertex.glsl", "shaders/stroke_fragment.glsl");
     bgShader = new Shader("shaders/bg_vertex.glsl", "shaders/bg_fragment.glsl");
+    meshShader = new Shader("shaders/mesh_vertex.glsl", "shaders/mesh_fragment.glsl");
 
     // Load default stroke texture
     defaultStrokeTexture = getOrCreateTexture("strokes/line_default.png");

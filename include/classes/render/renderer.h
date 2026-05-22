@@ -15,6 +15,7 @@ class Renderer {
         Shader* gizmoShader;
         Shader* strokeShader;
         Shader* bgShader;
+        Shader* meshShader;
         unsigned int bgVAO = 0, bgVBO = 0;
         unsigned int bgTextureID = 0;
         std::map<std::string, unsigned int> loadedTextures;
@@ -35,6 +36,7 @@ class Renderer {
         Shader* getGizmoShader() const { return gizmoShader; }
         Shader* getTextureShader() const { return textureShader; }
         Shader* getStrokeShader() const { return strokeShader; }
+        Shader* getMeshShader() const { return meshShader; }
         unsigned int getDefaultStrokeTexture() const { return defaultStrokeTexture; }
         
         void setBackground(unsigned int texID) { bgTextureID = texID; }

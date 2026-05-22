@@ -5,6 +5,7 @@
 #include "classes/entities/quad.h"
 #include "classes/entities/curve.h"
 #include "classes/entities/group.h"
+#include "classes/entities/mesh.h"
 #include "classes/animations/animation.h"
 #include "classes/animations/easing_type.h"
 #include "classes/animations/track.h"
@@ -132,6 +133,30 @@ bool ScenesParser::createEntity(const std::string& typeStr, std::stringstream& s
         };
 
         scene->addEntity(id, new Curve(fn, glm::vec3(r,g,b), renderer->getStrokeShader(), strokeTex, tMin, tMax));
+        return true;
+    }
+
+    if (typeStr == "mesh") {
+        std::string id, objFile;
+        if (!(ss >> id >> objFile)) return false;
+
+        float scale = 1.0f;
+        unsigned int texID = 0;
+
+        // Optional args: [texture] [scale] or just [scale]
+        std::string nextToken;
+        if (ss >> nextToken) {
+            // If it looks like a number, treat as scale; otherwise it's a texture
+            try {
+                scale = std::stof(nextToken);
+            } catch (...) {
+                texID = renderer->getOrCreateTexture(nextToken);
+                ss >> scale; // optional scale after texture
+            }
+        }
+
+        std::string objPath = assetPath("assets/meshes/" + objFile);
+        scene->addEntity(id, new Mesh(objPath, renderer->getMeshShader(), texID, scale));
         return true;
     }
 
