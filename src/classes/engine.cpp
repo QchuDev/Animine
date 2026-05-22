@@ -36,7 +36,8 @@ bool Engine::init(int width, int height, const char* title) {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     
-    renderer = new Renderer(); // Create the renderer to draw entities on the window
+    renderer = new Renderer();
+    renderer->aspect = (height > 0) ? (float)width / (float)height : 1.0f;
     animator = new Animator();
     
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

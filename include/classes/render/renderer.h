@@ -26,6 +26,7 @@ class Renderer {
         Camera* camera;
         bool useOrtho = false;
         float orthoZoom = 5.0f;
+        float aspect = 16.0f / 9.0f;
         
         Renderer();
         void clear(float r, float g, float b, float a);

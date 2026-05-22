@@ -83,7 +83,7 @@ void Renderer::clear(float r, float g, float b, float a) {
  * Draws every entity in the scene, sorted back-to-front for correct alpha blending
  */
 void Renderer::drawScene(const std::map<std::string, IEntity*>& entities) {
-    float aspect = 1280.0f / 720.0f;
+    float aspect = this->aspect;
     glm::mat4 projection;
     if (useOrtho) {
         float h = orthoZoom;

@@ -7,7 +7,8 @@ Curve::Curve(ParamFunction formula, glm::vec3 color, Shader* s, unsigned int str
 {
     // Generate polyline points
     float range = tMax - tMin;
-    float step = range / 1000.0f; // ~1000 segments regardless of range
+    if (range < 0.0001f) range = 0.0001f;
+    float step = range / 1000.0f;
 
     for (float t = tMin; t <= tMax; t += step) {
         points.push_back(formula(t));
