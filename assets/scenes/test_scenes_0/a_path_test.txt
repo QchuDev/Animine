@@ -1,4 +1,0 @@
-# Simple path test: move a quad in a circle
-quad box yellow.png
-
-animate box position linear path t*3 0 0 3.0

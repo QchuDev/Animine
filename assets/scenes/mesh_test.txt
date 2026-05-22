@@ -1,7 +1,0 @@
-# Scene: Mesh test
-# A rotating cube and a spinning pyramid
-
-mesh evee evee.obj  wood.png 1.0
-
-set evee rotation 0 180 0 
-set evee position 0 -1 0 

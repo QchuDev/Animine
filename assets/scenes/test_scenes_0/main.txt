@@ -1,2 +1,0 @@
-# MAIN: 
-curve hiper t 1/t 0         0 0 0     -10 10  arrow_default
