@@ -20,6 +20,7 @@ public:
 
     IEntity* getEntity(const std::string& entityId) const;
     const std::map<std::string, IEntity*>& getEntities() const;
+    std::map<std::string, IEntity*>& getMutableEntities();
     const std::vector<IAnimation*>& getAnimations() const;
 
 private:

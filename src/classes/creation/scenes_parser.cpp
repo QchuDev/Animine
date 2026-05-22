@@ -9,6 +9,7 @@
 #include "classes/animations/easing_type.h"
 #include "classes/animations/track.h"
 #include "classes/animations/keyframe.h"
+#include "classes/paths.h"
 
 #include <fstream>
 #include <filesystem>
@@ -290,6 +291,41 @@ std::unique_ptr<Scene> ScenesParser::parseFile(const std::string& file_path) {
                 else std::cerr << "group: child '" << childId << "' not found\n";
             }
             scene->addEntity(groupId, group);
+            group->entitiesRef = &scene->getMutableEntities();
+        } else if (token == "preset") {
+            std::string presetId, fileName;
+            if (!(ss >> presetId >> fileName)) {
+                std::cerr << "preset: expected <id> <file>\n"; continue;
+            }
+            std::string presetPath = assetPath("assets/presets/" + fileName);
+            std::ifstream pf(presetPath);
+            if (!pf.is_open()) {
+                std::cerr << "preset: cannot open " << presetPath << "\n"; continue;
+            }
+            auto* group = new Group();
+            std::string pline;
+            while (std::getline(pf, pline)) {
+                if (pline.empty() || pline[0] == '#') continue;
+                std::stringstream pss(pline);
+                std::string ptype;
+                pss >> ptype;
+                if (ptype == "line" || ptype == "quad" || ptype == "curve") {
+                    std::string childId;
+                    pss >> childId;
+                    std::string prefixedId = presetId + "." + childId;
+                    std::string rest;
+                    std::getline(pss, rest);
+                    std::stringstream rebuilt(prefixedId + rest);
+                    createEntity(ptype, rebuilt, scene.get());
+                    IEntity* child = scene->getEntity(prefixedId);
+                    if (child) {
+                        child->parentId = presetId;
+                        group->childIds.push_back(prefixedId);
+                    }
+                }
+            }
+            scene->addEntity(presetId, group);
+            group->entitiesRef = &scene->getMutableEntities();
         } else {
             // entity line — rewind and delegate
             parseLine(line, scene.get());
