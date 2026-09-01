@@ -1,0 +1,6 @@
+# star.txt — a small decorative star made of lines (used as a preset)
+# child ids get prefixed with the preset id at load time
+line ray_n   0  0.4 0   0 -0.4 0   1.0 0.95 0.6
+line ray_e   0.4 0  0  -0.4 0   0   1.0 0.95 0.6
+line ray_ne  0.28 0.28 0  -0.28 -0.28 0   1.0 0.9 0.5
+line ray_nw -0.28 0.28 0   0.28 -0.28 0   1.0 0.9 0.5

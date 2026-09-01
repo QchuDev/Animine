@@ -34,6 +34,10 @@ private:
     bool rightPressed = false;
     bool leftPressed = false;
     bool tabPressed = false;
+    bool gPressed = false;
+    // guiMode = true  -> cursor visible, camara solo con click derecho (para GUI)
+    // guiMode = false -> modo normal/FPS: cursor capturado, camara siempre activa
+    bool guiMode = false;
     int frameCount = 0;
 
     std::map<std::string, std::filesystem::file_time_type> fileTimestamps;

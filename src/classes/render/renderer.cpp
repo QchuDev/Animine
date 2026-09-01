@@ -139,26 +139,27 @@ unsigned int Renderer::loadTextureFromDisk(const char* path) {
     glGenTextures(1, &textureID);
 
     int width, height, nrComponents;
-    stbi_set_flip_vertically_on_load(true); 
-    unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+    stbi_set_flip_vertically_on_load(true);
+    // Forzamos 4 canales (RGBA) siempre: asi el tamano del buffer y el
+    // formato GL coinciden sin importar si el PNG es gris, RGB o RGBA.
+    // Esto evita que el driver lea fuera del buffer (SIGSEGV) con imagenes
+    // de 1/2 canales o anchos no alineados.
+    unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 4);
 
     if (data) {
-        GLenum format = (nrComponents == 4) ? GL_RGBA : GL_RGB;
-
-        // Premultiply alpha for RGBA textures
-        if (nrComponents == 4) {
-            int totalPixels = width * height;
-            for (int i = 0; i < totalPixels; i++) {
-                unsigned char* px = data + i * 4;
-                float a = px[3] / 255.0f;
-                px[0] = (unsigned char)(px[0] * a);
-                px[1] = (unsigned char)(px[1] * a);
-                px[2] = (unsigned char)(px[2] * a);
-            }
+        // Premultiply alpha (siempre 4 canales tras forzar STBI_rgb_alpha)
+        int totalPixels = width * height;
+        for (int i = 0; i < totalPixels; i++) {
+            unsigned char* px = data + i * 4;
+            float a = px[3] / 255.0f;
+            px[0] = (unsigned char)(px[0] * a);
+            px[1] = (unsigned char)(px[1] * a);
+            px[2] = (unsigned char)(px[2] * a);
         }
 
         glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // filas RGBA siempre validas
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
         // Configuración de repetición y filtrado (Mínimo necesario)
@@ -169,8 +170,7 @@ unsigned int Renderer::loadTextureFromDisk(const char* path) {
 
         stbi_image_free(data);
     } else {
-        stbi_image_free(data);
-        return 0; // O una textura por defecto
+        return 0; // textura no encontrada / invalida
     }
 
     return textureID;

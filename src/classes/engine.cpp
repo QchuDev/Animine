@@ -22,7 +22,18 @@ bool Engine::init(int width, int height, const char* title) {
 
     if (!glfwInit()) return false;
 
-    glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);                       // Always on top
+    glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);                       // Always on top (X11; ignorado en Wayland)
+
+    // app_id / clase estable para que el compositor (Hyprland, etc.)
+    // pueda identificar la ventana con reglas. En Wayland es el app_id,
+    // en X11 la WM_CLASS. Estos hints deben ir ANTES de crear la ventana.
+#ifdef GLFW_WAYLAND_APP_ID
+    glfwWindowHintString(GLFW_WAYLAND_APP_ID, "qchu-anims");
+#endif
+#ifdef GLFW_X11_CLASS_NAME
+    glfwWindowHintString(GLFW_X11_CLASS_NAME, "qchu-anims");
+    glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "qchu-anims");
+#endif
 
     window = glfwCreateWindow(width, height, title, NULL, NULL);    // We create the window with the specifications given to the engine
     if(!window) {                                                   // check if correctly created
@@ -40,7 +51,10 @@ bool Engine::init(int width, int height, const char* title) {
     renderer->aspect = (height > 0) ? (float)width / (float)height : 1.0f;
     animator = new Animator();
     
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    // Cursor inicial segun el modo: normal/FPS captura el cursor,
+    // modo GUI lo deja visible.
+    glfwSetInputMode(window, GLFW_CURSOR,
+                     guiMode ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
     
     // V-sync activation
     glfwSwapInterval(1);
@@ -134,8 +148,19 @@ void Engine::processInput() {
         if (renderer->orthoZoom < 0.5f) renderer->orthoZoom = 0.5f;
     }
 
-    // Camera movement only with right-click held
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) != GLFW_PRESS) {
+    // Alternar modo GUI / normal con la tecla G
+    if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS && !gPressed) {
+        gPressed = true;
+        guiMode = !guiMode;
+        glfwSetInputMode(window, GLFW_CURSOR,
+                         guiMode ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+        firstMouse = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_G) == GLFW_RELEASE) gPressed = false;
+
+    // En modo GUI la camara solo se mueve con click derecho.
+    // En modo normal/FPS la camara esta siempre activa.
+    if (guiMode && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) != GLFW_PRESS) {
         firstMouse = true;
         return;
     }
