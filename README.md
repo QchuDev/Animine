@@ -21,7 +21,7 @@ Create a file in `assets/scenes/`:
 
 ```
 # assets/scenes/hello.txt
-background backgrounds/bg_paper.png
+background backgrounds/paper.png
 line x_axis  0 0 0  3 0 0  1 0.3 0.3
 curve spiral cos(t) sin(t) t/6  0.2 0.9 0.4
 mesh cube1   cube.obj  0.4
@@ -95,6 +95,7 @@ Expressions for `curve` use the variable `t` (e.g. `cos(t)`, `sin(t)`, `t/6`).
 | `W A S D` | Move |
 | `Space` / `Ctrl` | Up / Down |
 | Mouse | Look around |
+| `G` | Toggle GUI mode (cursor visible; camera moves only while holding right-click) |
 | `Tab` | Perspective ↔ Orthographic |
 | `Q` / `E` | Zoom (ortho) |
 | `←` `→` | Cycle scenes |

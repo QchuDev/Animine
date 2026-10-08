@@ -1,0 +1,91 @@
+# ============================================================
+#  trig — Circulo unitario y la generacion de la onda seno
+#
+#  A la IZQUIERDA: circulo unitario con un radio giratorio.
+#  El punto recorre la circunferencia; sus proyecciones son
+#  cos (horizontal) y sin (vertical).
+#  A la DERECHA: la onda seno "desenrollada" que ese punto
+#  va dibujando, con un marcador que avanza sincronizado.
+#
+#  Un ciclo completo dura 12 s (velocidad angular constante).
+# ============================================================
+
+background backgrounds/paper.png
+
+# ------------------------------------------------------------
+#  EJES del plano del circulo (centrados en -3, 0)
+# ------------------------------------------------------------
+line axis_x  -4.6 0 0   -1.0 0 0   0.45 0.45 0.5   arrow_default
+line axis_y  -3.0 -1.6 0  -3.0 1.6 0   0.45 0.45 0.5   arrow_default
+
+# ------------------------------------------------------------
+#  CIRCULO UNITARIO (radio 1, centrado en -3,0)
+# ------------------------------------------------------------
+curve unit_circle  -3+cos(t)  sin(t)  0   0.25 0.55 0.95   0 6.2832   line_default
+
+# ------------------------------------------------------------
+#  RADIO GIRATORIO
+#  Linea de (0,0,0) a (1,0,0): rota alrededor de su origen local.
+#  La colocamos en el centro del circulo (-3,0) y la giramos en Z.
+# ------------------------------------------------------------
+line radius  0 0 0   1 0 0   0.95 0.75 0.15   line_default
+set radius position -3 0 0
+
+# ------------------------------------------------------------
+#  CATETOS: cos (horizontal) y sin (vertical)
+#  Son lineas unitarias que rotan/escalan para seguir al punto.
+#  cos_leg: del centro hacia la proyeccion en X.
+#  sin_leg: sube desde el eje X hasta el punto.
+# ------------------------------------------------------------
+line cos_leg  0 0 0   1 0 0   0.90 0.35 0.35   dotted_default
+set cos_leg position -3 0 0
+line sin_leg  0 0 0   0 1 0   0.35 0.80 0.45   dotted_default
+set sin_leg position -3 0 0
+
+# ------------------------------------------------------------
+#  PUNTO sobre la circunferencia (marcador)
+# ------------------------------------------------------------
+quad dot_circle  marks/dot.png  0.22 0.22
+set dot_circle position -2 0 0
+
+# ------------------------------------------------------------
+#  EJES de la onda desenrollada (a la derecha)
+# ------------------------------------------------------------
+line wave_axis_x  -0.6 0 0   5.2 0 0   0.45 0.45 0.5   arrow_default
+line wave_axis_y   0 -1.6 0   0 1.6 0   0.45 0.45 0.5   arrow_default
+
+# ------------------------------------------------------------
+#  ONDA SENO desplegada:  y = sin(x),  x de 0 a 2*pi (~6.2832)
+# ------------------------------------------------------------
+curve sine_wave  t  sin(t)  0   0.25 0.80 0.55   0 6.2832   line_default
+
+# ------------------------------------------------------------
+#  PUNTO que recorre la onda seno (marcador)
+# ------------------------------------------------------------
+quad dot_wave  marks/dot.png  0.22 0.22
+set dot_wave position 0 0 0
+
+# ============================================================
+#  ANIMACIONES  (1 vuelta = 12 s, velocidad constante -> linear)
+# ============================================================
+
+# Radio: gira una vuelta completa (0 -> 360 en Z)
+animate radius rotation linear linear  0 0 0   0 0 360   12.0
+
+# Punto en el circulo: recorre la circunferencia (centro -3,0 + radio 1)
+# path: t va 0..1 -> angulo 0..2pi
+animate dot_circle position linear path  -3+cos(6.2832*t)  sin(6.2832*t)  0   12.0
+
+# Cateto coseno: rota con el radio (misma vuelta) para quedar sobre el eje
+# proyectando; lo mantenemos alineado girandolo igual que el radio pero
+# aplastado luego en Y. Aqui simplemente lo giramos como guia del angulo.
+animate cos_leg scale linear path  cos(6.2832*t)  1  1   12.0
+
+# Cateto seno: su altura sigue sin(angulo); escalamos su Y.
+animate sin_leg scale linear path  1  sin(6.2832*t)  1   12.0
+# y lo trasladamos horizontalmente para que nazca bajo el punto
+animate sin_leg position linear path  -3+cos(6.2832*t)  0  0   12.0
+
+# Punto en la onda: avanza en X mientras su altura es sin(x)
+# x de 0..2pi, y = sin(x)
+animate dot_wave position linear path  6.2832*t  sin(6.2832*t)  0   12.0

@@ -6,7 +6,7 @@
 int main(int argc, char* argv[]) {
     g_basePath = std::filesystem::canonical(argv[0]).parent_path().parent_path();
 
-    int w = 800, h = 800;
+    int w = 1280, h = 720;
 
     for (int i = 1; i < argc; i++) {
         std::string arg = argv[i];

@@ -130,7 +130,20 @@ void Engine::processInput() {
         glfwSetWindowShouldClose(window, true);
     }
 
-    // Scene cycling with arrow keys removed — app controls active scene
+    // Scene cycling with arrow keys (debounced)
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && !rightPressed) {
+        rightPressed = true;
+        scenesManager->nextScene();
+        animator->reset(scenesManager->getCurrentScene());
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_RELEASE) rightPressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && !leftPressed) {
+        leftPressed = true;
+        scenesManager->prevScene();
+        animator->reset(scenesManager->getCurrentScene());
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_RELEASE) leftPressed = false;
 
     // Toggle ortho/perspective with Tab
     if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS && !tabPressed) {
