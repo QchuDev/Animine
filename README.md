@@ -1,4 +1,4 @@
-# QchuAnims
+# Animine
 
 A minimal 3D scene engine for visualizing parametric curves, vector math, meshes, and animations — all defined in plain text files.
 
